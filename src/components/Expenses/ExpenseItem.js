@@ -1,4 +1,4 @@
-import './ExpenseItem.css';
+import styles from './ExpenseItem.module.scss';
 
 function ExpenseItem({ amount, date, title }) {
   const locale = 'pl-PL';
@@ -6,15 +6,15 @@ function ExpenseItem({ amount, date, title }) {
   const day = date.toLocaleString(locale, { day: '2-digit' });
   const year = date.getFullYear();
   return (
-    <li className="expense-item">
-      <div className="expense-item__date">
-        <div className="expense-item__month">{month}</div>
-        <div className="expense-item__day">{day}</div>
-        <div className="expense-item__year">{year}</div>
+    <li className={styles.expenseItem}>
+      <div className={styles.expenseItem__date}>
+        <div className={styles.expenseItem__month}>{month}</div>
+        <div className={styles.expenseItem__day}>{day}</div>
+        <div className={styles.expenseItem__year}>{year}</div>
       </div>
-      <div className="expense-item__description">
-        <h2>{title}</h2>
-        <div className="expense-item__price">{amount}</div>
+      <div className={styles.expenseItem__description}>
+        <h2 className={styles.expenseItem__title}>{title}</h2>
+        <div className={styles.expenseItem__price}>{amount}</div>
       </div>
     </li>
   );

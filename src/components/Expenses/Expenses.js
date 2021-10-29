@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import './Expenses.css';
+import styles from './Expenses.module.css';
+import ExpensesChart from './ExpensesChart';
 import ExpensesFilter from './ExpensesFilter';
 import ExpensesList from './ExpensesList';
 
@@ -12,11 +13,12 @@ function Expenses({ items }) {
   };
 
   return (
-    <div className="expenses">
+    <div className={styles.expenses}>
       <ExpensesFilter
         onSelectYear={selectYearHandler}
         selectedYear={selectedYear}
       />
+      <ExpensesChart expenses={filteredItems} />
       <ExpensesList items={filteredItems} year={selectedYear} />
     </div>
   );

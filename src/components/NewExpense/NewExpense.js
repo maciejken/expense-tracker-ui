@@ -1,4 +1,4 @@
-import './NewExpense.css';
+import styles from './NewExpense.module.css';
 import ExpenseForm from './ExpenseForm';
 
 const NewExpense = ({ onAddExpense }) => {
@@ -6,7 +6,7 @@ const NewExpense = ({ onAddExpense }) => {
     onAddExpense(expenseData);
   };
   return (
-    <div className="new-expense">
+    <div className={styles.newExpense}>
       <ExpenseForm onSaveExpenseData={onSaveExpenseDataHandler} />
     </div>
   );

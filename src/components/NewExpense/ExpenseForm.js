@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './ExpenseForm.css';
+import styles from './ExpenseForm.module.scss';
 
 const ExpenseForm = ({ onSaveExpenseData }) => {
   const [title, setTitle] = useState('');
@@ -24,7 +24,7 @@ const ExpenseForm = ({ onSaveExpenseData }) => {
     evt.preventDefault();
     const expenseData = {
       title,
-      amount,
+      amount: +amount,
       date: new Date(date),
       category,
     };
@@ -36,36 +36,48 @@ const ExpenseForm = ({ onSaveExpenseData }) => {
   };
 
   return (
-    <form className="new-expense__form" onSubmit={submitHandler}>
-      <div className="new-expense__control">
-        <label>Nazwa</label>
-        <input type="text" value={title} onChange={titleChangeHandler} />
+    <form className={styles.newExpense__form} onSubmit={submitHandler}>
+      <div>
+        <label className={styles.newExpense__label}>Nazwa</label>
+        <input
+          type="text"
+          value={title}
+          onChange={titleChangeHandler}
+          className={styles.newExpense__input}
+        />
       </div>
-      <div className="new-expense__control amount">
-        <label>Kwota</label>
+      <div className={styles.newExpense__amount}>
+        <label className={styles.newExpense__label}>Kwota</label>
         <input
           type="number"
           min="0.01"
           step="0.01"
           value={amount}
           onChange={amountChangeHandler}
+          className={styles.newExpense__input}
         />
       </div>
-      <div className="new-expense__control date">
-        <label>Data</label>
+      <div className={styles.newExpense__date}>
+        <label className={styles.newExpense__label}>Data</label>
         <input
           type="date"
           min="2020-01-01"
           max="2022-12-31"
           value={date}
           onChange={dateChangeHandler}
+          className={styles.newExpense__input}
         />
       </div>
       <div className="new-expense__control">
-        <label>Kategoria</label>
-        <input type="text" value={category} onChange={categoryChangeHandler} />
+        <label className={styles.newExpense__label}>Kategoria</label>
+        <input
+          type="text"
+          value={category}
+          onChange={categoryChangeHandler}
+          className={styles.newExpense__input}
+        />
       </div>
-      <button type="submit" className="new-expense__add">+</button>
+      <button type="submit" className={styles.newExpense__add}>+</button>
     </form>
   );
 };

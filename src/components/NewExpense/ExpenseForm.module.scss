@@ -1,0 +1,49 @@
+.newExpense {
+  &__form {
+    width: 100%;
+    display: flex;
+    margin-bottom: 0.75rem;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  &__label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+    text-align: left;    
+  }
+
+  &__input {
+    font: inherit;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    width: 11rem;
+    height: 1.5rem;
+    max-width: 100%;    
+  }
+
+  &__amount {
+    width: 7rem;
+  }
+
+  &__date {
+    width: 9rem;
+  }
+
+  &__add {
+    width: 2.5rem;
+    height: 2.6rem;
+    line-height: 2.6rem;
+    font: inherit;
+    cursor: pointer;
+    background-color: #6c8efd;
+    color: white;
+    border: none;
+    border-radius: 2px;
+
+    &:hover, &:active {
+      background-color: #3a68ff;
+    }
+  }
+}
