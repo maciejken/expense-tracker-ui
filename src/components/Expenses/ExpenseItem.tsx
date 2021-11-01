@@ -1,10 +1,10 @@
+import React, { FC } from 'react';
+import { getYearMonthDay } from '../../utils/date';
 import styles from './ExpenseItem.module.scss';
+import { ExpenseItemProps } from './types';
 
-function ExpenseItem({ amount, date, title }) {
-  const locale = 'pl-PL';
-  const month = date.toLocaleString(locale, { month: 'long' });
-  const day = date.toLocaleString(locale, { day: '2-digit' });
-  const year = date.getFullYear();
+const ExpenseItem: FC<ExpenseItemProps> = ({ amount, date, title }) => {
+  const { year, month, day } = getYearMonthDay(date);
   return (
     <li className={styles.expenseItem}>
       <div className={styles.expenseItem__date}>

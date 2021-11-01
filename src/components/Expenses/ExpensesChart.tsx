@@ -1,6 +1,8 @@
-import Chart from "../Chart/Chart";
+import React, { FC } from 'react';
+import Chart from '../Chart/Chart';
+import { ExpensesChartProps } from './types';
 
-const ExpensesChart = ({ expenses }) => {
+const ExpensesChart: FC<ExpensesChartProps> = ({ expenses }) => {
   const chartData = [
     { label: 'I', value: 0 },
     { label: 'II', value: 0 },
@@ -16,12 +18,16 @@ const ExpensesChart = ({ expenses }) => {
     { label: 'XII', value: 0 },
   ];
 
+  if (!expenses.length) {
+    return null;
+  }
+
   for (const expense of expenses) {
-    const expenseMonth = expense.date.getMonth();
+    const expenseMonth = new Date(expense.date).getMonth();
     chartData[expenseMonth].value += expense.amount;
   }
 
-  return !!expenses.length && <Chart data={chartData} />;
+  return <Chart data={chartData} />;
 };
 
 export default ExpensesChart;

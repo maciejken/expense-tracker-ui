@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
 import styles from './Expenses.module.css';
 import ExpensesChart from './ExpensesChart';
 import ExpensesFilter from './ExpensesFilter';
 import ExpensesList from './ExpensesList';
+import { ExpensesProps } from './types';
 
-function Expenses({ items }) {
+const Expenses: FC<ExpensesProps> = ({ items }) => {
   const currentYear = '' + new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
-  const filteredItems = items.filter(item => item.date.getFullYear() === parseInt(selectedYear));
-  const selectYearHandler = (year) => {
-    setSelectedYear(year);
+  const filteredItems = items.filter(item => new Date(item.date).getFullYear() === parseInt(selectedYear));
+  const selectYearHandler = (evt: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(evt.target.value);
   };
 
   return (

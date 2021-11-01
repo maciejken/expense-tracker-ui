@@ -1,7 +1,9 @@
+import React, { FC } from 'react';
 import styles from './Chart.module.css';
 import ChartBar from './ChartBar';
+import { ChartProps } from './types';
 
-const Chart = ({ data }) => {
+const Chart: FC<ChartProps> = ({ data }) => {
   const values = data.map(d => d.value);
   const maxValue = Math.max(...values);
 

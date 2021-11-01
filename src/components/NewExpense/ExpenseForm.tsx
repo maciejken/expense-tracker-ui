@@ -1,34 +1,42 @@
-import { useState } from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  FormEvent,
+  useState
+} from 'react';
+import { getYearMonthDay } from '../../utils/date';
 import styles from './ExpenseForm.module.scss';
+import { ExpenseFormData, ExpenseFormProps } from './types';
 
-const ExpenseForm = ({ onSaveExpenseData }) => {
+const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
   const [category, setCategory] = useState('');
 
-  const titleChangeHandler = (evt) => {
+  const titleChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     setTitle(evt.target.value);
   };
-  const amountChangeHandler = (evt) => {
+  const amountChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     setAmount(evt.target.value);
   };
-  const dateChangeHandler = (evt) => {
+  const dateChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     setDate(evt.target.value);
   };
-  const categoryChangeHandler = (evt) => {
+  const categoryChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     setCategory(evt.target.value);
   };
 
-  const submitHandler = (evt) => {
+  const submitHandler = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const expenseData = {
+    const { year, month, day } = getYearMonthDay(date);
+    const expenseFormData: ExpenseFormData = {
       title,
       amount: +amount,
-      date: new Date(date),
+      date: `${year}-${month}-${day}`,
       category,
     };
-    onSaveExpenseData(expenseData);
+    onSaveExpenseData(expenseFormData);
     setTitle('');
     setAmount('');
     setDate('');

@@ -1,8 +1,10 @@
+import React, { FC } from 'react';
 import styles from './NewExpense.module.css';
 import ExpenseForm from './ExpenseForm';
+import { ExpenseFormData, NewExpenseProps } from './types';
 
-const NewExpense = ({ onAddExpense }) => {
-  const onSaveExpenseDataHandler = (expenseData) => {
+const NewExpense: FC<NewExpenseProps> = ({ onAddExpense }) => {
+  const onSaveExpenseDataHandler = (expenseData: ExpenseFormData) => {
     onAddExpense(expenseData);
   };
   return (

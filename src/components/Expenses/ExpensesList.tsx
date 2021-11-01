@@ -1,7 +1,9 @@
+import React, { FC } from 'react';
 import styles from './ExpensesList.module.scss';
 import ExpenseItem from './ExpenseItem';
+import { ExpensesListProps } from './types';
 
-const ExpensesList = ({ items, year }) => {
+const ExpensesList: FC<ExpensesListProps> = ({ items, year }) => {
   if (items.length === 0) {
     return (
       <h2 className={styles.expensesList__fallback}>
@@ -14,7 +16,7 @@ const ExpensesList = ({ items, year }) => {
     <ul className={styles.expensesList}>
       {items.map((item, index) => (
         <ExpenseItem
-          key={`expense-item-${index}`}
+          key={item.id}
           amount={item.amount}
           date={item.date}
           title={item.title}

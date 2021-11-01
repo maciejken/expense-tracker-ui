@@ -1,14 +1,13 @@
+import React, { FC } from 'react';
 import styles from './ExpensesFilter.module.scss';
+import { ExpensesFilterProps } from './types';
 
-const ExpensesFilter = ({ onSelectYear, selectedYear }) => {
-  const yearChangeHandler = (evt) => {
-    onSelectYear(evt.target.value);
-  };
+const ExpensesFilter: FC<ExpensesFilterProps> = ({ onSelectYear, selectedYear }) => {
   return (
     <div>
       <div className={styles.expensesFilter__control}>
         <select
-          onChange={yearChangeHandler}
+          onChange={onSelectYear}
           value={selectedYear}
           className={styles.expensesFilter__select}
         >
