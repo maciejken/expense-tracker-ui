@@ -1,4 +1,11 @@
 import { ChangeEventHandler } from "react";
+import { ExpenseFormData } from "../NewExpense/types";
+
+export interface ExpenseRequest {
+  token: string;
+  query?: any;
+  expense?: ExpenseFormData;
+}
 
 export interface ExpenseData {
   id: string;
