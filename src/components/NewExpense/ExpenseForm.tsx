@@ -5,8 +5,9 @@ import React, {
   useState
 } from 'react';
 import { getYearMonthDay } from '../../utils/date';
+import { ExpenseData } from '../Expenses/types';
 import styles from './ExpenseForm.module.scss';
-import { ExpenseFormData, ExpenseFormProps } from './types';
+import { ExpenseFormProps } from './types';
 
 const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
   const [title, setTitle] = useState('');
@@ -30,13 +31,13 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
   const submitHandler = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const { year, month, day } = getYearMonthDay(date);
-    const expenseFormData: ExpenseFormData = {
+    const expenseData: ExpenseData = {
       title,
       amount: +amount,
       date: `${year}-${month}-${day}`,
       category,
     };
-    onSaveExpenseData(expenseFormData);
+    onSaveExpenseData(expenseData);
     setTitle('');
     setAmount('');
     setDate('');

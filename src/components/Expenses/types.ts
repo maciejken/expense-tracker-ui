@@ -1,24 +1,26 @@
-import { ChangeEventHandler } from "react";
-import { ExpenseFormData } from "../NewExpense/types";
+import { ChangeEventHandler, MouseEventHandler } from "react";
 
 export interface ExpenseRequest {
   token: string;
   query?: any;
-  expense?: ExpenseFormData;
+  data?: ExpenseData;
 }
 
 export interface ExpenseData {
-  id: string;
+  id?: string;
   title: string;
   amount: number;
   date: string;
   category?: string;
 }
 
-export type ExpenseItemProps = Omit<ExpenseData, 'id'>;
+export interface ExpenseItemProps extends ExpenseData {
+  onDelete: (expenseId: string) => void;
+};
 
 export interface ExpensesProps {
   items: ExpenseData[];
+  onDeleteExpense: (expenseId: string) => void;
 }
 
 export interface ExpensesChartProps {
@@ -33,4 +35,5 @@ export interface ExpensesFilterProps {
 export interface ExpensesListProps {
   items: ExpenseData[];
   year: string;
+  onDeleteExpense: (expenseId: string) => void;
 }

@@ -1,5 +1,12 @@
+interface TokenClaims {
+  iat: number;
+  exp: number;
+  sub: string;
+}
+
 export interface TokenData {
   token: string;
+  claims: TokenClaims;
 }
 
 export interface BasicAuth {

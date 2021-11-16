@@ -10,11 +10,29 @@ export const fetchExpenses: ({
 };
 
 export const createExpense: ({
-  token, expense
-}: ExpenseRequest) => Promise<ExpenseData> = async ({ token, expense }) => {
+  token,
+  data,
+}: ExpenseRequest) => Promise<ExpenseData> = async ({ token, data }) => {
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
   headers.set("Authorization", `Bearer ${token}`);
-  const body = JSON.stringify(expense);
-  return http(`http://localhost:3001/api/expenses`, { headers, method: 'POST', body });
+  const body = JSON.stringify(data);
+  return http(`http://localhost:3001/api/expenses`, {
+    headers,
+    method: "POST",
+    body,
+  });
+};
+
+export const deleteExpense: (
+  expenseId: string,
+  { token }: ExpenseRequest
+) => Promise<{ removed: string }> = async (expenseId, { token }) => {
+  const headers = new Headers();
+  headers.set("Content-Type", "application/json");
+  headers.set("Authorization", `Bearer ${token}`);
+  return http(`http://localhost:3001/api/expenses/${expenseId}`, {
+    headers,
+    method: "DELETE",
+  });
 };

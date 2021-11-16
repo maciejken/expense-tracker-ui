@@ -5,7 +5,7 @@ import ExpensesFilter from './ExpensesFilter';
 import ExpensesList from './ExpensesList';
 import { ExpensesProps } from './types';
 
-const Expenses: FC<ExpensesProps> = ({ items }) => {
+const Expenses: FC<ExpensesProps> = ({ items, onDeleteExpense }) => {
   const currentYear = '' + new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const filteredItems = items.filter(item => new Date(item.date).getFullYear() === parseInt(selectedYear));
@@ -20,7 +20,7 @@ const Expenses: FC<ExpensesProps> = ({ items }) => {
         selectedYear={selectedYear}
       />
       <ExpensesChart expenses={filteredItems} />
-      <ExpensesList items={filteredItems} year={selectedYear} />
+      <ExpensesList items={filteredItems} year={selectedYear} onDeleteExpense={onDeleteExpense} />
     </div>
   );
 }
