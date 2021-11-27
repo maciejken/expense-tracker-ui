@@ -26,7 +26,7 @@ const LoginForm: FC<LoginFormProps> = ({ onAuth }) => {
   return (
     <form onSubmit={submitHandler} className={styles.loginForm__form}>
       <div>
-        <label className={styles.loginForm__label}>Uzytkownik</label>
+        <label className={styles.loginForm__label}>Użytkownik</label>
         <input
           type="text"
           value={username}
@@ -35,7 +35,7 @@ const LoginForm: FC<LoginFormProps> = ({ onAuth }) => {
         />
       </div>
       <div>
-        <label className={styles.loginForm__label}>Haslo</label>
+        <label className={styles.loginForm__label}>Hasło</label>
         <input
           type="password"
           value={password}

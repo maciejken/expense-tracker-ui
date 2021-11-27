@@ -22,8 +22,12 @@
     font-size: 1rem;
     font-weight: bold;
     color: white;
-    background-color: #6c8efd;
+    background-color: #00ac25;
     padding: 0.5rem;
+  }
+
+  &__isPrivate {
+    background-color: #b03aff;
   }
 
   &__date {
@@ -52,12 +56,13 @@
   }
 
   &__delete {
-    background-color: #f00;
-    width: 1rem;
-    height: 1rem;
+    background-color: rgb(226, 0, 0);
+    width: 1.25rem;
+    height: 1.25rem;
     cursor: pointer;
     margin-right: 1rem;
-    border-radius: 0.5rem;
+    border: 2px solid #eee;
+    border-radius: 50%;
   }
 
   @media (min-width: 580px) {

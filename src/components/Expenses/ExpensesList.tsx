@@ -21,6 +21,7 @@ const ExpensesList: FC<ExpensesListProps> = ({ items, year, onDeleteExpense }) =
           amount={item.amount}
           date={item.date}
           title={item.title}
+          isPrivate={item.isPrivate}
           onDelete={onDeleteExpense}
         />
       ))}

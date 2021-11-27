@@ -12,15 +12,16 @@ export interface ExpenseData {
   amount: number;
   date: string;
   category?: string;
+  isPrivate: boolean;
 }
 
 export interface ExpenseItemProps extends ExpenseData {
-  onDelete: (expenseId: string) => void;
+  onDelete: (expense: ExpenseData) => void;
 };
 
 export interface ExpensesProps {
   items: ExpenseData[];
-  onDeleteExpense: (expenseId: string) => void;
+  onDeleteExpense: (expense: ExpenseData) => void;
 }
 
 export interface ExpensesChartProps {
@@ -35,5 +36,5 @@ export interface ExpensesFilterProps {
 export interface ExpensesListProps {
   items: ExpenseData[];
   year: string;
-  onDeleteExpense: (expenseId: string) => void;
+  onDeleteExpense: (expense: ExpenseData) => void;
 }

@@ -10,7 +10,7 @@ const ChartBar: FC<ChartBarProps> = ({ value, maxValue, label }) => {
   }
 
   return (
-    <div className={styles.chartBar}>
+    <div className={styles.chartBar} title={`${label} - ${value} zł`}>
       <div className={styles.chartBar__inner}>
         <div
           className={styles.chartBar__fill}

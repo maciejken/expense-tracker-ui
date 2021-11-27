@@ -18,19 +18,17 @@
     font: inherit;
     padding: 0.5rem;
     border: 1px solid #ccc;
-    width: 11rem;
+    width: 10rem;
     height: 1.5rem;
     max-width: 100%;    
   }
 
-  &__amount {
-    width: 7rem;
+  &__dateInput, &__amountInput {
+    width: 8rem;
   }
 
-  &__date {
-    width: 9rem;
-  }
-
+  &__isPrivate,
+  &__isPublic,
   &__add {
     width: 2.5rem;
     height: 2.6rem;
@@ -44,6 +42,22 @@
 
     &:hover, &:active {
       background-color: #3a68ff;
+    }    
+  }
+
+  &__isPublic {
+    background-color: #00ac25;
+
+    &:hover, &:active {
+      background-color: #009220;
+    }
+  }
+
+  &__isPrivate {
+    background-color: #b03aff;
+
+    &:hover, &:active {
+      background-color: #9800fd;
     }
   }
 }

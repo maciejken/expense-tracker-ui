@@ -1,16 +1,28 @@
-import React, { FC } from 'react';
-import { getLocaleYearMonthDay } from '../../utils/date';
-import styles from './ExpenseItem.module.scss';
-import { ExpenseItemProps } from './types';
+import classnames from "classnames";
+import React, { FC } from "react";
+import { getLocaleYearMonthDay } from "../../utils/date";
+import styles from "./ExpenseItem.module.scss";
+import { ExpenseData, ExpenseItemProps } from "./types";
 
-const ExpenseItem: FC<ExpenseItemProps> = ({ id, amount, date, title, onDelete }) => {
-  const { year, month, day } = getLocaleYearMonthDay(date, 'pl-PL');
+const ExpenseItem: FC<ExpenseItemProps> = ({
+  id,
+  amount,
+  date,
+  isPrivate,
+  title,
+  onDelete,
+}) => {
+  const { year, month, day } = getLocaleYearMonthDay(date, "pl-PL");
 
-  const clickHandler = () => {
-    onDelete(id as string);
+  const deleteHandler = () => {
+    onDelete({ id, date, title, amount, isPrivate } as ExpenseData);
   };
+
+  const tooltip = title.concat(
+    isPrivate ? " (własny)" : " (wspólny)"
+  );
   return (
-    <li className={styles.expenseItem}>
+    <li className={styles.expenseItem} title={tooltip}>
       <div className={styles.expenseItem__date}>
         <div className={styles.expenseItem__month}>{month}</div>
         <div className={styles.expenseItem__day}>{day}</div>
@@ -18,15 +30,21 @@ const ExpenseItem: FC<ExpenseItemProps> = ({ id, amount, date, title, onDelete }
       </div>
       <div className={styles.expenseItem__description}>
         <h2 className={styles.expenseItem__title}>{title}</h2>
-        <div className={styles.expenseItem__price}>{amount}</div>
         <div
-          title={`Usun "${title}"`}
+          className={classnames(styles.expenseItem__price, {
+            [styles.expenseItem__isPrivate]: isPrivate,
+          })}
+        >
+          {amount}
+        </div>
+        <button
+          title={`Usuń "${title}"`}
           className={styles.expenseItem__delete}
-          onClick={clickHandler}
-        ></div>
+          onClick={deleteHandler}
+        ></button>
       </div>
     </li>
   );
-}
+};
 
 export default ExpenseItem;
