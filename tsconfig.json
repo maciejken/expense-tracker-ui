@@ -3,6 +3,7 @@
     "jsx": "react-jsx",
     "target": "es5",
     "module": "esnext",
+    "baseUrl": "./src",
     "outDir": "./build",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

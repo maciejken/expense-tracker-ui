@@ -1,9 +1,9 @@
-import { ExpenseData } from "../Expenses/types";
+import { NewExpenseData } from "../Expenses/types";
 
 export interface ExpenseFormProps {
-  onSaveExpenseData: (data: ExpenseData) => void;
+  onSaveExpenseData: (data: NewExpenseData) => void;
 }
 
 export interface NewExpenseProps {
-  onAddExpense: (data: ExpenseData) => void;
+  onAddExpense: (data: NewExpenseData) => void;
 }

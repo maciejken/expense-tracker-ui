@@ -9,6 +9,8 @@ const ChartBar: FC<ChartBarProps> = ({ value, maxValue, label }) => {
     barFillHeight = `${Math.round((value / maxValue) * 100)}%`;
   }
 
+  const truncatedLabel = label.slice(0, 3);
+
   return (
     <div className={styles.chartBar} title={`${label} - ${value} zł`}>
       <div className={styles.chartBar__inner}>
@@ -17,7 +19,7 @@ const ChartBar: FC<ChartBarProps> = ({ value, maxValue, label }) => {
           style={{ height: barFillHeight }}
         ></div>
       </div>
-      <div className={styles.chartBar__label}>{label}</div>
+      <div className={styles.chartBar__label}>{truncatedLabel}</div>
     </div>
   );
 };

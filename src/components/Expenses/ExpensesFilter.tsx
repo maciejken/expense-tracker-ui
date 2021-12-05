@@ -1,20 +1,46 @@
-import React, { FC } from 'react';
-import styles from './ExpensesFilter.module.scss';
-import { ExpensesFilterProps } from './types';
+import React, { ChangeEvent, FC } from "react";
+import styles from "components/Expenses/ExpensesFilter.module.scss";
+import { ExpensesFilterProps } from "components/Expenses/types";
+import { getMonths } from "utils/date";
 
-const ExpensesFilter: FC<ExpensesFilterProps> = ({ onSelectYear, selectedYear }) => {
+const ExpensesFilter: FC<ExpensesFilterProps> = ({
+  onSelectMonth,
+  onSelectYear,
+  selectedMonth,
+  selectedYear,
+  years,
+}) => {
+  const months = getMonths();
+  const yearChangeHandler = (evt: ChangeEvent<HTMLSelectElement>) => {
+    onSelectYear(evt.target.value);
+  }
+  const monthChangeHandler = (evt: ChangeEvent<HTMLSelectElement>) => {
+    onSelectMonth(evt.target.value);
+  }
   return (
     <div>
       <div className={styles.expensesFilter__control}>
         <select
-          onChange={onSelectYear}
+          onChange={yearChangeHandler}
           value={selectedYear}
           className={styles.expensesFilter__select}
         >
-          <option value="2022">2022</option>
-          <option value="2021">2021</option>
-          <option value="2020">2020</option>
-          <option value="2019">2019</option>
+          {years.map(year => (
+            <option key={`year-${year}`} value={year}>{year}</option>
+          ))}
+        </select>
+      </div>
+      <div className={styles.expensesFilter__control}>
+        <select
+          onChange={monthChangeHandler}
+          value={selectedMonth}
+          className={styles.expensesFilter__select}
+        >
+          {months.map((month) => (
+            <option key={`month-${month.id}`} value={month.id}>
+              {month.label}
+            </option>
+          ))}
         </select>
       </div>
     </div>

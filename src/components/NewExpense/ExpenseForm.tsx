@@ -1,3 +1,5 @@
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import classnames from "classnames";
 import React, {
   ChangeEvent,
@@ -6,20 +8,20 @@ import React, {
   MouseEventHandler,
   useState,
 } from "react";
-import { getYearMonthDay } from "../../utils/date";
-import { ExpenseData } from "../Expenses/types";
+import Add from "@material-ui/icons/Add";
+import { getYearMonthDay } from "utils/date";
+import { NewExpenseData } from "components/Expenses/types";
 import styles from "./ExpenseForm.module.scss";
-import { ExpenseFormProps } from "./types";
+import { ExpenseFormProps } from "components/NewExpense/types";
 
 const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
-  const { year, month, day } = getYearMonthDay(new Date().toISOString());
+  const [ year, month, day ] = getYearMonthDay(new Date().toISOString());
   const today = `${year}-${month}-${day}`;
-
-  const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState(today);
-  const [category, setCategory] = useState("");
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [title, setTitle] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [date, setDate] = useState<string>(today);
+  const [category, setCategory] = useState<string>("");
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
 
   const titleChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     setTitle(evt.target.value);
@@ -40,10 +42,10 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
 
   const submitHandler = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const { year, month, day } = getYearMonthDay(date);
-    const expenseData: ExpenseData = {
+    const [ year, month, day ] = getYearMonthDay(date);
+    const expenseData: NewExpenseData = {
       title,
-      amount: +amount,
+      amount,
       date: `${year}-${month}-${day}`,
       category,
       isPrivate,
@@ -53,6 +55,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
     setAmount("");
     setDate(today);
     setCategory("");
+    setIsPrivate(false);
   };
 
   return (
@@ -62,7 +65,6 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
         <input
           type="date"
           value={date}
-          defaultValue={new Date().toISOString()}
           onChange={dateChangeHandler}
           className={classnames(
             styles.newExpense__input,
@@ -108,21 +110,20 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
           )}
         />
       </div>
-      <div>
+      <div className={styles.newExpense__actions}>
         <button
           title={isPrivate ? "wydatek własny" : "wydatek wspólny"}
           onClick={isPrivateClickHandler}
-          className={classnames({
+          className={classnames(styles.newExpense__visibility, {
             [styles.newExpense__isPrivate]: isPrivate,
-            [styles.newExpense__isPublic]: !isPrivate,
           })}
         >
-          {isPrivate ? "#" : "&"}
+          {isPrivate ? <VisibilityOff /> : <Visibility />}
+        </button>
+        <button title="Dodaj" type="submit" className={styles.newExpense__add}>
+          <Add />
         </button>
       </div>
-      <button type="submit" className={styles.newExpense__add}>
-        +
-      </button>
     </form>
   );
 };

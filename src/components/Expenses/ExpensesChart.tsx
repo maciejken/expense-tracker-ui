@@ -1,31 +1,18 @@
 import React, { FC } from 'react';
-import Chart from '../Chart/Chart';
-import { ExpensesChartProps } from './types';
+import { getMonths } from 'utils/date';
+import Chart from 'components/Chart/Chart';
+import { ExpensesChartProps } from 'components/Expenses/types';
 
-const ExpensesChart: FC<ExpensesChartProps> = ({ expenses }) => {
-  const chartData = [
-    { label: 'I', value: 0 },
-    { label: 'II', value: 0 },
-    { label: 'III', value: 0 },
-    { label: 'IV', value: 0 },
-    { label: 'V', value: 0 },
-    { label: 'VI', value: 0 },
-    { label: 'VII', value: 0 },
-    { label: 'VIII', value: 0 },
-    { label: 'IX', value: 0 },
-    { label: 'X', value: 0 },
-    { label: 'XI', value: 0 },
-    { label: 'XII', value: 0 },
-  ];
+const ExpensesChart: FC<ExpensesChartProps> = ({ data }) => {
 
-  if (!expenses.length) {
-    return null;
-  }
-
-  for (const expense of expenses) {
-    const expenseMonth = new Date(expense.date).getMonth();
-    chartData[expenseMonth].value += expense.amount;
-  }
+  const months = getMonths();
+  const chartData = months.map(m => {
+    const monthly = data.find(d => d.id === m.id);
+    return {
+      value: monthly?.total || 0,
+      label: m.label,      
+    };
+  });
 
   return <Chart data={chartData} />;
 };
