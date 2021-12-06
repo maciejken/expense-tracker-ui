@@ -38,7 +38,7 @@ const Expenses: FC<ExpensesProps> = ({
           selectedMonth={selectedMonth}
         />
       </div>}
-      {loading && <div className={styles.expenses__loading}>Ładuję dane...</div>}
+      {loading && <div className={styles.expenses__loading}>Wczytuję dane...</div>}
       {!loading && (
         <ExpensesList
           items={items}

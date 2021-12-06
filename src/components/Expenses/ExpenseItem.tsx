@@ -6,9 +6,8 @@ import React, {
   useState,
 } from "react";
 import { getLocaleYearMonthDay } from "utils/date";
-import styles from "./ExpenseItem.module.scss";
+import styles from "./ExpenseItem.module.css";
 import { ExpenseData, ExpenseItemProps } from "components/Expenses/types";
-import { locale } from "config";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Delete from "@material-ui/icons/Delete";
@@ -26,13 +25,17 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
 }) => {
   // const [updatedDate, setDate] = useState<string>(date);
   // const [isDateLoading, setDateLoading] = useState<boolean>(false);
-  // const [updatedTitle, setTitle] = useState<string>(title);
+  const [updatedTitle, setTitle] = useState<string>(title);
   // const [isTitleLoading, setTitleLoading] = useState<boolean>(false);
   // const [isPrivateLoading, setIsPrivateLoading] = useState<boolean>(false);
   const [updatedAmount, setAmount] = useState<string>(amount);
   // const [isAmountLoading, setAmountLoading] = useState<boolean>(false);
 
-  const { year, month, day } = getLocaleYearMonthDay(date, locale);
+  const { year, month, day } = getLocaleYearMonthDay(date);
+
+  const titleChangeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
+    setTitle(evt.target.value);
+  };
 
   const amountChangeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
     setAmount(evt.target.value);
@@ -47,8 +50,16 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     }
   };
 
+  const titleBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
+    if (updatedTitle !== title) {
+      onUpdate(id, { title: updatedTitle });
+    }
+  };
+
   const amountBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
-    onUpdate(id, { amount: updatedAmount });
+    if (updatedAmount !== amount) {
+      onUpdate(id, { amount: updatedAmount });
+    }
   };
 
   const deleteHandler = () => {
@@ -64,11 +75,24 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
         <div className={styles.expenseItem__year}>{year}</div>
       </div>
       <div className={styles.expenseItem__description}>
-        <h2 className={styles.expenseItem__title}>{title}</h2>
         <input
-          className={classNames(styles.expenseItem__amount, {
-            [styles.isPrivate]: isPrivate,
-          })}
+          className={classNames(
+            styles.expenseItem__textInput,
+            styles.expenseItem__title
+          )}
+          type={InputType.Text}
+          value={updatedTitle}
+          onChange={titleChangeHandler}
+          onBlur={titleBlurHandler}
+        />
+        <input
+          className={classNames(
+            styles.expenseItem__textInput,
+            styles.expenseItem__amount,
+            {
+              [styles.expenseItem__amountPrivate]: isPrivate,
+            }
+          )}
           type={InputType.Text}
           value={updatedAmount}
           onChange={amountChangeHandler}
@@ -90,7 +114,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
             onClick={deleteHandler}
           >
             <Delete />
-          </button>          
+          </button>
         </div>
       </div>
     </li>

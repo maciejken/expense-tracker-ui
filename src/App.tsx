@@ -23,8 +23,9 @@ const App: FC = () => {
   const [token, setToken] = useState("");
   const [expenses, setExpenses] = useState([] as ExpenseData[]);
   const [expensesLoading, setExpensesLoading] = useState(false);
-  const [shouldRefreshExpenses, setShouldRefreshExpenses] = useState(false);
+  const [shouldLoadExpenses, setShouldLoadExpenses] = useState(true);
   const [chartData, setChartData] = useState([] as ExpenseChartYear[]);
+  const [shouldLoadChart, setShouldLoadChart] = useState(true);
   const [currentYear, currentMonth] = getCurrentDate();
   const [selectedMonth, setSelectedMonth] = useState<string>("" + currentMonth);
   const [selectedYear, setSelectedYear] = useState<string>("" + currentYear);
@@ -32,12 +33,12 @@ const App: FC = () => {
   useEffect(() => {
     const getChartData = async () => {
       setChartData(await fetchChartData({ token }));
+      setShouldLoadChart(false);
     }
     if (token) {
       getChartData();
-      setShouldRefreshExpenses(true);
     }
-  }, [token]);
+  }, [shouldLoadChart, token]);
 
   useEffect(() => {
     const getExpenses = async () => {
@@ -48,12 +49,12 @@ const App: FC = () => {
         month: "" + (1 + parseInt(selectedMonth)),
       }));
       setExpensesLoading(false);
+      setShouldLoadExpenses(false);
     };
-    if (token && shouldRefreshExpenses) {
+    if (token && shouldLoadExpenses) {
       getExpenses();
-      setShouldRefreshExpenses(false);
     }
-  }, [selectedMonth, selectedYear, shouldRefreshExpenses, token]);
+  }, [selectedMonth, selectedYear, shouldLoadExpenses, token]);
 
   const authHandler = async (auth: BasicAuth) => {
     const { token, claims }: TokenData = await fetchToken(auth);
@@ -69,8 +70,8 @@ const App: FC = () => {
   const addExpenseHandler = async (data: NewExpenseData) => {
     if (token) {
       await createExpense({ token, data });
-      !data.isPrivate && setChartData(await fetchChartData({ token }));
-      setShouldRefreshExpenses(true);
+      setShouldLoadChart(!data.isPrivate);
+      setShouldLoadExpenses(true);
     }
   };
 
@@ -80,8 +81,8 @@ const App: FC = () => {
   ) => {
     if (token) {
       await updateExpense(expenseId, { token, data });
-      !data.isPrivate && setChartData(await fetchChartData({ token }));
-      setShouldRefreshExpenses(true);
+      setShouldLoadChart(!data.isPrivate);
+      setShouldLoadExpenses(true);
     }
   };
 
@@ -91,19 +92,19 @@ const App: FC = () => {
     );
     if (isConfirmed) {
       await deleteExpense(expense.id as string, { token });
-      !expense.isPrivate && setChartData(await fetchChartData({ token }));
-      setShouldRefreshExpenses(true);
+      setShouldLoadChart(!expense.isPrivate);
+      setShouldLoadExpenses(true);
     }
   };
 
   const yearChangeHandler = async (year: string) => {
     setSelectedYear(year);
-    setShouldRefreshExpenses(true);
+    setShouldLoadExpenses(true);
   };
 
   const monthChangeHandler = async (month: string) => {
     setSelectedMonth(month);
-    setShouldRefreshExpenses(true);
+    setShouldLoadExpenses(true);
   };
 
   if (!token) {

@@ -11,11 +11,11 @@ export const getYearMonthDay = (date: string) => {
   return [year, month, day];
 };
 
-export const getLocaleYearMonthDay = (date: string, locale?: string) => {
+export const getLocaleYearMonthDay = (date: string) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear();
   const month = newDate.toLocaleString(locale, { month: 'long' });
-  const day = newDate.toLocaleString(locale, { day: '2-digit' });
+  const day = newDate.toLocaleString(locale, { day: 'numeric' });
   return { year, month, day };
 };
 

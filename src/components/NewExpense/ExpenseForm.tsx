@@ -11,8 +11,9 @@ import React, {
 import Add from "@material-ui/icons/Add";
 import { getYearMonthDay } from "utils/date";
 import { NewExpenseData } from "components/Expenses/types";
-import styles from "./ExpenseForm.module.scss";
+import styles from "./ExpenseForm.module.css";
 import { ExpenseFormProps } from "components/NewExpense/types";
+import { InputType } from "components/common";
 
 const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
   const [ year, month, day ] = getYearMonthDay(new Date().toISOString());
@@ -31,9 +32,6 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
   };
   const dateChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     setDate(evt.target.value);
-  };
-  const categoryChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
-    setCategory(evt.target.value);
   };
   const isPrivateClickHandler: MouseEventHandler<HTMLButtonElement> = (evt) => {
     evt.preventDefault();
@@ -63,7 +61,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
       <div>
         <label className={styles.newExpense__label}>Data</label>
         <input
-          type="date"
+          type={InputType.Date}
           value={date}
           onChange={dateChangeHandler}
           className={classnames(
@@ -75,7 +73,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
       <div>
         <label className={styles.newExpense__label}>Nazwa</label>
         <input
-          type="text"
+          type={InputType.Text}
           value={title}
           onChange={titleChangeHandler}
           className={classnames(
@@ -85,23 +83,9 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
         />
       </div>
       <div>
-        <label className={styles.newExpense__label}>Kategoria</label>
-        <input
-          type="text"
-          value={category}
-          onChange={categoryChangeHandler}
-          className={classnames(
-            styles.newExpense__input,
-            styles.newExpense__categoryInput
-          )}
-        />
-      </div>
-      <div>
         <label className={styles.newExpense__label}>Kwota</label>
         <input
-          type="number"
-          min="0.01"
-          step="0.01"
+          type={InputType.Text}
           value={amount}
           onChange={amountChangeHandler}
           className={classnames(
