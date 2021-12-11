@@ -1,3 +1,9 @@
+export enum Interval {
+  Year = "year",
+  Month = "month",
+  Day = "day",
+}
+
 export enum DateString {
   Long = "long",
   Short = "short",

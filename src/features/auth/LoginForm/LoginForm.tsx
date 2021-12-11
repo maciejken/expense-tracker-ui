@@ -1,6 +1,10 @@
 import React, { ChangeEvent, FC, FormEvent, useState } from "react";
-import styles from "./LoginForm.module.scss";
-import { BasicAuth, LoginFormProps } from "./types";
+import styles from "features/auth/LoginForm/LoginForm.module.css";
+import { BasicAuth } from "features/auth/authAPI";
+
+export interface LoginFormProps {
+  onAuth: (auth: BasicAuth) => void;
+}
 
 const LoginForm: FC<LoginFormProps> = ({ onAuth }) => {
   const [username, setUsername] = useState("");

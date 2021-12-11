@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import { ChartBarProps } from "./types";
-import styles from "./ChartBar.module.scss";
+import { ChartBarProps } from "components/Chart/types";
+import styles from "components/Chart/ChartBar.module.css";
 
 const ChartBar: FC<ChartBarProps> = ({ value, maxValue, label }) => {
   let barFillHeight = "0%";

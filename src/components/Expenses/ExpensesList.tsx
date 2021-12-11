@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import styles from "./ExpensesList.module.scss";
-import ExpenseItem from "./ExpenseItem";
-import { ExpensesListProps } from "./types";
+import styles from "components/Expenses/ExpensesList.module.css";
+import ExpenseItem from "components/Expenses/ExpenseItem";
+import { ExpensesListProps } from "components/Expenses/types";
 import { getMonths } from "utils/date";
 
 const ExpensesList: FC<ExpensesListProps> = ({

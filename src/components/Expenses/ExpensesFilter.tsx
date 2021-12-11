@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC } from "react";
-import styles from "components/Expenses/ExpensesFilter.module.scss";
+import styles from "components/Expenses/ExpensesFilter.module.css";
 import { ExpensesFilterProps } from "components/Expenses/types";
 import { getMonths } from "utils/date";
 

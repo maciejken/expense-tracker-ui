@@ -10,18 +10,20 @@ import React, {
 } from "react";
 import Add from "@material-ui/icons/Add";
 import { getYearMonthDay } from "utils/date";
-import { NewExpenseData } from "components/Expenses/types";
-import styles from "./ExpenseForm.module.css";
-import { ExpenseFormProps } from "components/NewExpense/types";
-import { InputType } from "components/common";
+import styles from "features/expenses/NewExpense/ExpenseForm.module.css";
+import { InputType } from "common/types";
+import { NewExpenseData } from "features/expenses/expensesSlice";
 
-const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
-  const [ year, month, day ] = getYearMonthDay(new Date().toISOString());
+export interface ExpenseFormProps {
+  onAddExpense: (data: NewExpenseData) => void;
+}
+
+const ExpenseForm: FC<ExpenseFormProps> = ({ onAddExpense }) => {
+  const [year, month, day] = getYearMonthDay(new Date().toISOString());
   const today = `${year}-${month}-${day}`;
   const [title, setTitle] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [date, setDate] = useState<string>(today);
-  const [category, setCategory] = useState<string>("");
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
 
   const titleChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -40,19 +42,17 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onSaveExpenseData }) => {
 
   const submitHandler = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const [ year, month, day ] = getYearMonthDay(date);
-    const expenseData: NewExpenseData = {
+    const [year, month, day] = getYearMonthDay(date);
+    const expenseData = {
+      date: `${year}-${month}-${day}`,
       title,
       amount,
-      date: `${year}-${month}-${day}`,
-      category,
       isPrivate,
     };
-    onSaveExpenseData(expenseData);
+    onAddExpense(expenseData);
+    setDate(today);
     setTitle("");
     setAmount("");
-    setDate(today);
-    setCategory("");
     setIsPrivate(false);
   };
 

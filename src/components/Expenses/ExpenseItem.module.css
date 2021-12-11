@@ -4,6 +4,7 @@
   align-items: center;
   background-color: rgba(0, 0, 0, 0.05);
   margin: 1rem 0;
+  position: relative;
 }
 
 .expenseItem__textInput {
@@ -23,7 +24,10 @@
 }
 
 .expenseItem__title:focus,
-.expenseItem__title:focus-visible {
+.expenseItem__title:focus-visible,
+.expenseItem__amount:focus,
+.expenseItem__amount:focus-visible {
+  color: #3a3a3a;
   background-color: #fffd7c;
 }
 
@@ -56,8 +60,8 @@
   justify-content: center;
   align-items: center;
   font-size: 1rem;
-  width: 2.5rem;
-  height: 2.6rem;
+  width: 2.4rem;
+  height: 2.4rem;
   line-height: 2.6rem;
   cursor: pointer;
   color: #00ac25;
@@ -72,7 +76,7 @@
 }
 
 .expenseItem__delete {
-  color: #000;
+  color: #444;
   margin-right: 1rem;
 }
 

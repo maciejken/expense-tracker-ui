@@ -1,26 +1,30 @@
 import React, { FC, useEffect, useState } from "react";
-import NewExpense from "components/NewExpense/NewExpense";
 import Expenses from "components/Expenses/Expenses";
 import {
   ExpenseChartYear,
   ExpenseData,
   ExpenseUpdate,
-  NewExpenseData,
 } from "components/Expenses/types";
 import {
-  createExpense,
   deleteExpense,
   fetchChartData,
   fetchExpenses,
   updateExpense,
 } from "api/expenses";
-import { BasicAuth, TokenData } from "components/LoginForm/types";
-import { fetchToken } from "api/auth";
-import LoginForm from "components/LoginForm/LoginForm";
+import NewExpense from "features/expenses/NewExpense/NewExpense";
+import LoginForm from "features/auth/LoginForm";
 import { getCurrentDate } from "utils/date";
+import {
+  clearToken,
+  selectAuthClaims,
+  selectAuthToken,
+} from "features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 
 const App: FC = () => {
-  const [token, setToken] = useState("");
+  const token = useAppSelector(selectAuthToken);
+  const claims = useAppSelector(selectAuthClaims);
+  const dispatch = useAppDispatch();
   const [expenses, setExpenses] = useState([] as ExpenseData[]);
   const [expensesLoading, setExpensesLoading] = useState(false);
   const [shouldLoadExpenses, setShouldLoadExpenses] = useState(true);
@@ -31,10 +35,19 @@ const App: FC = () => {
   const [selectedYear, setSelectedYear] = useState<string>("" + currentYear);
 
   useEffect(() => {
+    if (claims) {
+      const { iat, exp } = claims;
+      setTimeout(() => {
+        dispatch(clearToken());
+      }, (exp - iat) * 1000);
+    }
+  }, [claims, dispatch]);
+
+  useEffect(() => {
     const getChartData = async () => {
       setChartData(await fetchChartData({ token }));
       setShouldLoadChart(false);
-    }
+    };
     if (token) {
       getChartData();
     }
@@ -43,11 +56,13 @@ const App: FC = () => {
   useEffect(() => {
     const getExpenses = async () => {
       setExpensesLoading(true);
-      setExpenses(await fetchExpenses({
-        token,
-        year: selectedYear,
-        month: "" + (1 + parseInt(selectedMonth)),
-      }));
+      setExpenses(
+        await fetchExpenses({
+          token,
+          year: selectedYear,
+          month: "" + (1 + parseInt(selectedMonth)),
+        })
+      );
       setExpensesLoading(false);
       setShouldLoadExpenses(false);
     };
@@ -56,32 +71,13 @@ const App: FC = () => {
     }
   }, [selectedMonth, selectedYear, shouldLoadExpenses, token]);
 
-  const authHandler = async (auth: BasicAuth) => {
-    const { token, claims }: TokenData = await fetchToken(auth);
-    if (token) {
-      setToken(token);
-      const { iat, exp } = claims;
-      setTimeout(() => {
-        setToken("");
-      }, (exp - iat) * 1000);
-    }
-  };
-
-  const addExpenseHandler = async (data: NewExpenseData) => {
-    if (token) {
-      await createExpense({ token, data });
-      setShouldLoadChart(!data.isPrivate);
-      setShouldLoadExpenses(true);
-    }
-  };
-
   const updateExpenseHandler = async (
     expenseId: string,
     data: ExpenseUpdate
   ) => {
     if (token) {
       await updateExpense(expenseId, { token, data });
-      setShouldLoadChart(!data.isPrivate);
+      setShouldLoadChart(true);
       setShouldLoadExpenses(true);
     }
   };
@@ -108,12 +104,12 @@ const App: FC = () => {
   };
 
   if (!token) {
-    return <LoginForm onAuth={authHandler} />;
+    return <LoginForm />;
   }
 
   return (
     <div>
-      <NewExpense onAddExpense={addExpenseHandler} />
+      <NewExpense />
       <Expenses
         chartData={chartData}
         items={expenses}

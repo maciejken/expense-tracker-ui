@@ -6,13 +6,14 @@ import React, {
   useState,
 } from "react";
 import { getLocaleYearMonthDay } from "utils/date";
-import styles from "./ExpenseItem.module.css";
+import styles from "components/Expenses/ExpenseItem.module.css";
 import { ExpenseData, ExpenseItemProps } from "components/Expenses/types";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Delete from "@material-ui/icons/Delete";
 import classNames from "classnames";
 import { InputType } from "components/common";
+import Loader from "components/common/Loader/Loader";
 
 const ExpenseItem: FC<ExpenseItemProps> = ({
   id,
@@ -24,12 +25,9 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   onDelete,
 }) => {
   // const [updatedDate, setDate] = useState<string>(date);
-  // const [isDateLoading, setDateLoading] = useState<boolean>(false);
   const [updatedTitle, setTitle] = useState<string>(title);
-  // const [isTitleLoading, setTitleLoading] = useState<boolean>(false);
-  // const [isPrivateLoading, setIsPrivateLoading] = useState<boolean>(false);
   const [updatedAmount, setAmount] = useState<string>(amount);
-  // const [isAmountLoading, setAmountLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { year, month, day } = getLocaleYearMonthDay(date);
 
@@ -41,29 +39,37 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     setAmount(evt.target.value);
   };
 
+  const waitForIt = async (fn: () => Promise<void>) => {
+    setIsLoading(true);
+    await fn();
+    setIsLoading(false);
+  };
+
   const visibilityClickHandler: MouseEventHandler<HTMLButtonElement> = () => {
     const isConfirmed = window.confirm(
       "Czy chcesz zmienić widoczność wydatku?"
     );
     if (isConfirmed) {
-      onUpdate(id, { isPrivate: !isPrivate });
+      waitForIt(async () => onUpdate(id, { isPrivate: !isPrivate }));
     }
   };
 
-  const titleBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
+  const titleBlurHandler: FocusEventHandler<HTMLInputElement> = async () => {
     if (updatedTitle !== title) {
-      onUpdate(id, { title: updatedTitle });
+      waitForIt(async () => onUpdate(id, { title: updatedTitle }));
     }
   };
 
   const amountBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
-    if (updatedAmount !== amount) {
-      onUpdate(id, { amount: updatedAmount });
+    if (updatedAmount !== "" + amount) {
+      waitForIt(async () => onUpdate(id, { amount: updatedAmount }));
     }
   };
 
   const deleteHandler = () => {
-    onDelete({ id, date, title, amount, isPrivate } as ExpenseData);
+    waitForIt(async () =>
+      onDelete({ id, date, title, amount, isPrivate } as ExpenseData)
+    );
   };
 
   const tooltip = title.concat(isPrivate ? " (własny)" : " (wspólny)");
@@ -117,6 +123,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
           </button>
         </div>
       </div>
+      {isLoading && <Loader isOverlay />}
     </li>
   );
 };
