@@ -29,11 +29,11 @@ export const fetchAuthToken = createAsyncThunk(
   }
 );
 
-export const loginSlice = createSlice({
+export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    clearToken: (state) => {
+    clearAuth: (state) => {
       state.token = "";
       state.claims = null;
     },
@@ -63,9 +63,8 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { clearToken } = loginSlice.actions;
+export const { clearAuth } = authSlice.actions;
 
-export const selectAuthToken = (state: RootState) => state.auth.token;
-export const selectAuthClaims = (state: RootState) => state.auth.claims;
+export const selectAuth = (state: RootState) => state.auth;
 
-export default loginSlice.reducer;
+export default authSlice.reducer;

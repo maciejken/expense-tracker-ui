@@ -6,14 +6,19 @@ import React, {
   useState,
 } from "react";
 import { getLocaleYearMonthDay } from "utils/date";
-import styles from "components/Expenses/ExpenseItem.module.css";
-import { ExpenseData, ExpenseItemProps } from "components/Expenses/types";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Delete from "@material-ui/icons/Delete";
 import classNames from "classnames";
-import { InputType } from "components/common";
-import Loader from "components/common/Loader/Loader";
+import { InputType } from "common/types";
+import Loader from "common/components/Loader";
+import styles from "./ExpenseItem.module.css";
+import { ExpenseData, ExpenseUpdate } from "../expensesTypes";
+
+interface ExpenseItemProps extends ExpenseData {
+  onDelete: (data: ExpenseData) => void;
+  onUpdate: (data: ExpenseUpdate) => void;
+}
 
 const ExpenseItem: FC<ExpenseItemProps> = ({
   id,
@@ -50,26 +55,31 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
       "Czy chcesz zmienić widoczność wydatku?"
     );
     if (isConfirmed) {
-      waitForIt(async () => onUpdate(id, { isPrivate: !isPrivate }));
+      waitForIt(async () => onUpdate({ isPrivate: !isPrivate }));
     }
   };
 
   const titleBlurHandler: FocusEventHandler<HTMLInputElement> = async () => {
     if (updatedTitle !== title) {
-      waitForIt(async () => onUpdate(id, { title: updatedTitle }));
+      waitForIt(async () => onUpdate({ title: updatedTitle }));
     }
   };
 
   const amountBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
     if (updatedAmount !== "" + amount) {
-      waitForIt(async () => onUpdate(id, { amount: updatedAmount }));
+      waitForIt(async () => onUpdate({ amount: updatedAmount }));
     }
   };
 
   const deleteHandler = () => {
-    waitForIt(async () =>
-      onDelete({ id, date, title, amount, isPrivate } as ExpenseData)
+    const isConfirmed = window.confirm(
+      `Usunąć ${title} (${amount} zł)?`
     );
+    if (isConfirmed) {
+      waitForIt(async () =>
+        onDelete({ id, date, title, amount, isPrivate } as ExpenseData)
+      );      
+    }
   };
 
   const tooltip = title.concat(isPrivate ? " (własny)" : " (wspólny)");

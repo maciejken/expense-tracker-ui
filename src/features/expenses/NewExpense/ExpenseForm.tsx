@@ -12,7 +12,7 @@ import Add from "@material-ui/icons/Add";
 import { getYearMonthDay } from "utils/date";
 import styles from "features/expenses/NewExpense/ExpenseForm.module.css";
 import { InputType } from "common/types";
-import { NewExpenseData } from "features/expenses/expensesSlice";
+import { NewExpenseData } from "features/expenses";
 
 export interface ExpenseFormProps {
   onAddExpense: (data: NewExpenseData) => void;
