@@ -9,21 +9,18 @@ import React, {
   useState,
 } from "react";
 import Add from "@material-ui/icons/Add";
-import { getYearMonthDay } from "utils/date";
 import styles from "features/expenses/NewExpense/ExpenseForm.module.css";
 import { InputType } from "common/types";
-import { NewExpenseData } from "features/expenses";
+import { NewExpenseData } from "features/expenses/expensesTypes";
 
 export interface ExpenseFormProps {
+  date: string;
   onAddExpense: (data: NewExpenseData) => void;
 }
 
-const ExpenseForm: FC<ExpenseFormProps> = ({ onAddExpense }) => {
-  const [year, month, day] = getYearMonthDay(new Date().toISOString());
-  const today = `${year}-${month}-${day}`;
+const ExpenseForm: FC<ExpenseFormProps> = ({ date, onAddExpense }) => {
   const [title, setTitle] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
-  const [date, setDate] = useState<string>(today);
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
 
   const titleChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -32,9 +29,6 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onAddExpense }) => {
   const amountChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     setAmount(evt.target.value);
   };
-  const dateChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
-    setDate(evt.target.value);
-  };
   const isPrivateClickHandler: MouseEventHandler<HTMLButtonElement> = (evt) => {
     evt.preventDefault();
     setIsPrivate((isPrivate) => !isPrivate);
@@ -42,15 +36,13 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onAddExpense }) => {
 
   const submitHandler = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const [year, month, day] = getYearMonthDay(date);
     const expenseData = {
-      date: `${year}-${month}-${day}`,
+      date,
       title,
       amount,
       isPrivate,
     };
     onAddExpense(expenseData);
-    setDate(today);
     setTitle("");
     setAmount("");
     setIsPrivate(false);
@@ -58,18 +50,6 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ onAddExpense }) => {
 
   return (
     <form className={styles.newExpense__form} onSubmit={submitHandler}>
-      <div>
-        <label className={styles.newExpense__label}>Data</label>
-        <input
-          type={InputType.Date}
-          value={date}
-          onChange={dateChangeHandler}
-          className={classnames(
-            styles.newExpense__input,
-            styles.newExpense__dateInput
-          )}
-        />
-      </div>
       <div>
         <label className={styles.newExpense__label}>Nazwa</label>
         <input

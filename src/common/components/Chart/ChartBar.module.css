@@ -3,31 +3,53 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-grow: 1;
 }
 
-.chartBar__inner {
+.chartBar__bar {
   height: 100%;
-  width: 3.25rem;
-  border-left: 1px solid rgba(251, 255, 0, 0.25);
-  border-right: 1px solid rgba(251, 255, 0, 0.25);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  width: 100%;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background-color: rgba(251, 255, 0, 0.25);
+  transition: background-color 0.1s;
+  cursor: pointer;
+}
+
+.chartBar__bar:hover,
+.chartBar__barActive {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .chartBar__fill {
-  background-color: #00ac25;
+  background-color: #00dd30;
   width: 100%;
-  transition: all 0.3s ease-out;
+  transition: height 0.3s, background-color 0.1s;
+}
+
+label:hover .chartBar__fill,
+label .chartBar__fillActive {
+  background-color: #00ac25;
+}
+
+.chartBar__radioInput {
+  display: none;
 }
 
 .chartBar__label {
   font-weight: bold;
   font-size: 0.75rem;
   text-align: center;
-  color: #666;
+  color: #999;
   margin-top: 0.25rem;
+}
+
+label:hover + .chartBar__label,
+.chartBar__labelActive {
+  color: #111;
+  text-decoration: underline;
 }

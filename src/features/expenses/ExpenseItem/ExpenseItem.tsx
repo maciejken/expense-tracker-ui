@@ -29,7 +29,6 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   onUpdate,
   onDelete,
 }) => {
-  // const [updatedDate, setDate] = useState<string>(date);
   const [updatedTitle, setTitle] = useState<string>(title);
   const [updatedAmount, setAmount] = useState<string>(amount);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -66,7 +65,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   };
 
   const amountBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
-    if (updatedAmount !== "" + amount) {
+    if ('' + updatedAmount !== '' + amount) {
       waitForIt(async () => onUpdate({ amount: updatedAmount }));
     }
   };

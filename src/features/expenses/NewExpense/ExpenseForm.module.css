@@ -22,16 +22,13 @@
     max-width: 100%;
   }
   
-  .newExpense__dateInput {
-    width: 8rem;
-  }
-  
   .newExpense__amountInput {
-    width: 8rem;
+    flex-grow: 2;
   }
   
   .newExpense__titleInput {
-    width: 23rem;
+    width: 30rem;
+    flex-grow: 1;
   }
   
   .newExpense__titleInput:focus,

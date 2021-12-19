@@ -1,6 +1,7 @@
 import { useAppDispatch } from "app/hooks";
 import React, { FC } from "react";
-import { ExpenseData, ExpenseUpdate, removeExpense, updateExpense } from "..";
+import { removeExpense, updateExpense } from "../expensesThunks";
+import { ExpenseData, ExpenseUpdate } from "../expensesTypes";
 import ExpenseItem from "./ExpenseItem";
 
 const ExpenseItemWrapper: FC<ExpenseData> = ({ id, date, title, amount, isPrivate }) => {

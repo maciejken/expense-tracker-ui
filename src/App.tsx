@@ -1,14 +1,21 @@
 import React, { FC, useEffect } from "react";
 import Expenses from "features/expenses/Expenses";
-import NewExpense from "features/expenses/NewExpense/NewExpense";
 import LoginForm from "features/auth/LoginForm";
 import { clearAuth, selectAuth } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { fetchExpenses, selectExpensesStatus } from "features/expenses";
+import {
+  fetchExpenses,
+  fetchExpensesChart,
+} from "features/expenses/expensesThunks";
+import {
+  selectExpensesChartInterval,
+  selectExpensesStatus,
+} from "features/expenses/expensesSelectors";
 import { Status } from "common/types";
 
 const App: FC = () => {
   const { token, claims } = useAppSelector(selectAuth);
+  const chartInterval = useAppSelector(selectExpensesChartInterval);
   const { creationStatus, updateStatus, removalStatus } =
     useAppSelector(selectExpensesStatus);
   const dispatch = useAppDispatch();
@@ -22,16 +29,6 @@ const App: FC = () => {
     }
   }, [claims, dispatch]);
 
-  // useEffect(() => {
-  //   const getChartData = async () => {
-  //     setChartData(await fetchChartData({ token }));
-  //     setShouldLoadChart(false);
-  //   };
-  //   if (token) {
-  //     getChartData();
-  //   }
-  // }, [shouldLoadChart, token]);
-
   useEffect(() => {
     if (
       token &&
@@ -40,18 +37,16 @@ const App: FC = () => {
       removalStatus === Status.Idle
     ) {
       dispatch(fetchExpenses());
+      dispatch(fetchExpensesChart());
     }
-  }, [dispatch, creationStatus, updateStatus, removalStatus, token]);
-
-  // const yearChangeHandler = async (year: string) => {
-  //   setSelectedYear(year);
-  //   setShouldLoadExpenses(true);
-  // };
-
-  // const monthChangeHandler = async (month: string) => {
-  //   setSelectedMonth(month);
-  //   setShouldLoadExpenses(true);
-  // };
+  }, [
+    dispatch,
+    chartInterval,
+    creationStatus,
+    updateStatus,
+    removalStatus,
+    token,
+  ]);
 
   if (!token) {
     return <LoginForm />;
@@ -59,7 +54,6 @@ const App: FC = () => {
 
   return (
     <div>
-      <NewExpense />
       <Expenses />
     </div>
   );

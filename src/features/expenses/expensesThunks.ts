@@ -1,16 +1,25 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
 import { selectAuth } from "features/auth/authSlice";
-import { deleteExpense, getExpenses, patchExpense, postExpense } from "./expensesAPI";
+import {
+  deleteExpense,
+  getExpenses,
+  getExpensesChart,
+  patchExpense,
+  postExpense,
+} from "./expensesAPI";
 import {
   FetchExpensesPayload,
   AddExpensePayload,
   UpdateExpensePayload,
   DeleteExpensePayload,
-  NewExpenseData
+  NewExpenseData,
+  ExpenseUpdate,
 } from "./expensesTypes";
-import { selectExpensesDate } from "./expensesSelectors";
-import { ExpenseUpdate } from ".";
+import {
+  selectExpensesDateString,
+  selectExpensesChartInterval,
+} from "./expensesSelectors";
 
 export const fetchExpensesAsync = createAsyncThunk(
   "expenses/fetchExpenses",
@@ -18,6 +27,14 @@ export const fetchExpensesAsync = createAsyncThunk(
     const expenses = await getExpenses(data);
     // The value we return becomes the `fulfilled` action payload
     return expenses;
+  }
+);
+
+export const fetchExpensesChartAsync = createAsyncThunk(
+  "expenses/fetchExpensesChart",
+  async (data: FetchExpensesPayload) => {
+    const chartData = await getExpensesChart(data);
+    return chartData;
   }
 );
 
@@ -46,9 +63,19 @@ export const removeExpenseAsync = createAsyncThunk(
 // Here's an example of conditionally dispatching actions based on current state.
 export const fetchExpenses = (): AppThunk => (dispatch, getState) => {
   const { token } = selectAuth(getState());
-  const date = selectExpensesDate(getState());
+  const date = selectExpensesDateString(getState());
+  const interval = selectExpensesChartInterval(getState());
   if (token) {
-    dispatch(fetchExpensesAsync({ token, ...date }));
+    dispatch(fetchExpensesAsync({ token, date, interval }));
+  }
+};
+
+export const fetchExpensesChart = (): AppThunk => (dispatch, getState) => {
+  const { token } = selectAuth(getState());
+  const date = selectExpensesDateString(getState());
+  const interval = selectExpensesChartInterval(getState());
+  if (token) {
+    dispatch(fetchExpensesChartAsync({ token, date, interval }));
   }
 };
 
@@ -61,7 +88,7 @@ export const addExpense =
     }
   };
 
-  export const updateExpense =
+export const updateExpense =
   ({ id, data }: { id: string; data: ExpenseUpdate }): AppThunk =>
   (dispatch, getState) => {
     const { token } = selectAuth(getState());
@@ -70,8 +97,7 @@ export const addExpense =
     }
   };
 
-
-  export const removeExpense =
+export const removeExpense =
   ({ id }: { id: string }): AppThunk =>
   (dispatch, getState) => {
     const { token } = selectAuth(getState());

@@ -1,12 +1,15 @@
 import { ActionReducerMapBuilder, PayloadAction } from "@reduxjs/toolkit";
+import { DataPoint } from "common/components/Chart/Chart";
 import { Status } from "common/types";
 import {
   addExpenseAsync,
   fetchExpensesAsync,
+  fetchExpensesChartAsync,
   removeExpenseAsync,
   updateExpenseAsync,
-} from "features/expenses/expensesActions";
+} from "features/expenses/expensesThunks";
 import { ExpenseData, ExpensesState } from "features/expenses/expensesTypes";
+import { Interval } from "utils/date";
 
 export const reducers = {
   setExpensesMonth: (state: ExpensesState, action: PayloadAction<string>) => {
@@ -17,6 +20,12 @@ export const reducers = {
   },
   setExpensesDay: (state: ExpensesState, action: PayloadAction<string>) => {
     state.day = action.payload;
+  },
+  setExpensesChartInterval: (
+    state: ExpensesState,
+    action: PayloadAction<Interval>
+  ) => {
+    state.chartInterval = action.payload;
   },
 };
 
@@ -37,6 +46,19 @@ export const extraReducers = (
     .addCase(fetchExpensesAsync.rejected, (state: ExpensesState) => {
       state.status.readStatus = Status.Failed;
       state.expenses = [];
+    })
+    .addCase(fetchExpensesChartAsync.pending, (state: ExpensesState) => {
+      state.status.chartStatus = Status.Loading;
+    })
+    .addCase(
+      fetchExpensesChartAsync.fulfilled,
+      (state: ExpensesState, action: PayloadAction<DataPoint[]>) => {
+        state.status.chartStatus = Status.Idle;
+        state.chartData = action.payload;
+      }
+    )
+    .addCase(fetchExpensesChartAsync.rejected, (state: ExpensesState) => {
+      state.status.chartStatus = Status.Failed;
     })
     .addCase(addExpenseAsync.pending, (state: ExpensesState) => {
       state.status.creationStatus = Status.Loading;

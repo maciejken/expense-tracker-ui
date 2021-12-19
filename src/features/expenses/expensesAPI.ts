@@ -1,6 +1,5 @@
 import http from "services/http";
 import {
-  ExpenseChartData,
   ExpenseData,
   FetchExpensesPayload,
   AddExpensePayload,
@@ -8,24 +7,24 @@ import {
   DeleteExpensePayload,
 } from "features/expenses/expensesTypes";
 import { expensesUrl } from "app/config";
+import { DataPoint } from "common/components/Chart/Chart";
 
 export const getExpenses: (
   payload: FetchExpensesPayload
-) => Promise<ExpenseData[]> = async ({ token, year, month, day }) => {
+) => Promise<ExpenseData[]> = async ({ token, date, interval }) => {
   const headers = new Headers();
   headers.set("Authorization", `Bearer ${token}`);
-  const url = day
-    ? `${expensesUrl}/${year}/${month}/${day}`
-    : `${expensesUrl}/${year}/${month}`;
+  const url = `${expensesUrl}?date=${date}&interval=${interval}`;
   return http(url, { headers });
 };
 
-export const getChartData: (payload: {
-  token: string;
-}) => Promise<ExpenseChartData[]> = async ({ token }) => {
+export const getExpensesChart: (
+  payload: FetchExpensesPayload
+) => Promise<DataPoint[]> = async ({ token, date, interval }) => {
   const headers = new Headers();
   headers.set("Authorization", `Bearer ${token}`);
-  return http(`${expensesUrl}/chart`, { headers });
+  const url = `${expensesUrl}/chart?date=${date}&interval=${interval}`;
+  return http(url, { headers });
 };
 
 export const postExpense: ({

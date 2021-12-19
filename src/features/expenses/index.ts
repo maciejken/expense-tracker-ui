@@ -1,21 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { reducers, extraReducers } from 'features/expenses/expensesReducers';
-import { ExpensesState } from "features/expenses";
+import { ExpensesState } from 'features/expenses/expensesTypes';
 import { Status } from 'common/types';
+import { Interval } from 'utils/date';
 
 const currentDate = new Date();
 
 export const initialState: ExpensesState = {
   expenses: [],
-  year: "" + currentDate.getFullYear(),
-  month: "" + (currentDate.getMonth() + 1),
-  day: "",
+  year: '' + currentDate.getFullYear(),
+  month: '' + currentDate.getMonth(),
+  day: '' + currentDate.getDate(),
   status: {
+    chartStatus: Status.Idle,
     creationStatus: Status.Idle,
     readStatus: Status.Idle,
     updateStatus: Status.Idle,
     removalStatus: Status.Idle,
-  }
+  },
+  chartData: [],
+  chartInterval: Interval.Day,
 };
 
 export const expensesSlice = createSlice({
@@ -25,8 +29,6 @@ export const expensesSlice = createSlice({
   extraReducers,
 });
 
-export * from "features/expenses/expensesActions";
-export * from "features/expenses/expensesSelectors";
-export * from "features/expenses/expensesTypes";
+export const { setExpensesYear, setExpensesMonth, setExpensesDay } = expensesSlice.actions;
 
 export default expensesSlice.reducer;

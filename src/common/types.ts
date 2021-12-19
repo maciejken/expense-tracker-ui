@@ -1,10 +1,11 @@
 export enum InputType {
-  Text = "text",
-  Number = "number",
-  Submit = "submit",
-  Password = "password",
   Button = "button",
   Date = "date",
+  Number = "number",
+  Password = "password",
+  Radio = "radio",
+  Submit = "submit",
+  Text = "text",
 }
 
 export enum Status {
