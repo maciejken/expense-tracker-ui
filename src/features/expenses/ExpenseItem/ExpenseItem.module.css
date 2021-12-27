@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 1rem 0;
   position: relative;
 }
@@ -16,7 +16,8 @@
 }
 
 .expenseItem__title {
-  width: 27rem;
+  flex-grow: 1;
+  width: 25rem;
   color: #3a3a3a;
   font-size: 1rem;
   margin: 0 1rem;
@@ -31,14 +32,15 @@
   background-color: #fffd7c;
 }
 
-.expenseItem__description {
+.inputWrapper {
   display: flex;
+  flex-grow: 1;
   gap: 1rem;
   align-items: center;
 }
 
 .expenseItem__amount {
-  width: 7rem;
+  width: 8rem;
   font-size: 1.25rem;
   background-color: #00ac25;
   color: white;
@@ -89,7 +91,7 @@
   flex-direction: column;
   width: 5.5rem;
   height: 5.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #fff;
   align-items: center;
   justify-content: center;

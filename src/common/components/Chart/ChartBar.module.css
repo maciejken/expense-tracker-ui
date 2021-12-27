@@ -41,15 +41,19 @@ label .chartBar__fillActive {
 }
 
 .chartBar__label {
+  box-sizing: border-box;
   font-weight: bold;
   font-size: 0.75rem;
   text-align: center;
   color: #999;
   margin-top: 0.25rem;
+  padding-bottom: 6px;
 }
 
 label:hover + .chartBar__label,
 .chartBar__labelActive {
+  width: 100%;
   color: #111;
-  text-decoration: underline;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #111;
 }

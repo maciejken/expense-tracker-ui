@@ -14,6 +14,7 @@ import { InputType } from "common/types";
 import Loader from "common/components/Loader";
 import styles from "./ExpenseItem.module.css";
 import { ExpenseData, ExpenseUpdate } from "../expensesTypes";
+import { getLocalAmount, getLocalFloat } from "utils/number";
 
 interface ExpenseItemProps extends ExpenseData {
   onDelete: (data: ExpenseData) => void;
@@ -30,7 +31,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   onDelete,
 }) => {
   const [updatedTitle, setTitle] = useState<string>(title);
-  const [updatedAmount, setAmount] = useState<string>(amount);
+  const [updatedAmount, setAmount] = useState<string>(getLocalFloat(amount));
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { year, month, day } = getLocaleYearMonthDay(date);
@@ -65,19 +66,19 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   };
 
   const amountBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
-    if ('' + updatedAmount !== '' + amount) {
-      waitForIt(async () => onUpdate({ amount: updatedAmount }));
+    if (getLocalFloat(updatedAmount) !== getLocalFloat(amount)) {
+      waitForIt(async () =>
+        onUpdate({ amount: updatedAmount.replace(",", ".") })
+      );
     }
   };
 
   const deleteHandler = () => {
-    const isConfirmed = window.confirm(
-      `Usunąć ${title} (${amount} zł)?`
-    );
+    const isConfirmed = window.confirm(`Usunąć ${title} (${getLocalAmount(amount)})?`);
     if (isConfirmed) {
       waitForIt(async () =>
         onDelete({ id, date, title, amount, isPrivate } as ExpenseData)
-      );      
+      );
     }
   };
 
@@ -89,7 +90,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
         <div className={styles.expenseItem__day}>{day}</div>
         <div className={styles.expenseItem__year}>{year}</div>
       </div>
-      <div className={styles.expenseItem__description}>
+      <div className={styles.inputWrapper}>
         <input
           className={classNames(
             styles.expenseItem__textInput,

@@ -1,0 +1,61 @@
+.chart {
+  margin: 2rem 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  margin: 2rem 0;
+}
+
+.navLeft, .navRight {
+  width: 4rem;
+  display: flex;
+}
+
+.navLeft {
+  justify-content: flex-end;
+}
+
+.nevRight {
+  justify-content: flex-start;
+}
+
+.button {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  line-height: 1;
+  box-sizing: border-box;
+  border: none;
+  color: rgba(0,0,0, 0.9);
+  background-color: #fff;
+}
+
+.up,
+.down,
+.next,
+.prev {
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.up, .prev {
+  margin-right: 1rem;
+}
+
+.up:hover,
+.down:hover,
+.next:hover,
+.prev:hover {
+  background-color: #ddd;
+}
+
+.disabled {
+  color: rgba(0,0,0, 0.5);
+  cursor: default;
+  pointer-events: none;
+}

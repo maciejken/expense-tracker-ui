@@ -9,15 +9,14 @@ import {
 } from "features/expenses/expensesThunks";
 import {
   selectExpensesChartInterval,
-  selectExpensesStatus,
+  selectIsUpdatingExpenses,
 } from "features/expenses/expensesSelectors";
-import { Status } from "common/types";
+import styles from "./App.module.css";
 
 const App: FC = () => {
   const { token, claims } = useAppSelector(selectAuth);
   const chartInterval = useAppSelector(selectExpensesChartInterval);
-  const { creationStatus, updateStatus, removalStatus } =
-    useAppSelector(selectExpensesStatus);
+  const isUpdatingExpenses = useAppSelector(selectIsUpdatingExpenses);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -30,31 +29,25 @@ const App: FC = () => {
   }, [claims, dispatch]);
 
   useEffect(() => {
-    if (
-      token &&
-      creationStatus === Status.Idle &&
-      updateStatus === Status.Idle &&
-      removalStatus === Status.Idle
-    ) {
-      dispatch(fetchExpenses());
+    if (token && !isUpdatingExpenses) {
       dispatch(fetchExpensesChart());
     }
-  }, [
-    dispatch,
-    chartInterval,
-    creationStatus,
-    updateStatus,
-    removalStatus,
-    token,
-  ]);
+  }, [dispatch, chartInterval, isUpdatingExpenses, token]);
+
+  useEffect(() => {
+    if (token && !isUpdatingExpenses) {
+      dispatch(fetchExpenses());
+    }
+  }, [dispatch, isUpdatingExpenses, token]);
 
   if (!token) {
     return <LoginForm />;
   }
 
   return (
-    <div>
+    <div className={styles.flexContainer}>
       <Expenses />
+      <footer className={styles.footer}></footer>
     </div>
   );
 };

@@ -39,7 +39,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ date, onAddExpense }) => {
     const expenseData = {
       date,
       title,
-      amount,
+      amount: amount.replace(',', '.'),
       isPrivate,
     };
     onAddExpense(expenseData);

@@ -20,6 +20,7 @@ interface DateFormat {
   day?: DateNumber;
   hour12?: boolean;
   month?: DateString | DateNumber;
+  dateStyle?: "full" | "short";
   timeZone?: string;
   timeZoneName?: DateString;
   year?: DateNumber;
@@ -54,6 +55,13 @@ export const getLocaleYearMonthDay = (date: string) => {
 export const formatDate = (date: Date, options?: DateFormat) =>
   new Intl.DateTimeFormat(locale, options).format(date);
 
-// export const getLocalDate = (date: Date, opts: DateOptions) => {
-//   return date.toLocaleDateString(locale, opts);
-// };
+export const getLocalDate = (date: Date) => {
+  return formatDate(date, { dateStyle: 'full' });
+};
+
+const intervals = [Interval.Day, Interval.Month, Interval.Year];
+
+export const getRelativeInterval = (interval: Interval, step: number) => {
+  const index = intervals.indexOf(interval);
+  return intervals[index + step];
+};

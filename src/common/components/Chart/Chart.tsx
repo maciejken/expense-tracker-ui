@@ -6,7 +6,7 @@ export interface DataPoint {
   x: string;
   y: number;
   label?: string;
-  info?: string;  
+  info?: string;
 }
 
 export interface ChartData {

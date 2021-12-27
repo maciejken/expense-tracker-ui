@@ -20,18 +20,25 @@ import {
   selectExpensesDateString,
   selectExpensesChartInterval,
 } from "./expensesSelectors";
+import { getRelativeInterval } from "utils/date";
+import {
+  FETCH_EXPENSES_CHART,
+  FETCH_EXPENSES,
+  setExpensesInterval,
+  CREATE_EXPENSE,
+  UPDATE_EXPENSE,
+  REMOVE_EXPENSE,
+} from "./expensesActions";
 
 export const fetchExpensesAsync = createAsyncThunk(
-  "expenses/fetchExpenses",
+  FETCH_EXPENSES,
   async (data: FetchExpensesPayload) => {
-    const expenses = await getExpenses(data);
-    // The value we return becomes the `fulfilled` action payload
-    return expenses;
+    return await getExpenses(data);
   }
 );
 
 export const fetchExpensesChartAsync = createAsyncThunk(
-  "expenses/fetchExpensesChart",
+  FETCH_EXPENSES_CHART,
   async (data: FetchExpensesPayload) => {
     const chartData = await getExpensesChart(data);
     return chartData;
@@ -39,28 +46,26 @@ export const fetchExpensesChartAsync = createAsyncThunk(
 );
 
 export const addExpenseAsync = createAsyncThunk(
-  "expenses/createExpense",
+  CREATE_EXPENSE,
   async (data: AddExpensePayload) => {
     await postExpense(data);
   }
 );
 
 export const updateExpenseAsync = createAsyncThunk(
-  "expenses/updateExpense",
+  UPDATE_EXPENSE,
   async (payload: UpdateExpensePayload) => {
     await patchExpense(payload);
   }
 );
 
 export const removeExpenseAsync = createAsyncThunk(
-  "expenses/removeExpense",
+  REMOVE_EXPENSE,
   async (payload: DeleteExpensePayload) => {
     await deleteExpense(payload);
   }
 );
 
-// We can also write thunks by hand, which may contain both sync and async logic.
-// Here's an example of conditionally dispatching actions based on current state.
 export const fetchExpenses = (): AppThunk => (dispatch, getState) => {
   const { token } = selectAuth(getState());
   const date = selectExpensesDateString(getState());
@@ -103,5 +108,15 @@ export const removeExpense =
     const { token } = selectAuth(getState());
     if (token) {
       dispatch(removeExpenseAsync({ id, token }));
+    }
+  };
+
+export const jumpToExpensesChartInterval =
+  (step: number): AppThunk =>
+  (dispatch, getState) => {
+    const interval = selectExpensesChartInterval(getState());
+    const relativeInterval = getRelativeInterval(interval, step);
+    if (relativeInterval) {
+      dispatch(setExpensesInterval(relativeInterval));
     }
   };
