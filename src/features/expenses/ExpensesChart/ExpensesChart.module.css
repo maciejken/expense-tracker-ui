@@ -13,13 +13,6 @@
 .navLeft, .navRight {
   width: 4rem;
   display: flex;
-}
-
-.navLeft {
-  justify-content: flex-end;
-}
-
-.nevRight {
   justify-content: flex-start;
 }
 

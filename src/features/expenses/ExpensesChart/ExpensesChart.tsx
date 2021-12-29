@@ -37,37 +37,37 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
     <div className={styles.chart}>
       <nav className={styles.nav}>
         <div className={styles.navLeft}>
-          <button
-            className={classNames(styles.button, styles.up, {
-              [styles.disabled]: chartInterval === Interval.Year
-            })}
-            disabled={chartInterval === Interval.Year}
-            onClick={onChartUp}
-          >
-            <ExpandLess />
-          </button>
-          <button
-            className={classNames(styles.button, styles.down, {
-              [styles.disabled]: chartInterval === Interval.Day
-            })}
-            disabled={chartInterval === Interval.Day}
-            onClick={onChartDown}
-          >
-            <ExpandMore />
-          </button>
+          {chartInterval !== Interval.Year && (
+            <button
+              className={classNames(styles.button, styles.up)}
+              onClick={onChartUp}
+            >
+              <ExpandLess />
+            </button>
+          )}
+          {chartInterval !== Interval.Day && (
+            <button
+              className={classNames(styles.button, styles.down)}
+              onClick={onChartDown}
+            >
+              <ExpandMore />
+            </button>
+          )}
         </div>
         <span>{chartInfo}</span>
-        <div className={styles.navRight}>
-          <button
-            className={classNames(styles.button, styles.prev)}
-            onClick={onChartPrev}
-          >
-            <ChevronLeft />
-          </button>
-          <button className={styles.button} onClick={onChartNext}>
-            <ChevronRight className={styles.next} />
-          </button>
-        </div>
+        {chartInterval !== Interval.Year && (
+          <div className={styles.navRight}>
+            <button
+              className={classNames(styles.button, styles.prev)}
+              onClick={onChartPrev}
+            >
+              <ChevronLeft />
+            </button>
+            <button className={styles.button} onClick={onChartNext}>
+              <ChevronRight className={styles.next} />
+            </button>
+          </div>
+        )}
       </nav>
       <Chart
         data={chartData}

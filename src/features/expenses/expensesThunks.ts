@@ -19,8 +19,9 @@ import {
 import {
   selectExpensesDateString,
   selectExpensesChartInterval,
+  selectExpensesDate,
 } from "./expensesSelectors";
-import { getRelativeInterval } from "utils/date";
+import { getRelativeInterval, Interval } from "utils/date";
 import {
   FETCH_EXPENSES_CHART,
   FETCH_EXPENSES,
@@ -28,6 +29,9 @@ import {
   CREATE_EXPENSE,
   UPDATE_EXPENSE,
   REMOVE_EXPENSE,
+  incrementExpensesYear,
+  setExpensesMonth,
+  decrementExpensesYear,
 } from "./expensesActions";
 
 export const fetchExpensesAsync = createAsyncThunk(
@@ -119,4 +123,51 @@ export const jumpToExpensesChartInterval =
     if (relativeInterval) {
       dispatch(setExpensesInterval(relativeInterval));
     }
+  };
+
+export const incrementExpensesMonth = (): AppThunk => (dispatch, getState) => {
+  const { month } = selectExpensesDate(getState());
+  let nextMonth;
+  if (month === "11") {
+    nextMonth = "0";
+    dispatch(incrementExpensesYear());
+  } else {
+    nextMonth = "" + (parseInt(month) + 1);
+  }
+  dispatch(setExpensesMonth(nextMonth));
+};
+
+export const decrementExpensesMonth = (): AppThunk => (dispatch, getState) => {
+  const { month } = selectExpensesDate(getState());
+  let previousMonth;
+  if (month === "0") {
+    previousMonth = "11";
+    dispatch(decrementExpensesYear());
+  } else {
+    previousMonth = "" + (parseInt(month) - 1);
+  }
+  dispatch(setExpensesMonth(previousMonth));
+};
+
+export const getNextChart = (): AppThunk => (dispatch, getState) => {
+  const interval = selectExpensesChartInterval(getState());
+  const parentInterval = getRelativeInterval(interval, 1);
+  if (parentInterval === Interval.Month) {
+    dispatch(incrementExpensesMonth());
+  } else if (parentInterval === Interval.Year) {
+    dispatch(incrementExpensesYear());
+  }
+  dispatch(fetchExpensesChart());
+};
+
+export const getPreviousChart =
+  (): AppThunk => (dispatch, getState) => {
+    const interval = selectExpensesChartInterval(getState());
+    const parentInterval = getRelativeInterval(interval, 1);
+    if (parentInterval === Interval.Month) {
+      dispatch(decrementExpensesMonth());
+    } else if (parentInterval === Interval.Year) {
+      dispatch(decrementExpensesYear());
+    }
+    dispatch(fetchExpensesChart());
   };

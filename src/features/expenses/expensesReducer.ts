@@ -1,13 +1,14 @@
+import { createReducer, PayloadAction } from "@reduxjs/toolkit";
+import { DataPoint } from "common/components/Chart/Chart";
+import { Status } from "common/types";
+import { Interval } from "utils/date";
 import {
-  ActionReducerMapBuilder,
-  createReducer,
-  PayloadAction,
-} from "@reduxjs/toolkit";
-import {
-  setExpensesDay,
-  setExpensesInterval,
-  setExpensesMonth,
-  setExpensesYear,
+  DECREMENT_EXPENSES_YEAR,
+  INCREMENT_EXPENSES_YEAR,
+  SET_EXPENSES_DAY,
+  SET_EXPENSES_INTERVAL,
+  SET_EXPENSES_MONTH,
+  SET_EXPENSES_YEAR,
 } from "./expensesActions";
 import {
   addExpenseAsync,
@@ -15,11 +16,8 @@ import {
   fetchExpensesChartAsync,
   removeExpenseAsync,
   updateExpenseAsync,
-} from "features/expenses/expensesThunks";
-import { ExpenseData, ExpensesState } from "features/expenses/expensesTypes";
-import { Status } from "common/types";
-import { DataPoint } from "common/components/Chart/Chart";
-import { Interval } from "utils/date";
+} from "./expensesThunks";
+import { ExpenseData, ExpensesState } from "./expensesTypes";
 
 const currentDate = new Date();
 
@@ -39,89 +37,88 @@ export const initialState: ExpensesState = {
   chartInterval: Interval.Day,
 };
 
-const expensesReducer = createReducer(
-  initialState,
-  (builder: ActionReducerMapBuilder<ExpensesState>) => {
-    builder
-      .addCase(
-        setExpensesYear,
-        (state: ExpensesState, action: PayloadAction<string>) => {
-          state.year = action.payload;
-        }
-      )
-      .addCase(
-        setExpensesMonth,
-        (state: ExpensesState, action: PayloadAction<string>) => {
-          state.month = action.payload;
-        }
-      )
-      .addCase(
-        setExpensesDay,
-        (state: ExpensesState, action: PayloadAction<string>) => {
-          state.day = action.payload;
-        }
-      )
-      .addCase(
-        setExpensesInterval,
-        (state: ExpensesState, action: PayloadAction<Interval>) => {
-          state.chartInterval = action.payload;
-        }
-      )
-      .addCase(fetchExpensesAsync.pending, (state: ExpensesState) => {
-        state.status.readStatus = Status.Loading;
-      })
-      .addCase(
-        fetchExpensesAsync.fulfilled,
-        (state: ExpensesState, action: PayloadAction<ExpenseData[]>) => {
-          state.status.readStatus = Status.Idle;
-          state.expenses = action.payload;
-        }
-      )
-      .addCase(fetchExpensesAsync.rejected, (state: ExpensesState) => {
-        state.status.readStatus = Status.Failed;
-        state.expenses = [];
-      })
-      .addCase(fetchExpensesChartAsync.pending, (state: ExpensesState) => {
-        state.status.chartStatus = Status.Loading;
-      })
-      .addCase(
-        fetchExpensesChartAsync.fulfilled,
-        (state: ExpensesState, action: PayloadAction<DataPoint[]>) => {
-          state.status.chartStatus = Status.Idle;
-          state.chartData = action.payload;
-        }
-      )
-      .addCase(fetchExpensesChartAsync.rejected, (state: ExpensesState) => {
-        state.status.chartStatus = Status.Failed;
-      })
-      .addCase(addExpenseAsync.pending, (state: ExpensesState) => {
-        state.status.creationStatus = Status.Loading;
-      })
-      .addCase(addExpenseAsync.fulfilled, (state: ExpensesState) => {
-        state.status.creationStatus = Status.Idle;
-      })
-      .addCase(addExpenseAsync.rejected, (state: ExpensesState) => {
-        state.status.creationStatus = Status.Failed;
-      })
-      .addCase(updateExpenseAsync.pending, (state: ExpensesState) => {
-        state.status.updateStatus = Status.Loading;
-      })
-      .addCase(updateExpenseAsync.fulfilled, (state: ExpensesState) => {
-        state.status.updateStatus = Status.Idle;
-      })
-      .addCase(updateExpenseAsync.rejected, (state: ExpensesState) => {
-        state.status.updateStatus = Status.Failed;
-      })
-      .addCase(removeExpenseAsync.pending, (state: ExpensesState) => {
-        state.status.removalStatus = Status.Loading;
-      })
-      .addCase(removeExpenseAsync.fulfilled, (state: ExpensesState) => {
-        state.status.removalStatus = Status.Idle;
-      })
-      .addCase(removeExpenseAsync.rejected, (state: ExpensesState) => {
-        state.status.removalStatus = Status.Failed;
-      });
-  }
-);
+const expensesReducer = createReducer(initialState, {
+  [SET_EXPENSES_YEAR]: (
+    state: ExpensesState,
+    action: PayloadAction<string>
+  ) => {
+    state.year = action.payload;
+  },
+  [INCREMENT_EXPENSES_YEAR]: (state: ExpensesState) => {
+    state.year = '' + (parseInt(state.year) + 1)
+  },
+  [DECREMENT_EXPENSES_YEAR]: (state: ExpensesState) => {
+    state.year = '' + (parseInt(state.year) - 1)
+  },
+  [SET_EXPENSES_MONTH]: (
+    state: ExpensesState,
+    action: PayloadAction<string>
+  ) => {
+    state.month = action.payload;
+  },
+  [SET_EXPENSES_DAY]: (state: ExpensesState, action: PayloadAction<string>) => {
+    state.day = action.payload;
+  },
+  [SET_EXPENSES_INTERVAL]: (
+    state: ExpensesState,
+    action: PayloadAction<Interval>
+  ) => {
+    state.chartInterval = action.payload;
+  },
+  [fetchExpensesAsync.pending.type]: (state: ExpensesState) => {
+    state.status.readStatus = Status.Loading;
+  },
+  [fetchExpensesAsync.fulfilled.type]: (
+    state: ExpensesState,
+    action: PayloadAction<ExpenseData[]>
+  ) => {
+    state.status.readStatus = Status.Idle;
+    state.expenses = action.payload;
+  },
+  [fetchExpensesAsync.rejected.type]: (state: ExpensesState) => {
+    state.status.readStatus = Status.Failed;
+    state.expenses = [];
+  },
+  [fetchExpensesChartAsync.pending.type]: (state: ExpensesState) => {
+    state.status.chartStatus = Status.Loading;
+  },
+  [fetchExpensesChartAsync.fulfilled.type]: (
+    state: ExpensesState,
+    action: PayloadAction<DataPoint[]>
+  ) => {
+    state.status.chartStatus = Status.Idle;
+    state.chartData = action.payload;
+  },
+  [fetchExpensesChartAsync.rejected.type]: (state: ExpensesState) => {
+    state.status.chartStatus = Status.Failed;
+  },
+  [addExpenseAsync.pending.type]: (state: ExpensesState) => {
+    state.status.creationStatus = Status.Loading;
+  },
+  [addExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
+    state.status.creationStatus = Status.Idle;
+  },
+  [addExpenseAsync.rejected.type]: (state: ExpensesState) => {
+    state.status.creationStatus = Status.Failed;
+  },
+  [updateExpenseAsync.pending.type]: (state: ExpensesState) => {
+    state.status.updateStatus = Status.Loading;
+  },
+  [updateExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
+    state.status.updateStatus = Status.Idle;
+  },
+  [updateExpenseAsync.rejected.type]: (state: ExpensesState) => {
+    state.status.updateStatus = Status.Failed;
+  },
+  [removeExpenseAsync.pending.type]: (state: ExpensesState) => {
+    state.status.removalStatus = Status.Loading;
+  },
+  [removeExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
+    state.status.removalStatus = Status.Idle;
+  },
+  [removeExpenseAsync.rejected.type]: (state: ExpensesState) => {
+    state.status.removalStatus = Status.Failed;
+  },
+});
 
 export default expensesReducer;

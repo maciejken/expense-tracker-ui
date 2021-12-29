@@ -9,7 +9,12 @@ import {
 } from "../expensesSelectors";
 import { Interval } from "utils/date";
 import { setExpensesDay, setExpensesMonth } from "../expensesActions";
-import { fetchExpenses, jumpToExpensesChartInterval } from "../expensesThunks";
+import {
+  fetchExpenses,
+  getNextChart,
+  getPreviousChart,
+  jumpToExpensesChartInterval,
+} from "../expensesThunks";
 
 const ExpensesChartWrapper: FC = () => {
   const expensesChartData = useAppSelector(selectExpensesChartData);
@@ -38,12 +43,11 @@ const ExpensesChartWrapper: FC = () => {
   };
 
   const chartNextHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
-    console.log('next');
-    // dispatch(increment)
+    dispatch(getNextChart());
   };
 
   const chartPrevHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
-    console.log('prev');
+    dispatch(getPreviousChart());
   };
 
   return (
