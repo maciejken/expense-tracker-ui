@@ -20,6 +20,7 @@ interface ExpensesChartProps {
   onChartDown: MouseEventHandler<HTMLButtonElement>;
   onChartNext: MouseEventHandler<HTMLButtonElement>;
   onChartPrev: MouseEventHandler<HTMLButtonElement>;
+  onDrop: (id: string, value: string) => void;
 }
 
 const ExpensesChart: FC<ExpensesChartProps> = ({
@@ -32,6 +33,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   onChartDown,
   onChartNext,
   onChartPrev,
+  onDrop,
 }) => {
   return (
     <div className={styles.chart}>
@@ -73,6 +75,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
         data={chartData}
         interval={chartInterval}
         onChange={onChange}
+        onDrop={onDrop}
         value={chartValue}
       />
     </div>

@@ -1,5 +1,6 @@
 import React, {
   ChangeEventHandler,
+  DragEventHandler,
   FC,
   FocusEventHandler,
   MouseEventHandler,
@@ -17,6 +18,7 @@ import { ExpenseData, ExpenseUpdate } from "../expensesTypes";
 import { getLocalAmount, getLocalFloat } from "utils/number";
 
 interface ExpenseItemProps extends ExpenseData {
+  isDraggable: boolean;
   onDelete: (data: ExpenseData) => void;
   onUpdate: (data: ExpenseUpdate) => void;
 }
@@ -27,6 +29,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   date,
   isPrivate,
   title,
+  isDraggable,
   onUpdate,
   onDelete,
 }) => {
@@ -74,7 +77,9 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   };
 
   const deleteHandler = () => {
-    const isConfirmed = window.confirm(`Usunąć ${title} (${getLocalAmount(amount)})?`);
+    const isConfirmed = window.confirm(
+      `Usunąć ${title} (${getLocalAmount(amount)})?`
+    );
     if (isConfirmed) {
       waitForIt(async () =>
         onDelete({ id, date, title, amount, isPrivate } as ExpenseData)
@@ -83,8 +88,20 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   };
 
   const tooltip = title.concat(isPrivate ? " (własny)" : " (wspólny)");
+
+  const dragStartHandler: DragEventHandler<HTMLLIElement> = (e) => {
+    e.dataTransfer.setData("itemId", id);
+  };
+
   return (
-    <li className={styles.expenseItem} title={tooltip}>
+    <li
+      className={classNames(styles.expenseItem, {
+        [styles.draggable]: isDraggable
+      })}
+      title={tooltip}
+      draggable={isDraggable}
+      onDragStart={dragStartHandler}
+    >
       <div className={styles.expenseItem__date}>
         <div className={styles.expenseItem__month}>{month}</div>
         <div className={styles.expenseItem__day}>{day}</div>

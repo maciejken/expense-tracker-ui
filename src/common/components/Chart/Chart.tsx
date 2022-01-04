@@ -18,10 +18,11 @@ interface ChartProps {
   data: DataPoint[];
   interval: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  onDrop: (id: string, value: string) => void;
   value?: string;
 }
 
-const Chart: FC<ChartProps> = ({ data, interval, onChange, value }) => {
+const Chart: FC<ChartProps> = ({ data, interval, onChange, onDrop, value }) => {
   const values = data.map((d) => d.y);
   const maxValue = Math.max(...values);
 
@@ -41,6 +42,7 @@ const Chart: FC<ChartProps> = ({ data, interval, onChange, value }) => {
             label={d.label}
             name={interval}
             onChange={onChange}
+            onDrop={onDrop}
             value={d.x}
           />
         );

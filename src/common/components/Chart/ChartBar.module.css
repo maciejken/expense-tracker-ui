@@ -32,6 +32,7 @@
 }
 
 label:hover .chartBar__fill,
+label.isDraggedOver .chartBar__fill,
 label .chartBar__fillActive {
   background-color: #00ac25;
 }
@@ -51,6 +52,7 @@ label .chartBar__fillActive {
 }
 
 label:hover + .chartBar__label,
+label.isDraggedOver + .chartBar__label,
 .chartBar__labelActive {
   width: 100%;
   color: #111;
