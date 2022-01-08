@@ -1,4 +1,4 @@
-.expenseItem {
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -7,7 +7,7 @@
   position: relative;
 }
 
-.expenseItem__textInput {
+.textInput {
   font-size: 1rem;
   font-weight: bold;
   padding: 0.5rem 0;
@@ -15,7 +15,7 @@
   border: none;
 }
 
-.expenseItem__title {
+.title {
   flex-grow: 1;
   width: 25rem;
   color: #3a3a3a;
@@ -24,10 +24,10 @@
   background-color: transparent;
 }
 
-.expenseItem__title:focus,
-.expenseItem__title:focus-visible,
-.expenseItem__amount:focus,
-.expenseItem__amount:focus-visible {
+.title:focus,
+.title:focus-visible,
+.amount:focus,
+.amount:focus-visible {
   color: #3a3a3a;
   background-color: #fffd7c;
 }
@@ -39,7 +39,7 @@
   align-items: center;
 }
 
-.expenseItem__amount {
+.amount {
   width: 8rem;
   font-size: 1.25rem;
   background-color: #00ac25;
@@ -47,17 +47,17 @@
   text-align: center;
 }
 
-.expenseItem__amountPrivate {
+.amountPrivate {
   background-color: #b03aff;
 }
 
-.expenseItem__actions {
+.actions {
   display: flex;
   flex-direction: row;
 }
 
-.expenseItem__visibility,
-.expenseItem__delete {
+.visibility,
+.delete {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,23 +70,22 @@
   background-color: transparent;
   border: none;
   border-radius: 2px;
-
 }
-.expenseItem__delete:hover,
-.expenseItem__visibility:hover {
+.delete:hover,
+.visibility:hover {
   background-color: rgb(218, 218, 218);
 }
 
-.expenseItem__delete {
+.delete {
   color: #444;
   margin-right: 1rem;
 }
 
-.expenseItem__isPrivate {
+.isPrivate {
   color: #b03aff;
 }
 
-.expenseItem__date {
+.date {
   display: flex;
   flex-direction: column;
   width: 5.5rem;
@@ -101,33 +100,33 @@
   cursor: move;
 }
 
-.expenseItem__month {
+.month {
   font-size: 0.75rem;
   font-weight: bold;
 }
 
-.expenseItem__year {
+.year {
   font-size: 0.75rem;
 }
 
-.expenseItem__day {
+.day {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
 @media (min-width: 580px) {
-  .expenseItem__description {
+  .description {
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     flex: 1;
   }
 
-  .expenseItem__title {
+  .title {
     font-size: 1.25rem;
   }
 
-  .expenseItem__price {
+  .price {
     font-size: 1.25rem;
     padding: 0.5rem 1.5rem;
   }

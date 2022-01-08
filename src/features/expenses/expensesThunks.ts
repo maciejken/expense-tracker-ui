@@ -25,7 +25,7 @@ import { getRelativeInterval, Interval } from "utils/date";
 import {
   FETCH_EXPENSES_CHART,
   FETCH_EXPENSES,
-  setExpensesInterval,
+  setExpensesChartInterval,
   CREATE_EXPENSE,
   UPDATE_EXPENSE,
   REMOVE_EXPENSE,
@@ -121,7 +121,7 @@ export const jumpToExpensesChartInterval =
     const interval = selectExpensesChartInterval(getState());
     const relativeInterval = getRelativeInterval(interval, step);
     if (relativeInterval) {
-      dispatch(setExpensesInterval(relativeInterval));
+      dispatch(setExpensesChartInterval(relativeInterval));
     }
   };
 
@@ -160,14 +160,13 @@ export const getNextChart = (): AppThunk => (dispatch, getState) => {
   dispatch(fetchExpensesChart());
 };
 
-export const getPreviousChart =
-  (): AppThunk => (dispatch, getState) => {
-    const interval = selectExpensesChartInterval(getState());
-    const parentInterval = getRelativeInterval(interval, 1);
-    if (parentInterval === Interval.Month) {
-      dispatch(decrementExpensesMonth());
-    } else if (parentInterval === Interval.Year) {
-      dispatch(decrementExpensesYear());
-    }
-    dispatch(fetchExpensesChart());
-  };
+export const getPreviousChart = (): AppThunk => (dispatch, getState) => {
+  const interval = selectExpensesChartInterval(getState());
+  const parentInterval = getRelativeInterval(interval, 1);
+  if (parentInterval === Interval.Month) {
+    dispatch(decrementExpensesMonth());
+  } else if (parentInterval === Interval.Year) {
+    dispatch(decrementExpensesYear());
+  }
+  dispatch(fetchExpensesChart());
+};

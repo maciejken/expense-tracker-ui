@@ -95,55 +95,48 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
 
   return (
     <li
-      className={classNames(styles.expenseItem, {
-        [styles.draggable]: isDraggable
+      className={classNames(styles.container, {
+        [styles.draggable]: isDraggable,
       })}
       title={tooltip}
       draggable={isDraggable}
       onDragStart={dragStartHandler}
     >
-      <div className={styles.expenseItem__date}>
-        <div className={styles.expenseItem__month}>{month}</div>
-        <div className={styles.expenseItem__day}>{day}</div>
-        <div className={styles.expenseItem__year}>{year}</div>
+      <div className={styles.date}>
+        <div className={styles.month}>{month}</div>
+        <div className={styles.day}>{day}</div>
+        <div className={styles.year}>{year}</div>
       </div>
       <div className={styles.inputWrapper}>
         <input
-          className={classNames(
-            styles.expenseItem__textInput,
-            styles.expenseItem__title
-          )}
+          className={classNames(styles.textInput, styles.title)}
           type={InputType.Text}
           value={updatedTitle}
           onChange={titleChangeHandler}
           onBlur={titleBlurHandler}
         />
         <input
-          className={classNames(
-            styles.expenseItem__textInput,
-            styles.expenseItem__amount,
-            {
-              [styles.expenseItem__amountPrivate]: isPrivate,
-            }
-          )}
+          className={classNames(styles.textInput, styles.amount, {
+            [styles.amountPrivate]: isPrivate,
+          })}
           type={InputType.Text}
           value={updatedAmount}
           onChange={amountChangeHandler}
           onBlur={amountBlurHandler}
         />
-        <div className={styles.expenseItem__actions}>
+        <div className={styles.actions}>
           <button
             onClick={visibilityClickHandler}
-            className={classNames(styles.expenseItem__visibility, {
-              [styles.expenseItem__isPrivate]: isPrivate,
-              [styles.expenseItem__isPublic]: !isPrivate,
+            className={classNames(styles.visibility, {
+              [styles.isPrivate]: isPrivate,
+              [styles.isPublic]: !isPrivate,
             })}
           >
             {isPrivate ? <VisibilityOff /> : <Visibility />}
           </button>
           <button
             title={`Usuń "${title} (${amount} zł)"`}
-            className={styles.expenseItem__delete}
+            className={styles.delete}
             onClick={deleteHandler}
           >
             <Delete />

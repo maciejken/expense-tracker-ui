@@ -6,10 +6,10 @@ import {
   selectExpensesChartInfo,
   selectExpensesChartInterval,
   selectExpensesChartValue,
-  selectExpensesDate
+  selectExpensesDate,
 } from "../expensesSelectors";
 import { getStartDate, Interval } from "utils/date";
-import { setExpensesDay, setExpensesMonth } from "../expensesActions";
+import { setExpensesChartValue } from "../expensesActions";
 import {
   fetchExpenses,
   getNextChart,
@@ -27,13 +27,11 @@ const ExpensesChartWrapper: FC = () => {
   const dispatch = useAppDispatch();
   const chartChangeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value;
-    if (expensesChartInterval === Interval.Month) {
-      dispatch(setExpensesMonth(value));
+    dispatch(setExpensesChartValue({ value, interval: expensesChartInterval }));
+    if (expensesChartInterval === Interval.Day) {
       dispatch(fetchExpenses());
-      // TODO: dispatch(fetchExpensesChart());
     } else {
-      dispatch(setExpensesDay(value));
-      dispatch(fetchExpenses());
+      dispatch(jumpToExpensesChartInterval(-1));
     }
   };
 

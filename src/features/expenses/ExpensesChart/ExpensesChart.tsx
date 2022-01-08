@@ -1,12 +1,7 @@
 import React, { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import styles from "./ExpensesChart.module.css";
 import Chart, { DataPoint } from "common/components/Chart/Chart";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ExpandLess,
-  ExpandMore,
-} from "@material-ui/icons";
+import { ChevronLeft, ChevronRight, ExpandLess } from "@material-ui/icons";
 import classNames from "classnames";
 import { Interval } from "utils/date";
 
@@ -45,14 +40,6 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
               onClick={onChartUp}
             >
               <ExpandLess />
-            </button>
-          )}
-          {chartInterval !== Interval.Day && (
-            <button
-              className={classNames(styles.button, styles.down)}
-              onClick={onChartDown}
-            >
-              <ExpandMore />
             </button>
           )}
         </div>
