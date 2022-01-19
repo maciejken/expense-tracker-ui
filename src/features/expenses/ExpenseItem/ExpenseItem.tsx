@@ -7,12 +7,9 @@ import React, {
   useState,
 } from "react";
 import { getLocaleYearMonthDay } from "utils/date";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Delete from "@material-ui/icons/Delete";
 import classNames from "classnames";
 import { InputType } from "common/types";
-import Loader from "common/components/Loader";
+import Loader from "common/components/Loader/Loader";
 import styles from "./ExpenseItem.module.css";
 import { ExpenseData, ExpenseUpdate } from "../expensesTypes";
 import { getLocalAmount, getLocalFloat } from "utils/number";
@@ -132,18 +129,18 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
               [styles.isPublic]: !isPrivate,
             })}
           >
-            {isPrivate ? <VisibilityOff /> : <Visibility />}
+            <i className={`fa fa-eye${isPrivate ? "-slash" : ""}`} />
           </button>
           <button
             title={`Usuń "${title} (${amount} zł)"`}
             className={styles.delete}
             onClick={deleteHandler}
           >
-            <Delete />
+            <i className="fa fa-trash" />
           </button>
         </div>
       </div>
-      {isLoading && <Loader isOverlay />}
+      {isLoading && <Loader overlay />}
     </li>
   );
 };

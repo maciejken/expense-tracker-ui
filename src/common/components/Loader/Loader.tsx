@@ -3,14 +3,14 @@ import styles from "./Loader.module.css";
 import classNames from "classnames";
 
 interface LoaderProps {
-  isOverlay?: boolean;
+  overlay?: boolean;
 }
 
-const Loader: FC<LoaderProps> = ({ isOverlay }) => {
+const Loader: FC<LoaderProps> = ({ overlay }) => {
   return (
     <div
       className={classNames(styles.loader, {
-        [styles.loader__overlay]: isOverlay,
+        [styles.loader__overlay]: overlay,
       })}
     >
       Wczytuję dane...

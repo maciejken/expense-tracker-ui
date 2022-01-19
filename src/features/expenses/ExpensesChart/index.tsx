@@ -39,10 +39,6 @@ const ExpensesChartWrapper: FC = () => {
     dispatch(jumpToExpensesChartInterval(1));
   };
 
-  const chartDownHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
-    dispatch(jumpToExpensesChartInterval(-1));
-  };
-
   const chartNextHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     dispatch(getNextChart());
   };
@@ -67,7 +63,6 @@ const ExpensesChartWrapper: FC = () => {
       chartValue={expensesChartValue}
       onChange={chartChangeHandler}
       onChartUp={chartUpHandler}
-      onChartDown={chartDownHandler}
       onChartNext={chartNextHandler}
       onChartPrev={chartPrevHandler}
       onDrop={dropHandler}

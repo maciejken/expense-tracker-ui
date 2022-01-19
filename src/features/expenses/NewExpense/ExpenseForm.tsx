@@ -1,5 +1,3 @@
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import classnames from "classnames";
 import React, {
   ChangeEvent,
@@ -8,7 +6,6 @@ import React, {
   MouseEventHandler,
   useState,
 } from "react";
-import Add from "@material-ui/icons/Add";
 import styles from "features/expenses/NewExpense/ExpenseForm.module.css";
 import { InputType } from "common/types";
 import { NewExpenseData } from "features/expenses/expensesTypes";
@@ -82,10 +79,10 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ date, onAddExpense }) => {
             [styles.newExpense__isPrivate]: isPrivate,
           })}
         >
-          {isPrivate ? <VisibilityOff /> : <Visibility />}
+          <i className={`fa fa-eye${isPrivate ? "-slash" : ""}`} />
         </button>
         <button title="Dodaj" type="submit" className={styles.newExpense__add}>
-          <Add />
+          <i className="fa fa-plus" />
         </button>
       </div>
     </form>

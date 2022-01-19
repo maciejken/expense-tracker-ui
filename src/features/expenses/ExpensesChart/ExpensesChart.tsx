@@ -1,7 +1,6 @@
 import React, { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import styles from "./ExpensesChart.module.css";
 import Chart, { DataPoint } from "common/components/Chart/Chart";
-import { ChevronLeft, ChevronRight, ExpandLess } from "@material-ui/icons";
 import classNames from "classnames";
 import { Interval } from "utils/date";
 
@@ -12,7 +11,6 @@ interface ExpensesChartProps {
   chartValue: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onChartUp: MouseEventHandler<HTMLButtonElement>;
-  onChartDown: MouseEventHandler<HTMLButtonElement>;
   onChartNext: MouseEventHandler<HTMLButtonElement>;
   onChartPrev: MouseEventHandler<HTMLButtonElement>;
   onDrop: (id: string, value: string) => void;
@@ -25,7 +23,6 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   chartValue,
   onChange,
   onChartUp,
-  onChartDown,
   onChartNext,
   onChartPrev,
   onDrop,
@@ -39,7 +36,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
               className={classNames(styles.button, styles.up)}
               onClick={onChartUp}
             >
-              <ExpandLess />
+              <i className="fa fa-chevron-up" />
             </button>
           )}
         </div>
@@ -50,10 +47,10 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
               className={classNames(styles.button, styles.prev)}
               onClick={onChartPrev}
             >
-              <ChevronLeft />
+              <i className="fa fa-chevron-left" />
             </button>
-            <button className={styles.button} onClick={onChartNext}>
-              <ChevronRight className={styles.next} />
+            <button className={classNames(styles.button, styles.next)} onClick={onChartNext}>
+              <i className="fa fa-chevron-right" />
             </button>
           </div>
         )}
