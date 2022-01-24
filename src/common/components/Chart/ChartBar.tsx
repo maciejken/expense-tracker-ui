@@ -4,6 +4,7 @@ import React, {
   createRef,
   DragEventHandler,
   useState,
+  MouseEventHandler,
 } from "react";
 import classNames from "classnames";
 import { InputType } from "common/types";
@@ -15,8 +16,9 @@ interface ChartBarProps {
   active: boolean;
   label?: string;
   name: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  onDrop: (id: string, value: string) => void;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onClick?: MouseEventHandler<HTMLInputElement>;
+  onDrop?: (id: string, value: string) => void;
   value: string;
 }
 
@@ -27,6 +29,7 @@ const ChartBar: FC<ChartBarProps> = ({
   label,
   name,
   onChange,
+  onClick,
   onDrop,
   value,
 }) => {
@@ -45,7 +48,9 @@ const ChartBar: FC<ChartBarProps> = ({
   };
   const dropHandler: DragEventHandler<HTMLLabelElement> = (e) => {
     const id = e.dataTransfer.getData('itemId');
-    onDrop(id, value);
+    if (onDrop) {
+      onDrop(id, value);
+    }
     setIsDraggedOver(false);
   };
   return (
@@ -71,8 +76,8 @@ const ChartBar: FC<ChartBarProps> = ({
             type={InputType.Radio}
             name={name}
             value={value}
-            checked={active}
             onChange={onChange}
+            onClick={onClick}
             className={styles.chartBar__radioInput}
           />
         </div>

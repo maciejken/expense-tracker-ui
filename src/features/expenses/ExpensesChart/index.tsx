@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, MouseEventHandler } from "react";
+import React, { FC, MouseEventHandler } from "react";
 import ExpensesChart from "./ExpensesChart";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import {
@@ -7,9 +7,10 @@ import {
   selectExpensesChartInterval,
   selectExpensesChartValue,
   selectExpensesDate,
+  selectExpensesStatus,
 } from "../expensesSelectors";
 import { getStartDate, Interval } from "utils/date";
-import { setExpensesChartValue } from "../expensesActions";
+import { setExpensesChartValue } from "../expensesThunks";
 import {
   fetchExpenses,
   getNextChart,
@@ -17,6 +18,7 @@ import {
   jumpToExpensesChartInterval,
   updateExpense,
 } from "../expensesThunks";
+import { Status } from "common/types";
 
 const ExpensesChartWrapper: FC = () => {
   const expensesChartData = useAppSelector(selectExpensesChartData);
@@ -24,10 +26,11 @@ const ExpensesChartWrapper: FC = () => {
   const expensesChartValue = useAppSelector(selectExpensesChartValue);
   const expensesChartInfo = useAppSelector(selectExpensesChartInfo);
   const { year, month } = useAppSelector(selectExpensesDate);
+  const { chartStatus, readStatus } = useAppSelector(selectExpensesStatus);
   const dispatch = useAppDispatch();
-  const chartChangeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value;
-    dispatch(setExpensesChartValue({ value, interval: expensesChartInterval }));
+  const chartChangeHandler: MouseEventHandler<HTMLInputElement> = (e) => {
+    const target = e.target as HTMLInputElement;
+    dispatch(setExpensesChartValue(target.value));
     if (expensesChartInterval === Interval.Day) {
       dispatch(fetchExpenses());
     } else {
@@ -55,17 +58,20 @@ const ExpensesChartWrapper: FC = () => {
     dispatch(updateExpense({ id, data }));
   };
 
+  const isLoading = chartStatus === Status.Loading || readStatus === Status.Loading;
+
   return (
     <ExpensesChart
       chartData={expensesChartData}
       chartInfo={expensesChartInfo}
       chartInterval={expensesChartInterval}
       chartValue={expensesChartValue}
-      onChange={chartChangeHandler}
+      onBarClick={chartChangeHandler}
       onChartUp={chartUpHandler}
       onChartNext={chartNextHandler}
       onChartPrev={chartPrevHandler}
       onDrop={dropHandler}
+      isLoading={isLoading}
     />
   );
 };

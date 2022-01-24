@@ -11,7 +11,6 @@ export const SET_EXPENSES_YEAR = "expenses/setYear";
 export const SET_EXPENSES_MONTH = "expenses/setMonth";
 export const SET_EXPENSES_DAY = "expenses/setDay";
 export const SET_EXPENSES_CHART_INTERVAL = "expenses/setInterval";
-export const SET_EXPENSES_CHART_VALUE = "expenses/setChartValue";
 
 export const INCREMENT_EXPENSES_YEAR = "expenses/incrementYear";
 export const DECREMENT_EXPENSES_YEAR = "expenses/decrementYear";
@@ -24,7 +23,3 @@ export const setExpensesDay = createAction<string>(SET_EXPENSES_DAY);
 export const setExpensesChartInterval = createAction<Interval>(
   SET_EXPENSES_CHART_INTERVAL
 );
-export const setExpensesChartValue = createAction<{
-  value: string;
-  interval: Interval;
-}>(SET_EXPENSES_CHART_VALUE);

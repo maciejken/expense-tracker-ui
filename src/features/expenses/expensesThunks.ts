@@ -32,6 +32,8 @@ import {
   incrementExpensesYear,
   setExpensesMonth,
   decrementExpensesYear,
+  setExpensesDay,
+  setExpensesYear,
 } from "./expensesActions";
 
 export const fetchExpensesAsync = createAsyncThunk(
@@ -169,4 +171,15 @@ export const getPreviousChart = (): AppThunk => (dispatch, getState) => {
     dispatch(decrementExpensesYear());
   }
   dispatch(fetchExpensesChart());
+};
+
+export const setExpensesChartValue = (value: string): AppThunk => (dispatch, getState) => {
+  const interval = selectExpensesChartInterval(getState());
+  if (interval === Interval.Day) {
+    dispatch(setExpensesDay(value));
+  } else if (interval === Interval.Month) {
+    dispatch(setExpensesMonth(value));
+  } else {
+    dispatch(setExpensesYear(value));
+  }
 };

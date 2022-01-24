@@ -9,7 +9,9 @@ interface ExpensesChartProps {
   chartInfo?: string;
   chartInterval: string;
   chartValue: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  isLoading?: boolean;
+  onBarClick?: MouseEventHandler<HTMLInputElement>;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   onChartUp: MouseEventHandler<HTMLButtonElement>;
   onChartNext: MouseEventHandler<HTMLButtonElement>;
   onChartPrev: MouseEventHandler<HTMLButtonElement>;
@@ -21,10 +23,12 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   chartInfo,
   chartInterval,
   chartValue,
+  isLoading,
   onChange,
   onChartUp,
   onChartNext,
   onChartPrev,
+  onBarClick,
   onDrop,
 }) => {
   return (
@@ -40,7 +44,13 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
             </button>
           )}
         </div>
-        <span>{chartInfo}</span>
+        <span>
+          {isLoading ? (
+            <i className="fa fa-spinner fa-pulse" />
+          ) : (
+            chartInfo
+          )}
+        </span>
         {chartInterval !== Interval.Year && (
           <div className={styles.navRight}>
             <button
@@ -49,7 +59,10 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
             >
               <i className="fa fa-chevron-left" />
             </button>
-            <button className={classNames(styles.button, styles.next)} onClick={onChartNext}>
+            <button
+              className={classNames(styles.button, styles.next)}
+              onClick={onChartNext}
+            >
               <i className="fa fa-chevron-right" />
             </button>
           </div>
@@ -59,6 +72,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
         data={chartData}
         interval={chartInterval}
         onChange={onChange}
+        onBarClick={onBarClick}
         onDrop={onDrop}
         value={chartValue}
       />

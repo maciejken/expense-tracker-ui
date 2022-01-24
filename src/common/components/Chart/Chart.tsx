@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC } from "react";
+import React, { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import styles from "./Chart.module.css";
 import ChartBar from "./ChartBar";
 
@@ -17,12 +17,20 @@ export interface ChartData {
 interface ChartProps {
   data: DataPoint[];
   interval: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  onDrop: (id: string, value: string) => void;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onBarClick?: MouseEventHandler<HTMLInputElement>;
+  onDrop?: (id: string, value: string) => void;
   value?: string;
 }
 
-const Chart: FC<ChartProps> = ({ data, interval, onChange, onDrop, value }) => {
+const Chart: FC<ChartProps> = ({
+  data,
+  interval,
+  onBarClick,
+  onChange,
+  onDrop,
+  value,
+}) => {
   const values = data.map((d) => d.y);
   const maxValue = Math.max(...values);
 
@@ -42,6 +50,7 @@ const Chart: FC<ChartProps> = ({ data, interval, onChange, onDrop, value }) => {
             label={d.label}
             name={interval}
             onChange={onChange}
+            onClick={onBarClick}
             onDrop={onDrop}
             value={d.x}
           />

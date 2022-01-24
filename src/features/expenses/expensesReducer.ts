@@ -9,7 +9,6 @@ import {
   SET_EXPENSES_CHART_INTERVAL,
   SET_EXPENSES_MONTH,
   SET_EXPENSES_YEAR,
-  SET_EXPENSES_CHART_VALUE,
 } from "./expensesActions";
 import {
   addExpenseAsync,
@@ -47,15 +46,20 @@ const expensesReducer = createReducer(initialState, {
   },
   [INCREMENT_EXPENSES_YEAR]: (state: ExpensesState) => {
     state.year = "" + (parseInt(state.year) + 1);
+    state.month = "0";
+    state.day = "1";
   },
   [DECREMENT_EXPENSES_YEAR]: (state: ExpensesState) => {
     state.year = "" + (parseInt(state.year) - 1);
+    state.month = "0";
+    state.day = "1";
   },
   [SET_EXPENSES_MONTH]: (
     state: ExpensesState,
     action: PayloadAction<string>
   ) => {
     state.month = action.payload;
+    state.day = "1";
   },
   [SET_EXPENSES_DAY]: (state: ExpensesState, action: PayloadAction<string>) => {
     state.day = action.payload;
@@ -65,13 +69,6 @@ const expensesReducer = createReducer(initialState, {
     action: PayloadAction<Interval>
   ) => {
     state.chartInterval = action.payload;
-  },
-  [SET_EXPENSES_CHART_VALUE]: (
-    state: ExpensesState,
-    action: PayloadAction<{ value: string; interval: Interval }>
-  ) => {
-    const { interval, value } = action.payload;
-    state[interval] = value;
   },
   [fetchExpensesAsync.pending.type]: (state: ExpensesState) => {
     state.status.readStatus = Status.Loading;
