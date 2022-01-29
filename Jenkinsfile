@@ -1,7 +1,7 @@
 
 pipeline {
   agent {
-    node { label 'built-in' }
+    node { label 'master' }
   }
   stages {
     stage('install') {
