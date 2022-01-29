@@ -17,18 +17,15 @@
     font: inherit;
     padding: 0.5rem;
     border: 1px solid #ccc;
-    width: 10rem;
     height: 1.5rem;
-    max-width: 100%;
   }
   
   .newExpense__amountInput {
-    flex-grow: 2;
+    width: 7rem;
   }
   
   .newExpense__titleInput {
-    width: 30rem;
-    flex-grow: 1;
+    width: 33rem;
   }
   
   .newExpense__titleInput:focus,
@@ -43,6 +40,7 @@
   .newExpense__actions {
     display: flex;
     flex-direction: row;
+    margin-right: 1rem;
   }
   
   .newExpense__visibility,
