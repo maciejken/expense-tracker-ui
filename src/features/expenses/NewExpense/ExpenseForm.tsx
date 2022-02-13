@@ -74,6 +74,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ date, onAddExpense }) => {
       <div className={styles.newExpense__actions}>
         <button
           title={isPrivate ? "wydatek własny" : "wydatek wspólny"}
+          type="button"
           onClick={isPrivateClickHandler}
           className={classnames(styles.newExpense__visibility, {
             [styles.newExpense__isPrivate]: isPrivate,

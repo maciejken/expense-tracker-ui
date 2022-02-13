@@ -1,8 +1,6 @@
 
 pipeline {
-  agent {
-    node { label 'master' }
-  }
+  agent any
   stages {
     stage('install') {
       steps {
@@ -11,7 +9,7 @@ pipeline {
         sh 'npm install'
       }
     }
-    stage('unit tests') {
+    stage('test') {
       steps {
         sh 'npm test'
       }
