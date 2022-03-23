@@ -11,40 +11,48 @@
 }
 
 .navLeft, .navRight {
-  width: 4rem;
   display: flex;
   justify-content: flex-start;
 }
 
-.button {
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0;
-  line-height: 1;
-  box-sizing: border-box;
-  border: none;
-  color: rgba(0,0,0, 0.9);
-  background-color: #fff;
+.navLeft {
+  width: 12rem;
+  justify-content: space-between;
 }
 
-.up,
-.down,
+.radio {
+  display: none;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  padding: 0 1rem;
+  font-size: 0.75rem;
+  box-sizing: border-box;
+  color: rgba(0,0,0, 0.9);
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.1s;
+  border: 2px solid transparent;
+  border-radius: 1rem;
+}
+
+.button:hover, .active {
+  border-color: #000;
+}
+
 .next,
 .prev {
   border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.1s;
+  width: 2rem;
+  padding: 0;
 }
 
 .up, .prev {
   margin-right: 1rem;
-}
-
-.up:hover,
-.down:hover,
-.next:hover,
-.prev:hover {
-  background-color: #ddd;
 }
 
 .disabled {

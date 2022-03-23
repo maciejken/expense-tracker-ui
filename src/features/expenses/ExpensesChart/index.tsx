@@ -1,45 +1,43 @@
-import React, { FC, MouseEventHandler } from "react";
+import { FC, MouseEventHandler } from "react";
 import ExpensesChart from "./ExpensesChart";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import {
   selectExpensesChartData,
   selectExpensesChartInfo,
-  selectExpensesChartInterval,
   selectExpensesChartValue,
-  selectExpensesDate,
+  selectExpensesDatePrecision,
+  selectExpensesDateString,
   selectExpensesStatus,
 } from "../expensesSelectors";
-import { getStartDate, Interval } from "utils/date";
-import { setExpensesChartValue } from "../expensesThunks";
+import { DatePrecision } from "utils/date";
+import { setExpensesChartValue, updateExpensesChartView } from "../expensesThunks";
 import {
-  fetchExpenses,
   getNextChart,
   getPreviousChart,
-  jumpToExpensesChartInterval,
   updateExpense,
 } from "../expensesThunks";
 import { Status } from "common/types";
+import { setExpensesDatePrecision } from "../expensesActions";
 
 const ExpensesChartWrapper: FC = () => {
   const expensesChartData = useAppSelector(selectExpensesChartData);
-  const expensesChartInterval = useAppSelector(selectExpensesChartInterval);
   const expensesChartValue = useAppSelector(selectExpensesChartValue);
   const expensesChartInfo = useAppSelector(selectExpensesChartInfo);
-  const { year, month } = useAppSelector(selectExpensesDate);
   const { chartStatus, readStatus } = useAppSelector(selectExpensesStatus);
+  const dateString = useAppSelector(selectExpensesDateString);
+  const datePrecision = useAppSelector(selectExpensesDatePrecision);
   const dispatch = useAppDispatch();
+
   const chartChangeHandler: MouseEventHandler<HTMLInputElement> = (e) => {
     const target = e.target as HTMLInputElement;
     dispatch(setExpensesChartValue(target.value));
-    if (expensesChartInterval === Interval.Day) {
-      dispatch(fetchExpenses());
-    } else {
-      dispatch(jumpToExpensesChartInterval(-1));
-    }
   };
 
-  const chartUpHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
-    dispatch(jumpToExpensesChartInterval(1));
+  const viewChangeHandler: MouseEventHandler<HTMLInputElement> = (e) => {
+    const target = e.target as HTMLSelectElement;
+    const value = target.value as DatePrecision;
+    dispatch(setExpensesDatePrecision(value));
+    dispatch(updateExpensesChartView());
   };
 
   const chartNextHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -49,11 +47,11 @@ const ExpensesChartWrapper: FC = () => {
   const chartPrevHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     dispatch(getPreviousChart());
   };
+  
 
   const dropHandler = (id: string, value: string) => {
-    const date = getStartDate(new Date(+year, +month, +value), {
-      interval: Interval.Day,
-    });
+    const twoDigitDay = value.padStart(2, "0");
+    const date = dateString.slice(0, 8).concat(twoDigitDay);
     const data = { date };
     dispatch(updateExpense({ id, data }));
   };
@@ -64,10 +62,10 @@ const ExpensesChartWrapper: FC = () => {
     <ExpensesChart
       chartData={expensesChartData}
       chartInfo={expensesChartInfo}
-      chartInterval={expensesChartInterval}
       chartValue={expensesChartValue}
+      datePrecision={datePrecision}
       onBarClick={chartChangeHandler}
-      onChartUp={chartUpHandler}
+      onClickView={viewChangeHandler}
       onChartNext={chartNextHandler}
       onChartPrev={chartPrevHandler}
       onDrop={dropHandler}

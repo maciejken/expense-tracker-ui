@@ -15,7 +15,7 @@ interface ChartBarProps {
   info?: string;
   active: boolean;
   label?: string;
-  name: string;
+  inputName: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
   onDrop?: (id: string, value: string) => void;
@@ -27,7 +27,7 @@ const ChartBar: FC<ChartBarProps> = ({
   height,
   info,
   label,
-  name,
+  inputName,
   onChange,
   onClick,
   onDrop,
@@ -74,7 +74,7 @@ const ChartBar: FC<ChartBarProps> = ({
           <input
             ref={inputRef}
             type={InputType.Radio}
-            name={name}
+            name={inputName}
             value={value}
             onChange={onChange}
             onClick={onClick}

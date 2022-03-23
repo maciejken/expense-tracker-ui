@@ -1,6 +1,6 @@
 import { DataPoint } from "common/components/Chart/Chart";
 import { Status } from "common/types";
-import { Interval } from "utils/date";
+import { DatePrecision } from "utils/date";
 
 export interface NewExpenseData {
   title: string;
@@ -22,11 +22,11 @@ export interface ExpenseUpdate {
 
 export interface ExpensesState {
   chartData: DataPoint[];
-  chartInterval: Interval;
+  datePrecision: DatePrecision;
   expenses: ExpenseData[];
-  year: string;
-  month: string;
-  day: string;
+  year?: string;
+  month?: string;
+  day?: string;
   status: {
     chartStatus: Status;
     creationStatus: Status;
@@ -38,7 +38,6 @@ export interface ExpensesState {
 
 export interface FetchExpensesPayload {
   date: string;
-  interval: Interval;
   token: string;
 }
 

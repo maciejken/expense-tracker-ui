@@ -1,6 +1,6 @@
 import { RootState } from "app/store";
 import { Status } from "common/types";
-import { getLocalDate, getStartDate } from "utils/date";
+import { DatePrecision, dateValueMap } from "utils/date";
 
 export const selectExpenses = (state: RootState) => state.expenses.expenses;
 
@@ -9,20 +9,29 @@ export const selectExpensesDate = (state: RootState) => {
   return { year, month, day };
 };
 
+export const selectExpensesDatePrecision = (state: RootState) =>
+  state.expenses.datePrecision;
+
 export const selectExpensesDateString = (state: RootState) => {
-  const { year, month, day, chartInterval } = state.expenses;
-  return getStartDate(new Date(+year, +month, +day), {
-    interval: chartInterval,
-  });
-  // .concat("T00:00");
+  const { year, month, day, datePrecision } = state.expenses;
+  return [year, month, day]
+    .filter(Boolean)
+    .slice(0, +datePrecision)
+    .map(dateValueMap)
+    .join("-");
 };
 
-export const selectExpensesLocalDate = (state: RootState) => {
-  const { year, month, day } = state.expenses;
-  return getLocalDate(new Date(+year, +month, +day));
+export const selectExpensesChartDate = (state: RootState) => {
+  const { year, month, datePrecision } = state.expenses;
+  return [year, month]
+    .filter(Boolean)
+    .slice(0, +datePrecision)
+    .map(dateValueMap)
+    .join("-");
 };
 
 export const selectExpensesStatus = (state: RootState) => state.expenses.status;
+
 export const selectIsUpdatingExpenses = (state: RootState) => {
   const { creationStatus, updateStatus, removalStatus } = state.expenses.status;
   return [creationStatus, updateStatus, removalStatus].some(
@@ -30,22 +39,20 @@ export const selectIsUpdatingExpenses = (state: RootState) => {
   );
 };
 
-export const selectExpensesChartInterval = (state: RootState) =>
-  state.expenses.chartInterval;
-
 export const selectExpensesChartData = (state: RootState) =>
   state.expenses.chartData;
 
 export const selectExpensesChartValue = (state: RootState) => {
-  const { chartInterval } = state.expenses;
-  return state.expenses[chartInterval];
+  const { day, datePrecision } = state.expenses;
+  if (datePrecision === DatePrecision.Day) {
+    return day;
+  }
 };
 
 export const selectExpensesChartInfo = (state: RootState) => {
-  const { chartData, chartInterval } = state.expenses;
-  const selectedData = chartData.find(
-    (item) => item.x === state.expenses[chartInterval]
-  );
+  const selectedId = selectExpensesChartValue(state);
+  const chartData = selectExpensesChartData(state);
+  const selectedData = chartData.find((item) => item.id === selectedId);
   if (selectedData) {
     return selectedData.info;
   }

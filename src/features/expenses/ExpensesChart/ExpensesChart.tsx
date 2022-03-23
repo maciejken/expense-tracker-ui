@@ -2,17 +2,18 @@ import React, { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import styles from "./ExpensesChart.module.css";
 import Chart, { DataPoint } from "common/components/Chart/Chart";
 import classNames from "classnames";
-import { Interval } from "utils/date";
+import { DatePrecision } from "utils/date";
+import classnames from "classnames";
 
 interface ExpensesChartProps {
   chartData: DataPoint[];
   chartInfo?: string;
-  chartInterval: string;
-  chartValue: string;
+  chartValue?: string;
+  datePrecision: DatePrecision;
   isLoading?: boolean;
   onBarClick?: MouseEventHandler<HTMLInputElement>;
   onChange?: ChangeEventHandler<HTMLInputElement>;
-  onChartUp: MouseEventHandler<HTMLButtonElement>;
+  onClickView: MouseEventHandler<HTMLInputElement>;
   onChartNext: MouseEventHandler<HTMLButtonElement>;
   onChartPrev: MouseEventHandler<HTMLButtonElement>;
   onDrop: (id: string, value: string) => void;
@@ -21,11 +22,11 @@ interface ExpensesChartProps {
 const ExpensesChart: FC<ExpensesChartProps> = ({
   chartData,
   chartInfo,
-  chartInterval,
   chartValue,
+  datePrecision,
   isLoading,
   onChange,
-  onChartUp,
+  onClickView,
   onChartNext,
   onChartPrev,
   onBarClick,
@@ -35,14 +36,42 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
     <div className={styles.chart}>
       <nav className={styles.nav}>
         <div className={styles.navLeft}>
-          {chartInterval !== Interval.Year && (
-            <button
-              className={classNames(styles.button, styles.up)}
-              onClick={onChartUp}
-            >
-              <i className="fa fa-chevron-up" />
-            </button>
-          )}
+          <label className={classnames(styles.button, {
+            [styles.active]: datePrecision < DatePrecision.Year
+          })}>
+            wszystko
+            <input
+              type="radio"
+              name="chartView"
+              className={styles.radio}
+              onClick={onClickView}
+              value={DatePrecision.None}
+            />
+          </label>
+          <label className={classnames(styles.button, {
+            [styles.active]: datePrecision === DatePrecision.Year
+          })}>
+            rok
+            <input
+              type="radio"
+              name="chartView"
+              className={styles.radio}
+              onClick={onClickView}
+              value={DatePrecision.Year}
+            />
+          </label>
+          <label className={classnames(styles.button, {
+            [styles.active]: datePrecision > DatePrecision.Year
+          })}>
+            miesiąc
+            <input
+              type="radio"
+              name="chartView"
+              className={styles.radio}
+              onClick={onClickView}
+              value={DatePrecision.Month}
+            />
+          </label>
         </div>
         <span>
           {isLoading ? (
@@ -51,7 +80,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
             chartInfo
           )}
         </span>
-        {chartInterval !== Interval.Year && (
+        {datePrecision > DatePrecision.None && (
           <div className={styles.navRight}>
             <button
               className={classNames(styles.button, styles.prev)}
@@ -70,7 +99,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
       </nav>
       <Chart
         data={chartData}
-        interval={chartInterval}
+        inputName="date"
         onChange={onChange}
         onBarClick={onBarClick}
         onDrop={onDrop}

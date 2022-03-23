@@ -11,19 +11,19 @@ import { DataPoint } from "common/components/Chart/Chart";
 
 export const getExpenses: (
   payload: FetchExpensesPayload
-) => Promise<ExpenseData[]> = async ({ token, date, interval }) => {
+) => Promise<ExpenseData[]> = async ({ token, date }) => {
   const headers = new Headers();
   headers.set("Authorization", `Bearer ${token}`);
-  const url = `${expensesUrl}?date=${date}&interval=${interval}`;
+  const url = `${expensesUrl}?date=${date}`;
   return http(url, { headers });
 };
 
 export const getExpensesChart: (
   payload: FetchExpensesPayload
-) => Promise<DataPoint[]> = async ({ token, date, interval }) => {
+) => Promise<DataPoint[]> = async ({ token, date }) => {
   const headers = new Headers();
   headers.set("Authorization", `Bearer ${token}`);
-  const url = `${expensesUrl}/chart?date=${date}&interval=${interval}`;
+  const url = `${expensesUrl}/chart?date=${date}`;
   return http(url, { headers });
 };
 

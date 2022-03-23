@@ -1,9 +1,10 @@
 import { locale } from "app/config";
 
-export enum Interval {
-  Year = "year",
-  Month = "month",
-  Day = "day",
+export enum DatePrecision {
+  None = "0",
+  Year = "1",
+  Month = "2",
+  Day = "3",
 }
 
 export enum DateString {
@@ -26,24 +27,6 @@ interface DateFormat {
   year?: DateNumber;
 }
 
-interface DateOptions extends DateFormat {
-  interval: Interval;
-}
-
-export const getStartDate = (d: Date, { interval }: DateOptions) => {
-  const year = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  switch (interval) {
-    case Interval.Year:
-      return `${year}-01-01`;
-    case Interval.Month:
-      return `${year}-${mm}-01`;
-    default:
-      return `${year}-${mm}-${dd}`;
-  }
-};
-
 export const getLocaleYearMonthDay = (date: string) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear();
@@ -59,9 +42,17 @@ export const getLocalDate = (date: Date) => {
   return formatDate(date, { dateStyle: 'full' });
 };
 
-const intervals = [Interval.Day, Interval.Month, Interval.Year];
+const indexToMapperFn = {
+  0: (value: string) => value,
+  1: (value: string) => String(+value + 1).padStart(2, "0"),
+  2: (value: string) => value.padStart(2, "0"),
+};
 
-export const getRelativeInterval = (interval: Interval, step: number) => {
-  const index = intervals.indexOf(interval);
-  return intervals[index + step];
+export const dateValueMap = (value: string | undefined, index: number) => {
+  let result = null;
+  if (index === 0 || index === 1 || index === 2) {
+    const mapperFn = indexToMapperFn[index];
+    result = mapperFn(value as string);
+  }
+  return result as string | null;
 };

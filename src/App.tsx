@@ -8,14 +8,16 @@ import {
   fetchExpensesChart,
 } from "features/expenses/expensesThunks";
 import {
-  selectExpensesChartInterval,
+  selectExpensesDate,
+  selectExpensesDateString,
   selectIsUpdatingExpenses,
 } from "features/expenses/expensesSelectors";
 import styles from "./App.module.css";
 
 const App: FC = () => {
   const { token, claims } = useAppSelector(selectAuth);
-  const chartInterval = useAppSelector(selectExpensesChartInterval);
+  const dateString = useAppSelector(selectExpensesDateString);
+  const { day } = useAppSelector(selectExpensesDate);
   const isUpdatingExpenses = useAppSelector(selectIsUpdatingExpenses);
   const dispatch = useAppDispatch();
 
@@ -29,16 +31,16 @@ const App: FC = () => {
   }, [claims, dispatch]);
 
   useEffect(() => {
-    if (token && !isUpdatingExpenses) {
+    if (token && !day && !isUpdatingExpenses) {
       dispatch(fetchExpensesChart());
     }
-  }, [dispatch, chartInterval, isUpdatingExpenses, token]);
+  }, [dispatch, dateString, day, isUpdatingExpenses, token]);
 
   useEffect(() => {
-    if (token && !isUpdatingExpenses) {
+    if (token && day && !isUpdatingExpenses) {
       dispatch(fetchExpenses());
     }
-  }, [dispatch, isUpdatingExpenses, token]);
+  }, [day, dispatch, isUpdatingExpenses, token]);
 
   if (!token) {
     return <LoginForm />;
