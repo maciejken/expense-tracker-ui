@@ -5,9 +5,11 @@ import { DatePrecision } from "utils/date";
 import {
   DECREMENT_EXPENSES_YEAR,
   INCREMENT_EXPENSES_YEAR,
+  SET_EXPENSES_CHART_STATUS,
   SET_EXPENSES_DATE_PRECISION,
   SET_EXPENSES_DAY,
   SET_EXPENSES_MONTH,
+  SET_EXPENSES_STATUS,
   SET_EXPENSES_YEAR,
 } from "./expensesActions";
 import {
@@ -27,14 +29,11 @@ export const initialState: ExpensesState = {
   year: "" + currentDate.getFullYear(),
   month: "" + currentDate.getMonth(),
   day: "" + currentDate.getDate(),
-  status: {
-    chartStatus: Status.Idle,
-    creationStatus: Status.Idle,
-    readStatus: Status.Idle,
-    updateStatus: Status.Idle,
-    removalStatus: Status.Idle,
+  status: Status.Loading,
+  chart: {
+    data: null,
+    status: Status.Loading,
   },
-  chartData: [],
 };
 
 const expensesReducer = createReducer(initialState, {
@@ -59,7 +58,6 @@ const expensesReducer = createReducer(initialState, {
     action: PayloadAction<string>
   ) => {
     state.month = action.payload;
-    // state.day = "1";
   },
   [SET_EXPENSES_DAY]: (state: ExpensesState, action: PayloadAction<string>) => {
     state.day = action.payload;
@@ -70,59 +68,61 @@ const expensesReducer = createReducer(initialState, {
   ) => {
     state.datePrecision = action.payload;
   },
-  [fetchExpensesAsync.pending.type]: (state: ExpensesState) => {
-    state.status.readStatus = Status.Loading;
+  [SET_EXPENSES_STATUS]: (state: ExpensesState, action: PayloadAction<Status>) => {
+    state.status = action.payload;
+  },
+  [SET_EXPENSES_CHART_STATUS]: (state: ExpensesState, action: PayloadAction<Status>) => {
+    state.chart.status = action.payload;
   },
   [fetchExpensesAsync.fulfilled.type]: (
     state: ExpensesState,
     action: PayloadAction<ExpenseData[]>
   ) => {
-    state.status.readStatus = Status.Idle;
+    state.status = Status.Idle;
     state.expenses = action.payload;
   },
   [fetchExpensesAsync.rejected.type]: (state: ExpensesState) => {
-    state.status.readStatus = Status.Failed;
-    state.expenses = [];
-  },
-  [fetchExpensesChartAsync.pending.type]: (state: ExpensesState) => {
-    state.status.chartStatus = Status.Loading;
+    state.status = Status.Failed;
   },
   [fetchExpensesChartAsync.fulfilled.type]: (
     state: ExpensesState,
     action: PayloadAction<DataPoint[]>
   ) => {
-    state.status.chartStatus = Status.Idle;
-    state.chartData = action.payload;
+    state.chart.status = Status.Idle;
+    state.chart.data = action.payload;
   },
   [fetchExpensesChartAsync.rejected.type]: (state: ExpensesState) => {
-    state.status.chartStatus = Status.Failed;
+    state.chart.status = Status.Failed;
   },
   [addExpenseAsync.pending.type]: (state: ExpensesState) => {
-    state.status.creationStatus = Status.Loading;
+    state.status = Status.Pending;
   },
   [addExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
-    state.status.creationStatus = Status.Idle;
+    state.status = Status.Loading;
+    state.chart.status = Status.Loading;
   },
   [addExpenseAsync.rejected.type]: (state: ExpensesState) => {
-    state.status.creationStatus = Status.Failed;
+    state.status = Status.Failed;
   },
   [updateExpenseAsync.pending.type]: (state: ExpensesState) => {
-    state.status.updateStatus = Status.Loading;
+    state.status = Status.Pending;
   },
   [updateExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
-    state.status.updateStatus = Status.Idle;
+    state.status = Status.Loading;
+    state.chart.status = Status.Loading;
   },
   [updateExpenseAsync.rejected.type]: (state: ExpensesState) => {
-    state.status.updateStatus = Status.Failed;
+    state.status = Status.Failed;
   },
   [removeExpenseAsync.pending.type]: (state: ExpensesState) => {
-    state.status.removalStatus = Status.Loading;
+    state.status = Status.Pending;
   },
   [removeExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
-    state.status.removalStatus = Status.Idle;
+    state.status = Status.Loading;
+    state.chart.status = Status.Loading;
   },
   [removeExpenseAsync.rejected.type]: (state: ExpensesState) => {
-    state.status.removalStatus = Status.Failed;
+    state.status = Status.Failed;
   },
 });
 

@@ -9,7 +9,8 @@ export enum InputType {
 }
 
 export enum Status {
+  Failed = "failed",
   Idle = "idle",
   Loading = "loading",
-  Failed = "failed"
+  Pending = "pending",
 }

@@ -1,18 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
 import { selectAuth } from "features/auth/authSlice";
+import * as expensesApi from "./expensesAPI";
 import {
-  deleteExpense,
-  getExpenses,
-  getExpensesChart,
-  patchExpense,
-  postExpense,
-} from "./expensesAPI";
-import {
-  FetchExpensesPayload,
-  AddExpensePayload,
-  UpdateExpensePayload,
-  DeleteExpensePayload,
   NewExpenseData,
   ExpenseUpdate,
 } from "./expensesTypes";
@@ -34,43 +24,34 @@ import {
   setExpensesDay,
   setExpensesYear,
   setExpensesDatePrecision,
+  setExpensesChartStatus,
 } from "./expensesActions";
 import { DatePrecision } from "utils/date";
+import { Status } from "common/types";
 
 export const fetchExpensesAsync = createAsyncThunk(
   FETCH_EXPENSES,
-  async (data: FetchExpensesPayload) => {
-    return await getExpenses(data);
-  }
+  expensesApi.getExpenses
 );
 
 export const fetchExpensesChartAsync = createAsyncThunk(
   FETCH_EXPENSES_CHART,
-  async (data: FetchExpensesPayload) => {
-    const chartData = await getExpensesChart(data);
-    return chartData;
-  }
+  expensesApi.getExpensesChart
 );
 
 export const addExpenseAsync = createAsyncThunk(
   CREATE_EXPENSE,
-  async (data: AddExpensePayload) => {
-    await postExpense(data);
-  }
+  expensesApi.postExpense,
 );
 
 export const updateExpenseAsync = createAsyncThunk(
   UPDATE_EXPENSE,
-  async (payload: UpdateExpensePayload) => {
-    await patchExpense(payload);
-  }
+  expensesApi.patchExpense
 );
 
 export const removeExpenseAsync = createAsyncThunk(
   REMOVE_EXPENSE,
-  async (payload: DeleteExpensePayload) => {
-    await deleteExpense(payload);
-  }
+  expensesApi.deleteExpense
 );
 
 export const fetchExpenses = (): AppThunk => (dispatch, getState) => {
@@ -195,13 +176,18 @@ const increaseExpensesDatePrecision = (): AppThunk => (dispatch, getState) => {
     dispatch(setExpensesDatePrecision(increasedPrecision));
 };
 
-export const setExpensesChartValue =
+export const updateExpensesChartValue =
   (value: string): AppThunk =>
   (dispatch, getState) => {
     dispatch(increaseExpensesDatePrecision());
     const precision = selectExpensesDatePrecision(getState());
     const actionToDispatch = DatePrecisionToActionMap[precision];
     actionToDispatch && dispatch(actionToDispatch(value));
+    if (precision === DatePrecision.Day) {
+      dispatch(fetchExpenses());
+    } else {
+      dispatch(fetchExpensesChart());
+    }
   };
 
 interface AppDate {
@@ -231,5 +217,6 @@ export const updateExpensesChartView = (): AppThunk => (dispatch, getState) => {
     dispatch(setExpensesYear(yearValue));
     dispatch(setExpensesMonth(monthValue));
     dispatch(setExpensesDay());
+    dispatch(setExpensesChartStatus(Status.Loading));
   }
 };

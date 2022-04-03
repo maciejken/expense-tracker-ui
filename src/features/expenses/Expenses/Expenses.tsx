@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styles from "./Expenses.module.css";
-import ExpensesList from "../ExpensesList/ExpensesList";
+import ExpensesList from "../ExpensesList";
 import { ExpenseData } from "../expensesTypes";
 import NewExpense from "../NewExpense/NewExpense";
 import ExpensesChart from "../ExpensesChart";
@@ -16,7 +16,7 @@ const Expenses: FC<ExpensesProps> = ({
     <div className={styles.expenses}>
       <ExpensesChart />
       <NewExpense />
-      <ExpensesList items={expenses} />
+      <ExpensesList />
     </div>
   );
 };

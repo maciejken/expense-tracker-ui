@@ -1,16 +1,21 @@
-import { FC, MouseEventHandler } from "react";
+import { FC, MouseEventHandler, useEffect } from "react";
 import ExpensesChart from "./ExpensesChart";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import {
   selectExpensesChartData,
   selectExpensesChartInfo,
+  selectExpensesChartStatus,
   selectExpensesChartValue,
   selectExpensesDatePrecision,
   selectExpensesDateString,
   selectExpensesStatus,
 } from "../expensesSelectors";
 import { DatePrecision } from "utils/date";
-import { setExpensesChartValue, updateExpensesChartView } from "../expensesThunks";
+import {
+  fetchExpensesChart,
+  updateExpensesChartValue,
+  updateExpensesChartView,
+} from "../expensesThunks";
 import {
   getNextChart,
   getPreviousChart,
@@ -23,18 +28,29 @@ const ExpensesChartWrapper: FC = () => {
   const expensesChartData = useAppSelector(selectExpensesChartData);
   const expensesChartValue = useAppSelector(selectExpensesChartValue);
   const expensesChartInfo = useAppSelector(selectExpensesChartInfo);
-  const { chartStatus, readStatus } = useAppSelector(selectExpensesStatus);
+  const expensesStatus = useAppSelector(selectExpensesStatus);
+  const chartStatus = useAppSelector(selectExpensesChartStatus)
   const dateString = useAppSelector(selectExpensesDateString);
   const datePrecision = useAppSelector(selectExpensesDatePrecision);
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (chartStatus === Status.Loading) {
+      dispatch(fetchExpensesChart());
+    }
+  }, [dispatch, chartStatus]);
+
+  if (!expensesChartData) {
+    return null;
+  }
+
   const chartChangeHandler: MouseEventHandler<HTMLInputElement> = (e) => {
     const target = e.target as HTMLInputElement;
-    dispatch(setExpensesChartValue(target.value));
+    dispatch(updateExpensesChartValue(target.value));
   };
 
   const viewChangeHandler: MouseEventHandler<HTMLInputElement> = (e) => {
-    const target = e.target as HTMLSelectElement;
+    const target = e.target as HTMLInputElement;
     const value = target.value as DatePrecision;
     dispatch(setExpensesDatePrecision(value));
     dispatch(updateExpensesChartView());
@@ -47,7 +63,6 @@ const ExpensesChartWrapper: FC = () => {
   const chartPrevHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     dispatch(getPreviousChart());
   };
-  
 
   const dropHandler = (id: string, value: string) => {
     const twoDigitDay = value.padStart(2, "0");
@@ -56,7 +71,8 @@ const ExpensesChartWrapper: FC = () => {
     dispatch(updateExpense({ id, data }));
   };
 
-  const isLoading = chartStatus === Status.Loading || readStatus === Status.Loading;
+  const isLoading =
+    chartStatus === Status.Loading || expensesStatus === Status.Loading;
 
   return (
     <ExpensesChart

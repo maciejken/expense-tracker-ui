@@ -15,7 +15,7 @@ export interface ChartData {
 }
 
 interface ChartProps {
-  data: DataPoint[];
+  data: DataPoint[] | null;
   inputName: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBarClick?: MouseEventHandler<HTMLInputElement>;
@@ -31,6 +31,10 @@ const Chart: FC<ChartProps> = ({
   onDrop,
   value,
 }) => {
+  if (!data) {
+    return null;
+  }
+
   const values = data.map((d) => d.amount);
   const maxValue = Math.max(...values);
 

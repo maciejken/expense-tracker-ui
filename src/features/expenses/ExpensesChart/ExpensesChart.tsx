@@ -6,7 +6,7 @@ import { DatePrecision } from "utils/date";
 import classnames from "classnames";
 
 interface ExpensesChartProps {
-  chartData: DataPoint[];
+  chartData: DataPoint[] | null;
   chartInfo?: string;
   chartValue?: string;
   datePrecision: DatePrecision;
@@ -36,66 +36,72 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
     <div className={styles.chart}>
       <nav className={styles.nav}>
         <div className={styles.navLeft}>
-          <label className={classnames(styles.button, {
-            [styles.active]: datePrecision < DatePrecision.Year
-          })}>
-            wszystko
-            <input
-              type="radio"
-              name="chartView"
-              className={styles.radio}
-              onClick={onClickView}
-              value={DatePrecision.None}
-            />
-          </label>
-          <label className={classnames(styles.button, {
-            [styles.active]: datePrecision === DatePrecision.Year
-          })}>
-            rok
-            <input
-              type="radio"
-              name="chartView"
-              className={styles.radio}
-              onClick={onClickView}
-              value={DatePrecision.Year}
-            />
-          </label>
-          <label className={classnames(styles.button, {
-            [styles.active]: datePrecision > DatePrecision.Year
-          })}>
-            miesiąc
-            <input
-              type="radio"
-              name="chartView"
-              className={styles.radio}
-              onClick={onClickView}
-              value={DatePrecision.Month}
-            />
-          </label>
-        </div>
-        <span>
-          {isLoading ? (
-            <i className="fa fa-spinner fa-pulse" />
-          ) : (
-            chartInfo
-          )}
-        </span>
-        {datePrecision > DatePrecision.None && (
-          <div className={styles.navRight}>
-            <button
-              className={classNames(styles.button, styles.prev)}
-              onClick={onChartPrev}
+          <div className={styles.timeframeTabs}>
+            <label
+              className={classnames(styles.button, {
+                [styles.active]: datePrecision < DatePrecision.Year,
+              })}
             >
-              <i className="fa fa-chevron-left" />
-            </button>
-            <button
-              className={classNames(styles.button, styles.next)}
-              onClick={onChartNext}
+              wszystko
+              <input
+                type="radio"
+                name="chartView"
+                className={styles.radio}
+                onClick={onClickView}
+                value={DatePrecision.None}
+              />
+            </label>
+            <label
+              className={classnames(styles.button, {
+                [styles.active]: datePrecision === DatePrecision.Year,
+              })}
             >
-              <i className="fa fa-chevron-right" />
-            </button>
+              rok
+              <input
+                type="radio"
+                name="chartView"
+                className={styles.radio}
+                onClick={onClickView}
+                value={DatePrecision.Year}
+              />
+            </label>
+            <label
+              className={classnames(styles.button, {
+                [styles.active]: datePrecision > DatePrecision.Year,
+              })}
+            >
+              miesiąc
+              <input
+                type="radio"
+                name="chartView"
+                className={styles.radio}
+                onClick={onClickView}
+                value={DatePrecision.Month}
+              />
+            </label>
           </div>
-        )}
+          {datePrecision > DatePrecision.None && (
+            <div className={styles.chevrons}>
+              <button
+                className={classNames(styles.button, styles.prev)}
+                onClick={onChartPrev}
+              >
+                <i className="fa fa-chevron-left" />
+              </button>
+              <button
+                className={classNames(styles.button, styles.next)}
+                onClick={onChartNext}
+              >
+                <i className="fa fa-chevron-right" />
+              </button>
+            </div>
+          )}
+        </div>
+        <div className={styles.navRight}>
+          <span>
+            {isLoading ? <i className="fa fa-spinner fa-pulse" /> : chartInfo}
+          </span>
+        </div>
       </nav>
       <Chart
         data={chartData}

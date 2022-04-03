@@ -21,19 +21,16 @@ export interface ExpenseUpdate {
 }
 
 export interface ExpensesState {
-  chartData: DataPoint[];
+  chart: {
+    data: DataPoint[] | null;
+    status: Status;
+  };
   datePrecision: DatePrecision;
   expenses: ExpenseData[];
   year?: string;
   month?: string;
   day?: string;
-  status: {
-    chartStatus: Status;
-    creationStatus: Status;
-    readStatus: Status;
-    updateStatus: Status;
-    removalStatus: Status;    
-  }
+  status: Status;
 }
 
 export interface FetchExpensesPayload {
