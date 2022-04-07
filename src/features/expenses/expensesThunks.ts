@@ -147,7 +147,7 @@ export const getNextChart = (): AppThunk => (dispatch, getState) => {
     const incrementFn = precisionToIncrementFnMap[precision];
     incrementFn && dispatch(incrementFn());
   }
-  dispatch(fetchExpensesChart());
+  dispatch(setExpensesChartStatus(Status.Loading));
 };
 
 export const getPreviousChart = (): AppThunk => (dispatch, getState) => {
@@ -156,7 +156,7 @@ export const getPreviousChart = (): AppThunk => (dispatch, getState) => {
     const decrementFn = precisionToDecrementFnMap[precision];
     decrementFn && dispatch(decrementFn());
   }
-  dispatch(fetchExpensesChart());
+  dispatch(setExpensesChartStatus(Status.Loading));
 };
 
 const DatePrecisionToActionMap = {

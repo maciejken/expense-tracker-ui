@@ -36,6 +36,7 @@ const LoginForm: FC<LoginFormProps> = ({ onAuth }) => {
             value={username}
             onChange={usernameChangeHandler}
             className={styles.loginForm__input}
+            autoFocus
           />
         </label>
       </div>

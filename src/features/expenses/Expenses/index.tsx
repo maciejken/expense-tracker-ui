@@ -1,11 +1,22 @@
-import React, { FC } from "react";
-import { selectExpenses } from "../expensesSelectors";
+import { FC } from "react";
+import { selectExpensesDate } from "../expensesSelectors";
 import Expenses from "./Expenses";
-import { useAppSelector } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { setExpensesMode } from "../expensesActions";
+import { ExpensesMode } from "../expensesTypes";
 
 const ExpensesWrapper: FC = () => {
-  const expenses = useAppSelector(selectExpenses);
-  return <Expenses expenses={expenses} />;
+  const { day } = useAppSelector(selectExpensesDate);
+  const dispatch = useAppDispatch();
+  const createHandler = () => {
+    dispatch(setExpensesMode(ExpensesMode.Create));
+  };
+  return (
+    <Expenses
+      canCreate={!!day}
+      onCreate={createHandler}
+    />
+  );
 };
 
 export default ExpensesWrapper;

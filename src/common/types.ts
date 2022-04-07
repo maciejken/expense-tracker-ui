@@ -1,5 +1,6 @@
 export enum InputType {
   Button = "button",
+  Checkbox = "checkbox",
   Date = "date",
   Number = "number",
   Password = "password",

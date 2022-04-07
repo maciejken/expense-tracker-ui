@@ -1,6 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
 import { Status } from "common/types";
 import { DatePrecision } from "utils/date";
+import { ExpensesMode } from "./expensesTypes";
 
 export const FETCH_EXPENSES = "expenses/fetchExpenses";
 export const FETCH_EXPENSES_CHART = "expenses/fetchChart";
@@ -14,6 +15,7 @@ export const SET_EXPENSES_DAY = "expenses/setDay";
 export const SET_EXPENSES_DATE_PRECISION = "expenses/setDatePrecision";
 export const SET_EXPENSES_STATUS = "expenses/setStatus";
 export const SET_EXPENSES_CHART_STATUS = "expenses/setChartStatus";
+export const SET_EXPENSES_MODE = "expenses/setMode";
 
 export const INCREMENT_EXPENSES_YEAR = "expenses/incrementYear";
 export const DECREMENT_EXPENSES_YEAR = "expenses/decrementYear";
@@ -26,3 +28,4 @@ export const setExpensesDay = createAction<string | undefined>(SET_EXPENSES_DAY)
 export const setExpensesDatePrecision = createAction<DatePrecision>(SET_EXPENSES_DATE_PRECISION);
 export const setExpensesStatus = createAction<Status>(SET_EXPENSES_STATUS);
 export const setExpensesChartStatus = createAction<Status>(SET_EXPENSES_CHART_STATUS);
+export const setExpensesMode = createAction<ExpensesMode>(SET_EXPENSES_MODE);

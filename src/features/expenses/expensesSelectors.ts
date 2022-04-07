@@ -52,3 +52,5 @@ export const selectExpensesChartInfo = (state: RootState) => {
     return selectedData.info;
   }
 };
+
+export const selectExpensesMode = (state: RootState) => state.expenses.mode;

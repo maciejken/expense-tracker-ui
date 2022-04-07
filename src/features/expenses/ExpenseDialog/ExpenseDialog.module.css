@@ -1,0 +1,70 @@
+.overlay {
+  display: flex;
+  flex-direction: column;
+  min-width: 100vw;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.dialog {
+  max-width: 95%;
+  max-height: 75%;
+  background-color: rgb(255, 255, 255);
+  color: #000;
+}
+
+.dialogHeader {
+  background-color: #6c8efd;
+  color: #fff;
+  padding: 0.5rem 1rem;
+}
+
+.formControl {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+.input {
+  font-size: 1.25rem;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 2rem 1rem 1rem 1rem;
+}
+
+.checkbox {
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+
+.actionButton {
+  padding: 0.5rem 2rem;
+  border: 2px solid #6c8efd;
+  border-radius: 2px;
+  font-size: 1.25rem;
+  color: #6c8efd;
+  background-color: #fff;
+  cursor: pointer;
+  outline: none;
+}
+
+.submitButton {
+  color: #fff;
+  background-color: #6c8efd;
+  margin-left: 1rem;
+}
+
+
+.actionButton:hover,
+.actionButton:active {
+  color: #fff;
+  border: 2px solid #3a68ff;
+  background-color: #3a68ff;
+}

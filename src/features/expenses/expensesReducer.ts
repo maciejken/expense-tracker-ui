@@ -8,6 +8,7 @@ import {
   SET_EXPENSES_CHART_STATUS,
   SET_EXPENSES_DATE_PRECISION,
   SET_EXPENSES_DAY,
+  SET_EXPENSES_MODE,
   SET_EXPENSES_MONTH,
   SET_EXPENSES_STATUS,
   SET_EXPENSES_YEAR,
@@ -19,7 +20,7 @@ import {
   removeExpenseAsync,
   updateExpenseAsync,
 } from "./expensesThunks";
-import { ExpenseData, ExpensesState } from "./expensesTypes";
+import { ExpenseData, ExpensesMode, ExpensesState } from "./expensesTypes";
 
 const currentDate = new Date();
 
@@ -34,6 +35,7 @@ export const initialState: ExpensesState = {
     data: null,
     status: Status.Loading,
   },
+  mode: ExpensesMode.Default,
 };
 
 const expensesReducer = createReducer(initialState, {
@@ -73,6 +75,9 @@ const expensesReducer = createReducer(initialState, {
   },
   [SET_EXPENSES_CHART_STATUS]: (state: ExpensesState, action: PayloadAction<Status>) => {
     state.chart.status = action.payload;
+  },
+  [SET_EXPENSES_MODE]: (state: ExpensesState, action: PayloadAction<ExpensesMode>) => {
+    state.mode = action.payload;
   },
   [fetchExpensesAsync.fulfilled.type]: (
     state: ExpensesState,

@@ -20,6 +20,11 @@ export interface ExpenseUpdate {
   isPrivate?: boolean;
 }
 
+export enum ExpensesMode {
+  Default = "default",
+  Create = "create",
+}
+
 export interface ExpensesState {
   chart: {
     data: DataPoint[] | null;
@@ -31,6 +36,7 @@ export interface ExpensesState {
   month?: string;
   day?: string;
   status: Status;
+  mode: ExpensesMode;
 }
 
 export interface FetchExpensesPayload {
