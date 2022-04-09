@@ -127,6 +127,17 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     );
   };
 
+  const getSpinner = () => {
+    if (!isLoading) {
+      return null;
+    }
+    return (
+      <div className={styles.spinner}>
+        <i className="fa fa-spinner fa-pulse" />
+      </div>
+    );
+  }
+
   return (
     <li
       className={classNames(styles.accordion, {
@@ -142,6 +153,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
         })}
       >
         {getTitle()}
+        {getSpinner()}
         <div className={styles.right}>
           <div className={styles.row}>
             {getAmount()}
