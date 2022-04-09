@@ -24,47 +24,59 @@
   padding: 0.5rem 1rem;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 21rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
 .formControl {
   display: flex;
   flex-direction: column;
-  margin: 1rem;
+  margin: 0.5rem 1rem;
+}
+
+.amount {
+  width: 9rem;
+}
+
+.textArea {
+  resize: none;
 }
 
 .input {
   font-size: 1.25rem;
 }
 
-.formActions {
+.label {
   display: flex;
-  justify-content: flex-end;
-  margin: 2rem 1rem 1rem 1rem;
+  flex-direction: column;
+}
+
+.checkboxColumn {
+  width: 9rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: .5rem 1rem 0 0;
 }
 
 .checkbox {
-  margin: 0.5rem 0.5rem 0.5rem 0;
+  margin-right: 0.5rem;
 }
 
-.actionButton {
-  padding: 0.5rem 2rem;
-  border: 2px solid #6c8efd;
-  border-radius: 2px;
-  font-size: 1.25rem;
-  color: #6c8efd;
-  background-color: #fff;
-  cursor: pointer;
-  outline: none;
+.isPrivate {
+  margin-bottom: 1rem;
 }
 
-.submitButton {
-  color: #fff;
-  background-color: #6c8efd;
-  margin-left: 1rem;
-}
-
-
-.actionButton:hover,
-.actionButton:active {
-  color: #fff;
-  border: 2px solid #3a68ff;
-  background-color: #3a68ff;
+.formActions {
+  width: 19rem;
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
 }

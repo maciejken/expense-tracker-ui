@@ -1,14 +1,11 @@
-import { useAppDispatch, useAppSelector } from "app/hooks";
-import React, { FC } from "react";
-import { DatePrecision } from "utils/date";
-import { selectExpensesDatePrecision } from "../expensesSelectors";
+import { useAppDispatch } from "app/hooks";
+import { FC } from "react";
 import { removeExpense, updateExpense } from "../expensesThunks";
 import { ExpenseData, ExpenseUpdate } from "../expensesTypes";
 import ExpenseItem from "./ExpenseItem";
 
 const ExpenseItemWrapper: FC<ExpenseData> = ({ id, date, title, amount, isPrivate }) => {
   const dispatch = useAppDispatch();
-  const datePrecision = useAppSelector(selectExpensesDatePrecision);
   const updateHandler = (data: ExpenseUpdate) => {
     dispatch(updateExpense({ id, data }))
   };
@@ -24,7 +21,6 @@ const ExpenseItemWrapper: FC<ExpenseData> = ({ id, date, title, amount, isPrivat
     isPrivate={isPrivate}
     onUpdate={updateHandler}
     onDelete={deleteHandler}
-    isDraggable={datePrecision === DatePrecision.Day}
   />
 };
 

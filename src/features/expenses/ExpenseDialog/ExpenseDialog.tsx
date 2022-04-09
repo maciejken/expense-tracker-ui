@@ -9,6 +9,7 @@ import {
 import styles from "./ExpenseDialog.module.css";
 import { InputType } from "common/types";
 import { NewExpenseData } from "../expensesTypes";
+import Button, { ButtonType, ButtonVariant } from "common/components/Button/Button";
 
 export interface ExpenseFormProps {
   date: string;
@@ -16,7 +17,11 @@ export interface ExpenseFormProps {
   onCancel: () => void;
 }
 
-const ExpenseForm: FC<ExpenseFormProps> = ({ date, onAddExpense, onCancel }) => {
+const ExpenseForm: FC<ExpenseFormProps> = ({
+  date,
+  onAddExpense,
+  onCancel,
+}) => {
   const [title, setTitle] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
@@ -56,61 +61,63 @@ const ExpenseForm: FC<ExpenseFormProps> = ({ date, onAddExpense, onCancel }) => 
   return (
     <div className={styles.dialog}>
       <header className={styles.dialogHeader}>Nowy wydatek</header>
-      <form className={styles.newExpense__form} onSubmit={formSubmitHandler}>
-        <div className={styles.formControl}>
-          <label className={styles.label}>Opis</label>
-          <textarea
-            value={title}
-            onChange={titleChangeHandler}
-            className={classnames(styles.input, styles.title)}
-            autoFocus
-          />
-        </div>
-        <div className={styles.formControl}>
-          <label className={styles.label}>Kwota</label>
-          <input
-            type={InputType.Text}
-            value={amount}
-            onChange={amountChangeHandler}
-            className={classnames(styles.input, styles.amount)}
-          />
-        </div>
-        <div className={styles.formControl}>
-          <label>
-            <input
-              type={InputType.Checkbox}
-              checked={!isPrivate}
-              onChange={isPrivateClickHandler}
-              className={styles.checkbox}
-            />
-            Sumuj
+      <form className={styles.form} onSubmit={formSubmitHandler}>
+        <div className={classnames(styles.formControl, styles.title)}>
+          <label className={styles.label}>Opis
+            <textarea
+              value={title}
+              onChange={titleChangeHandler}
+              className={styles.textArea}
+              autoFocus
+            />          
           </label>
-          <label>
-            <input
-              type={InputType.Checkbox}
-              checked={addMore}
-              onChange={addMoreClickHandler}
-              className={styles.checkbox}
-            />
-            Dodaj więcej
-          </label>
+        </div>
+        <div className={styles.row}>
+          <div className={classnames(styles.formControl, styles.amount)}>
+            <label className={styles.label}>Kwota
+              <input
+                type={InputType.Text}
+                value={amount}
+                onChange={amountChangeHandler}
+                className={classnames(styles.input)}
+              />
+            </label>
+          </div>
+          <div className={styles.checkboxColumn}>
+            <label className={styles.checkboxLabel}>
+              <input
+                type={InputType.Checkbox}
+                checked={!isPrivate}
+                onChange={isPrivateClickHandler}
+                className={classnames(styles.checkbox, styles.isPrivate)}
+              />
+              Sumuj
+            </label>
+            <label className={styles.checkboxLabel}>
+              <input
+                type={InputType.Checkbox}
+                checked={addMore}
+                onChange={addMoreClickHandler}
+                className={styles.checkbox}
+              />
+              Dodaj następny
+            </label>
+          </div>
         </div>
         <div className={styles.formActions}>
-          <button
+          <Button
             title="Odrzuć"
-            type="button"
-            className={classnames(styles.actionButton, styles.closeButton)}
+            variant={ButtonVariant.Secondary}
             onClick={dialogCloseHandler}
           >
             Odrzuć
-          </button>
-          <button
+          </Button>
+          <Button
             title="Zapisz"
-            type="submit"
-            className={classnames(styles.actionButton, styles.submitButton)}
+            type={ButtonType.Submit}
           >
             Zapisz
-          </button>
+          </Button>
         </div>
       </form>
     </div>

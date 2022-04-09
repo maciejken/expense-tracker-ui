@@ -24,6 +24,7 @@ const App: FC = () => {
 
   return (
     <div className={styles.flexContainer}>
+      <header className={styles.header}></header>
       <Expenses />
       <footer className={styles.footer}></footer>
     </div>

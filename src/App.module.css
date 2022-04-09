@@ -1,3 +1,8 @@
+.header {
+  height: 0.5rem;
+  background-color: #00ac25;
+}
+
 .flexContainer {
   display: flex;
   flex-direction: column;

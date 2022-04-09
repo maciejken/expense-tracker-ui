@@ -1,6 +1,7 @@
-import React, { ChangeEvent, FC, FormEvent, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 import styles from "features/auth/LoginForm/LoginForm.module.css";
 import { BasicAuth } from "features/auth/authAPI";
+import Button, { ButtonType } from "common/components/Button/Button";
 
 export interface LoginFormProps {
   onAuth: (auth: BasicAuth) => void;
@@ -28,29 +29,29 @@ const LoginForm: FC<LoginFormProps> = ({ onAuth }) => {
   };
 
   return (
-    <form onSubmit={submitHandler} className={styles.loginForm__form}>
+    <form onSubmit={submitHandler} className={styles.form}>
       <div>
-        <label className={styles.loginForm__label}>Użytkownik
+        <label className={styles.label}>Użytkownik
           <input
             type="text"
             value={username}
             onChange={usernameChangeHandler}
-            className={styles.loginForm__input}
+            className={styles.input}
             autoFocus
           />
         </label>
       </div>
       <div>
-        <label className={styles.loginForm__label}>Hasło
+        <label className={styles.label}>Hasło
           <input
             type="password"
             value={password}
             onChange={passwordChangeHandler}
-            className={styles.loginForm__input}
+            className={styles.input}
           />
         </label>
       </div>
-      <button type="submit" className={styles.loginForm__submit}>Zaloguj</button>
+      <Button type={ButtonType.Submit}>Zaloguj</Button>
     </form>
   );
 }
