@@ -1,4 +1,4 @@
-import React, {
+import {
   FC,
   ChangeEventHandler,
   createRef,
@@ -39,7 +39,7 @@ const ChartBar: FC<ChartBarProps> = ({
     e.preventDefault();
     setIsDraggedOver(true);
   };
-  const dragExitHandler: DragEventHandler<HTMLLabelElement> = (e) => {
+  const dragLeaveHandler: DragEventHandler<HTMLLabelElement> = (e) => {
     e.preventDefault();
     setIsDraggedOver(false);
   };
@@ -57,7 +57,7 @@ const ChartBar: FC<ChartBarProps> = ({
     <div className={styles.chartBar} title={info}>
       <label
         onDragEnter={dragEnterHandler}
-        onDragExit={dragExitHandler}
+        onDragLeave={dragLeaveHandler}
         onDragOver={dragOverHandler}
         onDrop={dropHandler}
         className={classNames(styles.chartBar__bar, {
