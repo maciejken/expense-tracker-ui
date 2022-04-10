@@ -102,6 +102,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
       <textarea
         className={classNames(styles.textInput, styles.title, {
           [styles.draggable]: !expanded,
+          [styles.textAreaExpanded]: expanded,
         })}
         value={inputValue}
         onChange={titleChangeHandler}

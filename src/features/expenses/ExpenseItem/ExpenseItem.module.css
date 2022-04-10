@@ -79,6 +79,10 @@
   background-color: #fffd7c;
 }
 
+.textAreaExpanded {
+  overflow: auto;
+}
+
 .title {
   resize: none;
   flex-grow: 1;
