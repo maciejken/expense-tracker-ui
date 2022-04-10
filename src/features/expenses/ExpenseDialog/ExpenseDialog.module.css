@@ -58,6 +58,10 @@
   flex-direction: column;
 }
 
+.hasError {
+  color: #c00;
+}
+
 .checkboxColumn {
   width: 9rem;
   display: flex;

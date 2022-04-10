@@ -165,15 +165,15 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
               <i className={`fa fa-chevron-${expanded ? "up" : "down"}`} />
             </button>
           </div>
-          <div className={styles.row}>
+          <div className={styles.collapsible}>
             <label className={styles.checkboxLabel}>
+              Sumuj
               <input
                 type={InputType.Checkbox}
                 className={styles.checkbox}
                 onChange={privateClickHandler}
                 checked={!isPrivate}
               />
-              Sumuj
             </label>
             <Button
               title="Usuń"

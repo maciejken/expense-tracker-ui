@@ -17,6 +17,8 @@ export interface ExpenseFormProps {
   onCancel: () => void;
 }
 
+const maxTitleLength = 140;
+
 const ExpenseForm: FC<ExpenseFormProps> = ({
   date,
   onAddExpense,
@@ -34,10 +36,10 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
     setAmount(evt.target.value);
   };
   const isPrivateClickHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-    setIsPrivate(evt.target.checked);
+    setIsPrivate(isPrivate => !isPrivate);
   };
   const addMoreClickHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-    setAddMore(evt.target.checked);
+    setAddMore(addMore => !addMore);
   };
 
   const formSubmitHandler: FormEventHandler<HTMLFormElement> = (evt) => {
@@ -63,12 +65,16 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
       <header className={styles.dialogHeader}>Nowy wydatek</header>
       <form className={styles.form} onSubmit={formSubmitHandler}>
         <div className={classnames(styles.formControl, styles.title)}>
-          <label className={styles.label}>Opis
+          <label className={styles.label}>
+            <span className={classnames({
+              [styles.hasError]: title.length > maxTitleLength
+            })}>Opis ({title.length}/{maxTitleLength})</span>
             <textarea
               value={title}
               onChange={titleChangeHandler}
               className={styles.textArea}
               autoFocus
+              rows={3}
             />          
           </label>
         </div>
@@ -76,7 +82,10 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
           <div className={classnames(styles.formControl, styles.amount)}>
             <label className={styles.label}>Kwota
               <input
-                type={InputType.Text}
+                type={InputType.Number}
+                step={0.01}
+                min={0}
+                max={99999999.99}
                 value={amount}
                 onChange={amountChangeHandler}
                 className={classnames(styles.input)}
