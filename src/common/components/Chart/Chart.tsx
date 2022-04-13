@@ -7,6 +7,8 @@ export interface DataPoint {
   amount: number;
   label?: string;
   info?: string;
+  week: string;
+  day: string;
 }
 
 export interface ChartData {

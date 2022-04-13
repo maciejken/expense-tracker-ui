@@ -1,18 +1,23 @@
-import React, { ChangeEventHandler, FC, MouseEventHandler } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import styles from "./ExpensesChart.module.css";
 import Chart, { DataPoint } from "common/components/Chart/Chart";
 import classNames from "classnames";
 import { DatePrecision } from "utils/date";
 import classnames from "classnames";
+import Month from "common/components/Calendar/Month";
 
 interface ExpensesChartProps {
   chartData: DataPoint[] | null;
   chartInfo?: string;
   chartValue?: string;
+  selectedYear?: string;
+  selectedMonth?: string;
+  selectedDate?: string;
   datePrecision: DatePrecision;
   isLoading?: boolean;
   onBarClick?: MouseEventHandler<HTMLInputElement>;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  onDateChange?: (date: string) => void;
   onClickView: MouseEventHandler<HTMLInputElement>;
   onChartNext: MouseEventHandler<HTMLButtonElement>;
   onChartPrev: MouseEventHandler<HTMLButtonElement>;
@@ -23,15 +28,48 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   chartData,
   chartInfo,
   chartValue,
+  selectedYear,
+  selectedMonth,
+  selectedDate,
   datePrecision,
   isLoading,
   onChange,
+  onDateChange,
   onClickView,
   onChartNext,
   onChartPrev,
   onBarClick,
   onDrop,
 }) => {
+  const getCal = () => {
+    if (!chartData) {
+      return null;
+    }
+    const weekNums = chartData.reduce((nums, d) => {
+      const week = d.week as string;
+      if (!nums.includes(week)) {
+        nums.push(week);
+      }
+      return nums;
+    }, [] as string[]);
+    const weeks = weekNums.map((num) =>
+      chartData
+        .map((data) => ({
+          date: data.id,
+          day: data.day,
+          week: data.week,
+        }))
+        .filter((d) => d.week === num)
+    );
+    return (
+      <Month
+        weeks={weeks}
+        inputName="date"
+        selectedDate={selectedDate}
+        onDateChange={onDateChange}
+      />
+    );
+  };
   return (
     <div className={styles.chart}>
       <nav className={styles.nav}>
@@ -97,14 +135,18 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
         )}
         {isLoading && <i className="fa fa-spinner fa-pulse" />}
       </nav>
-      <Chart
-        data={chartData}
-        inputName="date"
-        onChange={onChange}
-        onBarClick={onBarClick}
-        onDrop={onDrop}
-        value={chartValue}
-      />
+      {datePrecision === DatePrecision.Day || datePrecision === DatePrecision.Month ? (
+        getCal()
+      ) : (
+        <Chart
+          data={chartData}
+          inputName="date"
+          onChange={onChange}
+          onBarClick={onBarClick}
+          onDrop={onDrop}
+          value={chartValue}
+        />
+      )}
       <div className={styles.chartInfo}>{chartInfo}</div>
     </div>
   );

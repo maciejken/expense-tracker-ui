@@ -1,0 +1,37 @@
+.month {
+  display: flex;
+  flex-direction: column;
+}
+
+.week {
+  display: flex;
+  position: relative;
+  width: 14rem;
+  height: 2.5rem;
+}
+
+.day {
+  display: flex;
+  position: absolute;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.25rem;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: .25rem;
+}
+
+.day:hover {
+  background-color: #3a68ff;
+  color: #fff;
+}
+
+.selected {
+  background-color: #6c8efd;
+  color: #fff;
+}
+
+.dayInput {
+  display: none;
+}

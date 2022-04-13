@@ -6,12 +6,14 @@ import {
   selectExpensesChartInfo,
   selectExpensesChartStatus,
   selectExpensesChartValue,
+  selectExpensesDate,
   selectExpensesDatePrecision,
   selectExpensesDateString,
   selectExpensesStatus,
 } from "../expensesSelectors";
 import { DatePrecision } from "utils/date";
 import {
+  fetchExpenses,
   fetchExpensesChart,
   updateExpensesChartValue,
   updateExpensesChartView,
@@ -22,7 +24,7 @@ import {
   updateExpense,
 } from "../expensesThunks";
 import { Status } from "common/types";
-import { setExpensesDatePrecision } from "../expensesActions";
+import { setExpensesDatePrecision, setExpensesDay } from "../expensesActions";
 
 const ExpensesChartWrapper: FC = () => {
   const expensesChartData = useAppSelector(selectExpensesChartData);
@@ -31,6 +33,7 @@ const ExpensesChartWrapper: FC = () => {
   const expensesStatus = useAppSelector(selectExpensesStatus);
   const chartStatus = useAppSelector(selectExpensesChartStatus)
   const dateString = useAppSelector(selectExpensesDateString);
+  const { year, month, day } = useAppSelector(selectExpensesDate);
   const datePrecision = useAppSelector(selectExpensesDatePrecision);
   const dispatch = useAppDispatch();
 
@@ -43,10 +46,14 @@ const ExpensesChartWrapper: FC = () => {
   if (!expensesChartData) {
     return null;
   }
-
   const chartChangeHandler: MouseEventHandler<HTMLInputElement> = (e) => {
     const target = e.target as HTMLInputElement;
     dispatch(updateExpensesChartValue(target.value));
+  };
+
+  const dateChangeHandler = (value: string) => {
+    dispatch(setExpensesDay(value));
+    dispatch(fetchExpenses());
   };
 
   const viewChangeHandler: MouseEventHandler<HTMLInputElement> = (e) => {
@@ -79,11 +86,15 @@ const ExpensesChartWrapper: FC = () => {
       chartData={expensesChartData}
       chartInfo={expensesChartInfo}
       chartValue={expensesChartValue}
+      selectedYear={year}
+      selectedMonth={month}
+      selectedDate={day}
       datePrecision={datePrecision}
       onBarClick={chartChangeHandler}
       onClickView={viewChangeHandler}
       onChartNext={chartNextHandler}
       onChartPrev={chartPrevHandler}
+      onDateChange={dateChangeHandler}
       onDrop={dropHandler}
       isLoading={isLoading}
     />
