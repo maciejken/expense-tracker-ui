@@ -1,3 +1,4 @@
+import React from "react";
 import classNames from "classnames";
 import { InputType } from "common/types";
 import { ChangeEventHandler, FC } from "react";
@@ -50,4 +51,4 @@ const Week: FC<WeekProps> = ({
   );
 };
 
-export default Week;
+export default React.memo(Week);
