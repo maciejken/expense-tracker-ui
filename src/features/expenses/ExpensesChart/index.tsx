@@ -13,7 +13,6 @@ import {
 } from "../expensesSelectors";
 import { DatePrecision } from "utils/date";
 import {
-  fetchExpenses,
   fetchExpensesChart,
   updateExpensesChartValue,
   updateExpensesChartView,
@@ -24,14 +23,18 @@ import {
   updateExpense,
 } from "../expensesThunks";
 import { Status } from "common/types";
-import { setExpensesDatePrecision, setExpensesDay } from "../expensesActions";
+import {
+  setExpensesDatePrecision,
+  setExpensesDay,
+  setExpensesStatus,
+} from "../expensesActions";
 
 const ExpensesChartWrapper: FC = () => {
   const expensesChartData = useAppSelector(selectExpensesChartData);
   const expensesChartValue = useAppSelector(selectExpensesChartValue);
   const expensesChartInfo = useAppSelector(selectExpensesChartInfo);
   const expensesStatus = useAppSelector(selectExpensesStatus);
-  const chartStatus = useAppSelector(selectExpensesChartStatus)
+  const chartStatus = useAppSelector(selectExpensesChartStatus);
   const dateString = useAppSelector(selectExpensesDateString);
   const { year, month, day } = useAppSelector(selectExpensesDate);
   const datePrecision = useAppSelector(selectExpensesDatePrecision);
@@ -53,7 +56,7 @@ const ExpensesChartWrapper: FC = () => {
 
   const dateChangeHandler = (value: string) => {
     dispatch(setExpensesDay(value));
-    dispatch(fetchExpenses());
+    dispatch(setExpensesStatus(Status.Loading));
   };
 
   const viewChangeHandler: MouseEventHandler<HTMLInputElement> = (e) => {

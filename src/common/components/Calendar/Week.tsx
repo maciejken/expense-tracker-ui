@@ -7,13 +7,21 @@ import { Day } from "./types";
 interface WeekProps {
   days: Day[];
   inputName: string;
+  offset?: number;
   selectedDate?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-const Week: FC<WeekProps> = ({ days, inputName, selectedDate, onChange }) => {
+const Week: FC<WeekProps> = ({
+  days,
+  inputName,
+  offset,
+  selectedDate,
+  onChange,
+}) => {
+  const style = offset ? { marginLeft: `${offset * 2.5}rem`} : undefined;
   return (
-    <div className={styles.week}>
+    <div className={styles.week} style={style}>
       {days.map((d) => {
         const isChecked = d.date === selectedDate;
         return (
@@ -22,7 +30,6 @@ const Week: FC<WeekProps> = ({ days, inputName, selectedDate, onChange }) => {
             className={classNames(styles.day, {
               [styles.selected]: isChecked,
             })}
-            style={{ left: `${(+d.day - 1) * 3}rem` }}
           >
             {d.date}
             <input
@@ -33,7 +40,7 @@ const Week: FC<WeekProps> = ({ days, inputName, selectedDate, onChange }) => {
               name={inputName}
               onChange={onChange}
             />
-          </label>          
+          </label>
         );
       })}
     </div>
