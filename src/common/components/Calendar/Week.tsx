@@ -25,23 +25,25 @@ const Week: FC<WeekProps> = ({
       {days.map((d) => {
         const isChecked = d.date === selectedDate;
         return (
-          <label
-            key={`day-of-the-month-${d.date}`}
-            className={classNames(styles.day, {
-              [styles.selected]: isChecked,
-              [styles.sunday]: +d.day === 7,
-            })}
-          >
-            {d.date}
-            <input
-              type={InputType.Radio}
-              checked={isChecked}
-              value={d.date}
-              className={styles.dayInput}
-              name={inputName}
-              onChange={onChange}
-            />
-          </label>
+          <div>
+            <label
+              key={`day-of-the-month-${d.date}`}
+              className={classNames(styles.day, {
+                [styles.selected]: isChecked,
+                [styles.sunday]: +d.day === 7,
+              })}
+            >
+              {d.date}
+              <input
+                type={InputType.Radio}
+                checked={isChecked}
+                value={d.date}
+                className={styles.dayInput}
+                name={inputName}
+                onChange={onChange}
+              />
+            </label>            
+          </div>
         );
       })}
     </div>
