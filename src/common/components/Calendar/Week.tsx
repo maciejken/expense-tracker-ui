@@ -19,7 +19,7 @@ const Week: FC<WeekProps> = ({
   selectedDate,
   onChange,
 }) => {
-  const style = offset ? { marginLeft: `${offset * 2.5}rem`} : undefined;
+  const style = offset ? { marginLeft: `${offset * 2.7}rem`} : undefined;
   return (
     <div className={styles.week} style={style}>
       {days.map((d) => {
@@ -29,6 +29,7 @@ const Week: FC<WeekProps> = ({
             key={`day-of-the-month-${d.date}`}
             className={classNames(styles.day, {
               [styles.selected]: isChecked,
+              [styles.sunday]: +d.day === 7,
             })}
           >
             {d.date}

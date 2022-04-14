@@ -1,4 +1,4 @@
-.header {
+.header, .footer {
   height: 0.5rem;
   background-color: #00ac25;
 }
@@ -7,9 +7,4 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.footer {
-  height: 3rem;
-  background-color: #00ac25;
 }

@@ -1,6 +1,7 @@
 .month {
   display: flex;
   flex-direction: column;
+  margin: 0 1rem;
 }
 
 .week {
@@ -8,14 +9,19 @@
 }
 
 .day {
-  display: flex;
-  width: 2.5rem;
-  height: 2.5rem;
+  box-sizing: border-box;
+  display: block;
   font-size: 1.25rem;
-  justify-content: center;
-  align-items: center;
+  padding: .5rem;
+  width: 2.5rem;
   cursor: pointer;
   border-radius: .25rem;
+  text-align: center;
+  margin: .1rem;
+}
+
+.sunday {
+  font-weight: bold;
 }
 
 .day:hover {
