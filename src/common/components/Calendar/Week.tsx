@@ -20,31 +20,29 @@ const Week: FC<WeekProps> = ({
   selectedDate,
   onChange,
 }) => {
-  const style = offset ? { marginLeft: `${offset * 2.7}rem`} : undefined;
+  const style = offset ? { marginLeft: `${offset * 2.7}rem` } : undefined;
   return (
     <div className={styles.week} style={style}>
       {days.map((d) => {
         const isChecked = d.date === selectedDate;
         return (
-          <div>
-            <label
-              key={`day-of-the-month-${d.date}`}
-              className={classNames(styles.day, {
-                [styles.selected]: isChecked,
-                [styles.sunday]: +d.day === 7,
-              })}
-            >
-              {d.date}
-              <input
-                type={InputType.Radio}
-                checked={isChecked}
-                value={d.date}
-                className={styles.dayInput}
-                name={inputName}
-                onChange={onChange}
-              />
-            </label>            
-          </div>
+          <label
+            key={`day-of-the-month-${d.date}`}
+            className={classNames(styles.day, {
+              [styles.selected]: isChecked,
+              [styles.sunday]: +d.day === 7,
+            })}
+          >
+            {d.date}
+            <input
+              type={InputType.Radio}
+              checked={isChecked}
+              value={d.date}
+              className={styles.dayInput}
+              name={inputName}
+              onChange={onChange}
+            />
+          </label>
         );
       })}
     </div>
