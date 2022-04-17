@@ -42,7 +42,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   onDrop,
 }) => {
   const getCal = () => {
-    if (!chartData) {
+    if (!chartData?.length) {
       return null;
     }
     const weekNums = chartData.reduce((nums, d) => {
