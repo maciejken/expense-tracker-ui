@@ -9,7 +9,11 @@ import {
 import styles from "./ExpenseDialog.module.css";
 import { InputType } from "common/types";
 import { NewExpenseData } from "../expensesTypes";
-import Button, { ButtonType, ButtonVariant } from "common/components/Button/Button";
+import Button, {
+  ButtonType,
+  ButtonVariant,
+} from "common/components/Button/Button";
+import Dialog from "common/components/Dialog/Dialog";
 
 export interface ExpenseFormProps {
   date: string;
@@ -27,7 +31,6 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
   const [title, setTitle] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
-  const [addMore, setAddMore] = useState<boolean>(false);
 
   const titleChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
     setTitle(evt.target.value);
@@ -36,10 +39,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
     setAmount(evt.target.value);
   };
   const isPrivateClickHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-    setIsPrivate(isPrivate => !isPrivate);
-  };
-  const addMoreClickHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-    setAddMore(addMore => !addMore);
+    setIsPrivate((isPrivate) => !isPrivate);
   };
 
   const formSubmitHandler: FormEventHandler<HTMLFormElement> = (evt) => {
@@ -50,7 +50,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
       amount: amount.replace(",", "."),
       isPrivate,
     };
-    onAddExpense(expenseData, !addMore);
+    onAddExpense(expenseData);
     setTitle("");
     setAmount("");
     setIsPrivate(false);
@@ -61,26 +61,30 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
   };
 
   return (
-    <div className={styles.dialog}>
-      <header className={styles.dialogHeader}>Nowy wydatek</header>
+    <Dialog title="Nowy wydatek" onClose={dialogCloseHandler}>
       <form className={styles.form} onSubmit={formSubmitHandler}>
-        <div className={classnames(styles.formControl, styles.title)}>
+        <div className={styles.formControl}>
           <label className={styles.label}>
-            <span className={classnames({
-              [styles.hasError]: title.length > maxTitleLength
-            })}>Opis ({title.length}/{maxTitleLength})</span>
+            <span
+              className={classnames({
+                [styles.hasError]: title.length > maxTitleLength,
+              })}
+            >
+              Opis ({title.length}/{maxTitleLength})
+            </span>
             <textarea
               value={title}
               onChange={titleChangeHandler}
               className={styles.textArea}
               autoFocus
               rows={3}
-            />          
+            />
           </label>
         </div>
         <div className={styles.row}>
           <div className={classnames(styles.formControl, styles.amount)}>
-            <label className={styles.label}>Kwota
+            <label className={styles.label}>
+              Kwota
               <input
                 type={InputType.Number}
                 step={0.01}
@@ -92,7 +96,9 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
               />
             </label>
           </div>
-          <div className={styles.checkboxColumn}>
+          <div
+            className={classnames(styles.formControl)}
+          >
             <label className={styles.checkboxLabel}>
               <input
                 type={InputType.Checkbox}
@@ -101,15 +107,6 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                 className={classnames(styles.checkbox, styles.isPrivate)}
               />
               Sumuj
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input
-                type={InputType.Checkbox}
-                checked={addMore}
-                onChange={addMoreClickHandler}
-                className={styles.checkbox}
-              />
-              Dodaj następny
             </label>
           </div>
         </div>
@@ -121,15 +118,12 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
           >
             Odrzuć
           </Button>
-          <Button
-            title="Zapisz"
-            type={ButtonType.Submit}
-          >
+          <Button title="Zapisz" type={ButtonType.Submit}>
             Zapisz
           </Button>
         </div>
       </form>
-    </div>
+    </Dialog>
   );
 };
 

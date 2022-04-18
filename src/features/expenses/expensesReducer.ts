@@ -63,6 +63,9 @@ const expensesReducer = createReducer(initialState, {
   },
   [SET_EXPENSES_DAY]: (state: ExpensesState, action: PayloadAction<string>) => {
     state.day = action.payload;
+    if (action.payload) {
+      state.datePrecision = DatePrecision.Day;
+    }
   },
   [SET_EXPENSES_DATE_PRECISION]: (
     state: ExpensesState,
@@ -95,6 +98,9 @@ const expensesReducer = createReducer(initialState, {
   ) => {
     state.chart.status = Status.Idle;
     state.chart.data = action.payload;
+  },
+  [fetchExpensesChartAsync.pending.type]: (state: ExpensesState) => {
+    state.chart.status = Status.Loading;
   },
   [fetchExpensesChartAsync.rejected.type]: (state: ExpensesState) => {
     state.chart.status = Status.Failed;

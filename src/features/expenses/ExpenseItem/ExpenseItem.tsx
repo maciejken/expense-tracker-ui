@@ -16,6 +16,7 @@ import Button, {
   ButtonType,
   ButtonVariant,
 } from "common/components/Button/Button";
+import Dialog from "common/components/Dialog/Dialog";
 
 interface ExpenseItemProps extends ExpenseData {
   onDelete: (data: ExpenseData) => void;
@@ -32,9 +33,10 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   onDelete,
 }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [edited, setEdited] = useState<boolean>(false);
   const [updatedTitle, setTitle] = useState<string>(title);
   const [updatedAmount, setAmount] = useState<string>(getLocalFloat(amount));
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const day = new Date(date).getDate();
 
   const titleChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
     setTitle(evt.target.value);
@@ -44,34 +46,30 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     setAmount(evt.target.value);
   };
 
-  const waitForIt = async (fn: () => Promise<void>) => {
-    setIsLoading(true);
-    await fn();
-    setIsLoading(false);
-  };
-
   const privateClickHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
     const isConfirmed = window.confirm(
       "Czy chcesz zmienić widoczność wydatku?"
     );
     if (isConfirmed) {
-      waitForIt(async () => onUpdate({ isPrivate: !isPrivate }));
+      onUpdate({ isPrivate: !isPrivate });
     }
   };
 
   const titleBlurHandler: FocusEventHandler<HTMLTextAreaElement> = async () => {
     if (updatedTitle !== title) {
-      waitForIt(async () => onUpdate({ title: updatedTitle }));
+      onUpdate({ title: updatedTitle });
     }
   };
 
   const amountBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
     if (getLocalFloat(updatedAmount) !== getLocalFloat(amount)) {
-      waitForIt(async () =>
-        onUpdate({ amount: updatedAmount.replace(",", ".") })
-      );
+      onUpdate({ amount: updatedAmount.replace(",", ".") });
     }
+  };
+
+  const dateUpdateHandler = () => {
+    setEdited(true);
   };
 
   const deleteHandler = () => {
@@ -79,9 +77,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
       `Usunąć ${title} (${getLocalAmount(amount)})?`
     );
     if (isConfirmed) {
-      waitForIt(async () =>
-        onDelete({ id, date, title, amount, isPrivate } as ExpenseData)
-      );
+      onDelete({ id, date, title, amount, isPrivate } as ExpenseData);
     }
   };
 
@@ -128,16 +124,17 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     );
   };
 
-  const getSpinner = () => {
-    if (!isLoading) {
-      return null;
-    }
+  const closeEditDialog = () => {
+    setEdited(false);
+  };
+
+  const getDatepicker = () => {
     return (
-      <div className={styles.spinner}>
-        <i className="fa fa-spinner fa-pulse" />
-      </div>
+      <Dialog title="Zmiana daty" onClose={closeEditDialog}>
+        {date}
+      </Dialog>
     );
-  }
+  };
 
   return (
     <li
@@ -148,13 +145,12 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
       draggable={!expanded}
       onDragStart={dragStartHandler}
     >
-      <header
+      <div
         className={classnames(styles.summary, {
           [styles.expanded]: expanded,
         })}
       >
         {getTitle()}
-        {getSpinner()}
         <div className={styles.right}>
           <div className={styles.row}>
             {getAmount()}
@@ -176,18 +172,30 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
                 checked={!isPrivate}
               />
             </label>
-            <Button
-              title="Usuń"
-              size={ButtonSize.Small}
-              type={ButtonType.Button}
-              variant={ButtonVariant.Secondary}
-              onClick={deleteHandler}
-            >
-              Usuń
-            </Button>
+            <div className={classnames(styles.row, styles.actions)}>
+              <Button
+                title="Zmień datę"
+                size={ButtonSize.Small}
+                type={ButtonType.Button}
+                variant={ButtonVariant.Primary}
+                onClick={dateUpdateHandler}
+              >
+                {day}
+              </Button> 
+              <Button
+                title="Usuń"
+                size={ButtonSize.Small}
+                type={ButtonType.Button}
+                variant={ButtonVariant.Secondary}
+                onClick={deleteHandler}
+              >
+                <i className="fa fa-trash" />
+              </Button>              
+            </div>
           </div>
         </div>
-      </header>
+      </div>
+      {edited && getDatepicker()}
     </li>
   );
 };

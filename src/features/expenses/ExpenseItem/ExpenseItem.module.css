@@ -124,6 +124,12 @@
   margin: 0;
   padding: .5rem 1.125rem .5rem .75rem;
 }
+
+.actions {
+  min-width: 6rem;
+  justify-content: space-between;
+}
+
 .delete:hover,
 .visibility:hover {
   background-color: #efefef;

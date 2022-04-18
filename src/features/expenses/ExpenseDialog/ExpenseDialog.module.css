@@ -1,33 +1,6 @@
-.overlay {
-  display: flex;
-  flex-direction: column;
-  min-width: 100vw;
-  min-height: 100vh;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0,0,0,.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-.dialog {
-  max-width: 95%;
-  max-height: 75%;
-  background-color: rgb(255, 255, 255);
-  color: #000;
-}
-
-.dialogHeader {
-  background-color: #6c8efd;
-  color: #fff;
-  padding: 0.5rem 1rem;
-}
-
 .form {
   display: flex;
   flex-direction: column;
-  width: 21rem;
 }
 
 .row {
@@ -38,7 +11,11 @@
 .formControl {
   display: flex;
   flex-direction: column;
-  margin: 0.5rem 1rem;
+  margin: 0.5rem 0;
+}
+
+.titleControl {
+  margin-top: 0;
 }
 
 .amount {
@@ -62,25 +39,19 @@
   color: #c00;
 }
 
-.checkboxColumn {
-  width: 9rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin: .5rem 1rem 0 0;
+.checkboxLabel {
+  margin: 1rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .checkbox {
-  margin-right: 0.5rem;
-}
-
-.isPrivate {
-  margin-bottom: 1rem;
+  margin: 0 0.5rem 0 0;
 }
 
 .formActions {
   width: 19rem;
   display: flex;
   justify-content: space-between;
-  margin: 1rem;
+  margin: 1rem 0 0;
 }

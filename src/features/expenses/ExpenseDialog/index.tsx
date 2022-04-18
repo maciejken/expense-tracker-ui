@@ -7,18 +7,16 @@ import {
 import { addExpense } from "../expensesThunks";
 import { ExpensesMode, NewExpenseData } from "../expensesTypes";
 import styles from "./ExpenseDialog.module.css";
-import ExpenseForm from "./ExpenseDialog";
+import ExpenseDialog from "./ExpenseDialog";
 import { setExpensesMode } from "../expensesActions";
 
 const ExpenseDialogWrapper: FC = () => {
   const date = useAppSelector(selectExpensesDateString);
   const expensesMode = useAppSelector(selectExpensesMode);
   const dispatch = useAppDispatch();
-  const addExpenseHandler = (data: NewExpenseData, shouldCloseDialog?: boolean) => {
+  const addExpenseHandler = (data: NewExpenseData) => {
     dispatch(addExpense(data));
-    if (shouldCloseDialog) {
-      dispatch(setExpensesMode(ExpensesMode.Default));
-    }
+    dispatch(setExpensesMode(ExpensesMode.Default));
   };
   const cancelHandler = () => {
     dispatch(setExpensesMode(ExpensesMode.Default));
@@ -29,7 +27,7 @@ const ExpenseDialogWrapper: FC = () => {
   }
   return (
     <div className={styles.overlay}>
-      <ExpenseForm
+      <ExpenseDialog
         date={date}
         onAddExpense={addExpenseHandler}
         onCancel={cancelHandler}

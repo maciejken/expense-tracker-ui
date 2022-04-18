@@ -1,0 +1,44 @@
+.overlay {
+  display: flex;
+  flex-direction: column;
+  min-width: 100vw;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.dialog {
+  min-width: 10rem;
+  max-width: 95%;
+  max-height: 75%;
+  background-color: #fff;
+  color: #000;
+}
+
+.dialogHeader {
+  display: flex;
+  justify-content: space-between;
+  background-color: #6c8efd;
+  color: #fff;
+}
+
+.dialogTitle {
+  padding: .5rem 1rem;
+}
+
+.closeButton {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #fff;
+  padding: .5rem 1rem;
+}
+
+.dialogContent {
+  padding: .5rem 1rem 1rem;
+}

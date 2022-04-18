@@ -9,7 +9,6 @@ import {
   selectExpensesDate,
   selectExpensesDatePrecision,
   selectExpensesDateString,
-  selectExpensesStatus,
 } from "../expensesSelectors";
 import { DatePrecision } from "utils/date";
 import {
@@ -33,10 +32,9 @@ const ExpensesChartWrapper: FC = () => {
   const expensesChartData = useAppSelector(selectExpensesChartData);
   const expensesChartValue = useAppSelector(selectExpensesChartValue);
   const expensesChartInfo = useAppSelector(selectExpensesChartInfo);
-  const expensesStatus = useAppSelector(selectExpensesStatus);
   const chartStatus = useAppSelector(selectExpensesChartStatus);
   const dateString = useAppSelector(selectExpensesDateString);
-  const { year, month, day } = useAppSelector(selectExpensesDate);
+  const { month, day } = useAppSelector(selectExpensesDate);
   const datePrecision = useAppSelector(selectExpensesDatePrecision);
   const dispatch = useAppDispatch();
 
@@ -81,15 +79,13 @@ const ExpensesChartWrapper: FC = () => {
     dispatch(updateExpense({ id, data }));
   };
 
-  const isLoading =
-    chartStatus === Status.Loading || expensesStatus === Status.Loading;
+  const isLoading = chartStatus === Status.Loading;
 
   return (
     <ExpensesChart
       chartData={expensesChartData}
       chartInfo={expensesChartInfo}
       chartValue={expensesChartValue}
-      selectedYear={year}
       selectedMonth={month}
       selectedDate={day}
       datePrecision={datePrecision}

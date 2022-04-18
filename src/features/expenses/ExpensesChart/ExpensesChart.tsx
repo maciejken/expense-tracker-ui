@@ -10,7 +10,6 @@ interface ExpensesChartProps {
   chartData: DataPoint[] | null;
   chartInfo?: string;
   chartValue?: string;
-  selectedYear?: string;
   selectedMonth?: string;
   selectedDate?: string;
   datePrecision: DatePrecision;
@@ -28,7 +27,6 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   chartData,
   chartInfo,
   chartValue,
-  selectedYear,
   selectedMonth,
   selectedDate,
   datePrecision,
@@ -41,7 +39,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   onBarClick,
   onDrop,
 }) => {
-  const getCal = () => {
+  const getChart = () => {
     if (!chartData?.length) {
       return null;
     }
@@ -61,12 +59,21 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
         }))
         .filter((d) => d.week === num)
     );
-    return (
+    return selectedMonth ? (
       <Month
         weeks={weeks}
         inputName="date"
         selectedDate={selectedDate}
         onDateChange={onDateChange}
+      />
+    ) : (
+      <Chart
+        data={chartData}
+        inputName="date"
+        onChange={onChange}
+        onBarClick={onBarClick}
+        onDrop={onDrop}
+        value={chartValue}
       />
     );
   };
@@ -133,19 +140,13 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
             </button>
           </div>
         )}
-        {isLoading && <i className="fa fa-spinner fa-pulse" />}
       </nav>
-      {datePrecision === DatePrecision.Day || datePrecision === DatePrecision.Month ? (
-        getCal()
+      {isLoading ? (
+        <div className={styles.loader}>
+          <i className="fa fa-spinner fa-pulse" />
+        </div>
       ) : (
-        <Chart
-          data={chartData}
-          inputName="date"
-          onChange={onChange}
-          onBarClick={onBarClick}
-          onDrop={onDrop}
-          value={chartValue}
-        />
+        getChart()
       )}
       <div className={styles.chartInfo}>{chartInfo}</div>
     </div>

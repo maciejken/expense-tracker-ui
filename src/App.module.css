@@ -1,6 +1,30 @@
 .header, .footer {
   height: 0.5rem;
   background-color: #00ac25;
+  width: 100%;
+  overflow: hidden;
+}
+
+.header {
+  position: relative;
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  width: 10rem;
+  height: 100%;
+  background: linear-gradient(to left, transparent, white, transparent);
+  animation: translate 2s linear infinite;
+}
+
+@keyframes translate {
+  from {
+    left: -10rem;
+  }
+  to {
+    left: 100%;
+  }
 }
 
 .flexContainer {
