@@ -17,9 +17,7 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
 
   const isLoading =
-    expensesStatus === Status.Loading ||
-    expensesStatus === Status.Pending ||
-    chartStatus === Status.Loading;
+    expensesStatus === Status.Loading || chartStatus === Status.Loading;
 
   useEffect(() => {
     if (claims) {

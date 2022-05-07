@@ -2,15 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
 import { selectAuth } from "features/auth/authSlice";
 import * as expensesApi from "./expensesAPI";
+import { NewExpenseData, ExpenseUpdate } from "./expensesTypes";
 import {
-  NewExpenseData,
-  ExpenseUpdate,
-} from "./expensesTypes";
-import {
-  selectExpensesDateString,
-  selectExpensesDate,
-  selectExpensesDatePrecision,
   selectExpensesChartDate,
+  selectExpensesDate,
 } from "./expensesSelectors";
 import {
   FETCH_EXPENSES_CHART,
@@ -18,16 +13,7 @@ import {
   CREATE_EXPENSE,
   UPDATE_EXPENSE,
   REMOVE_EXPENSE,
-  incrementExpensesYear,
-  setExpensesMonth,
-  decrementExpensesYear,
-  setExpensesDay,
-  setExpensesYear,
-  setExpensesDatePrecision,
-  setExpensesChartStatus,
 } from "./expensesActions";
-import { DatePrecision } from "utils/date";
-import { Status } from "common/types";
 
 export const fetchExpensesAsync = createAsyncThunk(
   FETCH_EXPENSES,
@@ -41,7 +27,7 @@ export const fetchExpensesChartAsync = createAsyncThunk(
 
 export const addExpenseAsync = createAsyncThunk(
   CREATE_EXPENSE,
-  expensesApi.postExpense,
+  expensesApi.postExpense
 );
 
 export const updateExpenseAsync = createAsyncThunk(
@@ -56,7 +42,7 @@ export const removeExpenseAsync = createAsyncThunk(
 
 export const fetchExpenses = (): AppThunk => (dispatch, getState) => {
   const { token } = selectAuth(getState());
-  const date = selectExpensesDateString(getState());
+  const date = selectExpensesDate(getState());
   if (token) {
     dispatch(fetchExpensesAsync({ date, token }));
   }
@@ -96,127 +82,3 @@ export const removeExpense =
       dispatch(removeExpenseAsync({ id, token }));
     }
   };
-
-export const incrementExpensesMonth = (): AppThunk => (dispatch, getState) => {
-  const { month } = selectExpensesDate(getState());
-  let nextMonth;
-  if (!month) {
-    return;
-  } else if (month === "11") {
-    nextMonth = "0";
-    dispatch(incrementExpensesYear());
-  } else {
-    nextMonth = "" + (parseInt(month) + 1);
-  }
-  dispatch(setExpensesMonth(nextMonth));
-  dispatch(setExpensesDay());
-};
-
-export const decrementExpensesMonth = (): AppThunk => (dispatch, getState) => {
-  const { month } = selectExpensesDate(getState());
-  let previousMonth;
-  if (!month) {
-    return;
-  } else if (month === "0") {
-    previousMonth = "11";
-    dispatch(decrementExpensesYear());
-  } else {
-    previousMonth = "" + (parseInt(month) - 1);
-  }
-  dispatch(setExpensesMonth(previousMonth));
-  dispatch(setExpensesDay());
-};
-
-const precisionToIncrementFnMap = {
-  [DatePrecision.None]: null,
-  [DatePrecision.Year]: incrementExpensesYear,
-  [DatePrecision.Month]: incrementExpensesMonth,
-  [DatePrecision.Day]: incrementExpensesMonth,
-};
-
-const precisionToDecrementFnMap = {
-  [DatePrecision.None]: null,
-  [DatePrecision.Year]: decrementExpensesYear,
-  [DatePrecision.Month]: decrementExpensesMonth,
-  [DatePrecision.Day]: decrementExpensesMonth,
-};
-
-export const getNextChart = (): AppThunk => (dispatch, getState) => {
-  const precision = selectExpensesDatePrecision(getState());
-  if (precision) {
-    const incrementFn = precisionToIncrementFnMap[precision];
-    incrementFn && dispatch(incrementFn());
-  }
-  dispatch(setExpensesChartStatus(Status.Loading));
-};
-
-export const getPreviousChart = (): AppThunk => (dispatch, getState) => {
-  const precision = selectExpensesDatePrecision(getState());
-  if (precision) {
-    const decrementFn = precisionToDecrementFnMap[precision];
-    decrementFn && dispatch(decrementFn());
-  }
-  dispatch(setExpensesChartStatus(Status.Loading));
-};
-
-const DatePrecisionToActionMap = {
-  [DatePrecision.None]: null,
-  [DatePrecision.Year]: setExpensesYear,
-  [DatePrecision.Month]: setExpensesMonth,
-  [DatePrecision.Day]: setExpensesDay,
-};
-
-const increaseExpensesDatePrecision = (): AppThunk => (dispatch, getState) => {
-  const precision = selectExpensesDatePrecision(getState());
-  const increasedPrecision =
-    precision === DatePrecision.Day
-      ? precision
-      : (String(+precision + 1) as DatePrecision);
-  precision !== DatePrecision.Day &&
-    dispatch(setExpensesDatePrecision(increasedPrecision));
-};
-
-export const updateExpensesChartValue =
-  (value: string): AppThunk =>
-  (dispatch, getState) => {
-    dispatch(increaseExpensesDatePrecision());
-    const precision = selectExpensesDatePrecision(getState());
-    const actionToDispatch = DatePrecisionToActionMap[precision];
-    actionToDispatch && dispatch(actionToDispatch(value));
-    if (precision === DatePrecision.Day) {
-      dispatch(fetchExpenses());
-    } else {
-      dispatch(fetchExpensesChart());
-    }
-  };
-
-interface AppDate {
-  year?: string;
-  month?: string;
-  day?: string;
-}
-
-const DatePrecisionToDateUpdateMap = {
-  [DatePrecision.None]: () => [] as string[],
-  [DatePrecision.Year]: (date: AppDate) => [
-    date.year || "" + new Date().getFullYear(),
-  ],
-  [DatePrecision.Month]: (date: AppDate) => [
-    date.year || "" + new Date().getFullYear(),
-    date.month || "" + new Date().getMonth(),
-  ],
-  [DatePrecision.Day]: null,
-};
-
-export const updateExpensesChartView = (): AppThunk => (dispatch, getState) => {
-  const { year, month } = selectExpensesDate(getState());
-  const precision = selectExpensesDatePrecision(getState());
-  const mapperFn = DatePrecisionToDateUpdateMap[precision];
-  if (mapperFn) {
-    const [yearValue, monthValue] = mapperFn({ year, month });
-    dispatch(setExpensesYear(yearValue));
-    dispatch(setExpensesMonth(monthValue));
-    dispatch(setExpensesDay());
-    dispatch(setExpensesChartStatus(Status.Loading));
-  }
-};

@@ -13,5 +13,5 @@ export enum Status {
   Failed = "failed",
   Idle = "idle",
   Loading = "loading",
-  Pending = "pending",
+  ShouldUpdate = "should_update",
 }

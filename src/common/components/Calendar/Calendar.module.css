@@ -10,12 +10,13 @@
   display: block;
   box-sizing: border-box;
   font-size: 1.25rem;
-  padding: .5rem;
+  padding: 0.5rem 0;
   width: 2.5rem;
   cursor: pointer;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   text-align: center;
-  margin: .1rem;
+  margin: 0.1rem;
+  border: 2px solid transparent;
 }
 
 .sunday {
@@ -28,8 +29,7 @@
 }
 
 .selected {
-  background-color: #6c8efd;
-  color: #fff;
+  border: 2px solid #3a68ff;
 }
 
 .dayInput {

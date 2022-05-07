@@ -1,17 +1,13 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import { DataPoint } from "common/components/Chart/Chart";
+import { ChartData } from "common/components/Chart/Chart";
 import { Status } from "common/types";
-import { DatePrecision } from "utils/date";
+import { DatePrecision, getCurrentDateString } from "utils/date";
 import {
-  DECREMENT_EXPENSES_YEAR,
-  INCREMENT_EXPENSES_YEAR,
+  SET_EXPENSES_CHART_DATE,
   SET_EXPENSES_CHART_STATUS,
-  SET_EXPENSES_DATE_PRECISION,
-  SET_EXPENSES_DAY,
+  SET_EXPENSES_DATE,
   SET_EXPENSES_MODE,
-  SET_EXPENSES_MONTH,
   SET_EXPENSES_STATUS,
-  SET_EXPENSES_YEAR,
 } from "./expensesActions";
 import {
   addExpenseAsync,
@@ -22,64 +18,50 @@ import {
 } from "./expensesThunks";
 import { ExpenseData, ExpensesMode, ExpensesState } from "./expensesTypes";
 
-const currentDate = new Date();
+const date = getCurrentDateString();
+const chartDate = getCurrentDateString(DatePrecision.Month);
 
 export const initialState: ExpensesState = {
   expenses: [],
-  datePrecision: DatePrecision.Day,
-  year: "" + currentDate.getFullYear(),
-  month: "" + currentDate.getMonth(),
-  day: "" + currentDate.getDate(),
+  date,
   status: Status.Loading,
   chart: {
-    data: null,
+    date: chartDate,
+    intervals: null,
     status: Status.Loading,
   },
   mode: ExpensesMode.Default,
 };
 
 const expensesReducer = createReducer(initialState, {
-  [SET_EXPENSES_YEAR]: (
+  [SET_EXPENSES_DATE]: (
     state: ExpensesState,
     action: PayloadAction<string>
   ) => {
-    state.year = action.payload;
+    state.date = action.payload;
   },
-  [INCREMENT_EXPENSES_YEAR]: (state: ExpensesState) => {
-    if (state.year) {
-      state.year = "" + (parseInt(state.year) + 1);
-    }
-  },
-  [DECREMENT_EXPENSES_YEAR]: (state: ExpensesState) => {
-    if (state.year) {
-      state.year = "" + (parseInt(state.year) - 1);
-    }
-  },
-  [SET_EXPENSES_MONTH]: (
+  [SET_EXPENSES_STATUS]: (
     state: ExpensesState,
-    action: PayloadAction<string>
+    action: PayloadAction<Status>
   ) => {
-    state.month = action.payload;
-  },
-  [SET_EXPENSES_DAY]: (state: ExpensesState, action: PayloadAction<string>) => {
-    state.day = action.payload;
-    if (action.payload) {
-      state.datePrecision = DatePrecision.Day;
-    }
-  },
-  [SET_EXPENSES_DATE_PRECISION]: (
-    state: ExpensesState,
-    action: PayloadAction<DatePrecision>
-  ) => {
-    state.datePrecision = action.payload;
-  },
-  [SET_EXPENSES_STATUS]: (state: ExpensesState, action: PayloadAction<Status>) => {
     state.status = action.payload;
   },
-  [SET_EXPENSES_CHART_STATUS]: (state: ExpensesState, action: PayloadAction<Status>) => {
+  [SET_EXPENSES_CHART_STATUS]: (
+    state: ExpensesState,
+    action: PayloadAction<Status>
+  ) => {
     state.chart.status = action.payload;
   },
-  [SET_EXPENSES_MODE]: (state: ExpensesState, action: PayloadAction<ExpensesMode>) => {
+  [SET_EXPENSES_CHART_DATE]: (
+    state: ExpensesState,
+    action: PayloadAction<string>
+  ) => {
+    state.chart.date = action.payload;
+  },
+  [SET_EXPENSES_MODE]: (
+    state: ExpensesState,
+    action: PayloadAction<ExpensesMode>
+  ) => {
     state.mode = action.payload;
   },
   [fetchExpensesAsync.fulfilled.type]: (
@@ -94,10 +76,12 @@ const expensesReducer = createReducer(initialState, {
   },
   [fetchExpensesChartAsync.fulfilled.type]: (
     state: ExpensesState,
-    action: PayloadAction<DataPoint[]>
+    action: PayloadAction<ChartData>
   ) => {
-    state.chart.status = Status.Idle;
-    state.chart.data = action.payload;
+    state.chart = {
+      ...action.payload,
+      status: Status.Idle,
+    };
   },
   [fetchExpensesChartAsync.pending.type]: (state: ExpensesState) => {
     state.chart.status = Status.Loading;
@@ -106,31 +90,28 @@ const expensesReducer = createReducer(initialState, {
     state.chart.status = Status.Failed;
   },
   [addExpenseAsync.pending.type]: (state: ExpensesState) => {
-    state.status = Status.Pending;
+    state.status = Status.Loading;
   },
   [addExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
-    state.status = Status.Loading;
-    state.chart.status = Status.Loading;
+    state.status = Status.ShouldUpdate;
   },
   [addExpenseAsync.rejected.type]: (state: ExpensesState) => {
     state.status = Status.Failed;
   },
   [updateExpenseAsync.pending.type]: (state: ExpensesState) => {
-    state.status = Status.Pending;
+    state.status = Status.Loading;
   },
   [updateExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
-    state.status = Status.Loading;
-    state.chart.status = Status.Loading;
+    state.status = Status.ShouldUpdate;
   },
   [updateExpenseAsync.rejected.type]: (state: ExpensesState) => {
     state.status = Status.Failed;
   },
   [removeExpenseAsync.pending.type]: (state: ExpensesState) => {
-    state.status = Status.Pending;
+    state.status = Status.Loading;
   },
   [removeExpenseAsync.fulfilled.type]: (state: ExpensesState) => {
-    state.status = Status.Loading;
-    state.chart.status = Status.Loading;
+    state.status = Status.ShouldUpdate;
   },
   [removeExpenseAsync.rejected.type]: (state: ExpensesState) => {
     state.status = Status.Failed;

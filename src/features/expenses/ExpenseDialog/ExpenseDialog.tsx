@@ -17,7 +17,7 @@ import Dialog from "common/components/Dialog/Dialog";
 
 export interface ExpenseFormProps {
   date: string;
-  onAddExpense: (data: NewExpenseData, shouldCloseDialog?: boolean) => void;
+  onAddExpense: (data: NewExpenseData) => void;
   onCancel: () => void;
 }
 

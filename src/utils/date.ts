@@ -27,32 +27,40 @@ interface DateFormat {
   year?: DateNumber;
 }
 
-export const getLocaleYearMonthDay = (date: string) => {
-  const newDate = new Date(date);
-  const year = newDate.getFullYear();
-  const month = newDate.toLocaleString(locale, { month: 'long' });
-  const day = newDate.toLocaleString(locale, { day: 'numeric' });
-  return { year, month, day };
-};
-
 export const formatDate = (date: Date, options?: DateFormat) =>
   new Intl.DateTimeFormat(locale, options).format(date);
 
 export const getLocalDate = (date: Date) => {
-  return formatDate(date, { dateStyle: 'full' });
+  return formatDate(date, { dateStyle: "full" });
 };
 
-const indexToMapperFn = {
-  0: (value: string) => value,
-  1: (value: string) => String(+value + 1).padStart(2, "0"),
-  2: (value: string) => value.padStart(2, "0"),
-};
-
-export const dateValueMap = (value: string | undefined, index: number) => {
-  let result = null;
-  if (index === 0 || index === 1 || index === 2) {
-    const mapperFn = indexToMapperFn[index];
-    result = mapperFn(value as string);
+export const getCurrentDateString = (precision?: DatePrecision) => {
+  const date = new Date();
+  const isoString = date.toISOString();
+  const [dateString] = isoString.split("T");
+  if (!precision) {
+    return dateString;
   }
-  return result as string | null;
+  const numPrecision = +precision;
+  return dateString.split("-").slice(0, numPrecision).join("-");
+};
+
+interface DateOptions {
+  date: string;
+  precision: DatePrecision;
+}
+
+const ValueDateMap = {
+  [DatePrecision.None]: (value: string) => value,
+  [DatePrecision.Year]: (value: string, date: string) =>
+    `${date}-${value.padStart(2, "0")}`,
+  [DatePrecision.Month]: (value: string, date: string) =>
+    `${date}-${value.padStart(2, "0")}`,
+  [DatePrecision.Day]: (value: string, date: string) =>
+    `${date.slice(0, 8)}-${value.padStart(2, "0")}`,
+};
+
+export const getNewDate = (value: string, { date, precision }: DateOptions) => {
+  const mapperFn = ValueDateMap[precision];
+  return mapperFn(value, date);
 };

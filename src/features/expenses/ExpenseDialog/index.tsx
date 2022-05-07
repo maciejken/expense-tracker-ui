@@ -1,9 +1,6 @@
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { FC } from "react";
-import {
-  selectExpensesDateString,
-  selectExpensesMode,
-} from "../expensesSelectors";
+import { selectExpensesDate, selectExpensesMode } from "../expensesSelectors";
 import { addExpense } from "../expensesThunks";
 import { ExpensesMode, NewExpenseData } from "../expensesTypes";
 import styles from "./ExpenseDialog.module.css";
@@ -11,7 +8,7 @@ import ExpenseDialog from "./ExpenseDialog";
 import { setExpensesMode } from "../expensesActions";
 
 const ExpenseDialogWrapper: FC = () => {
-  const date = useAppSelector(selectExpensesDateString);
+  const date = useAppSelector(selectExpensesDate);
   const expensesMode = useAppSelector(selectExpensesMode);
   const dispatch = useAppDispatch();
   const addExpenseHandler = (data: NewExpenseData) => {

@@ -24,19 +24,19 @@ const Week: FC<WeekProps> = ({
   return (
     <div className={styles.week} style={style}>
       {days.map((d) => {
-        const isChecked = d.date === selectedDate;
+        const isSelected = d.date === selectedDate;
         return (
           <label
             key={`day-of-the-month-${d.date}`}
             className={classNames(styles.day, {
-              [styles.selected]: isChecked,
+              [styles.selected]: isSelected,
               [styles.sunday]: +d.day === 7,
             })}
           >
             {d.date}
             <input
               type={InputType.Radio}
-              checked={isChecked}
+              checked={isSelected}
               value={d.date}
               className={styles.dayInput}
               name={inputName}

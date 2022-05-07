@@ -1,16 +1,14 @@
 import { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import styles from "./ExpensesChart.module.css";
-import Chart, { DataPoint } from "common/components/Chart/Chart";
+import Chart, { ChartData } from "common/components/Chart/Chart";
 import classNames from "classnames";
 import { DatePrecision } from "utils/date";
 import classnames from "classnames";
 import Month from "common/components/Calendar/Month";
 
 interface ExpensesChartProps {
-  chartData: DataPoint[] | null;
+  chartData: ChartData;
   chartInfo?: string;
-  chartValue?: string;
-  selectedMonth?: string;
   selectedDate?: string;
   datePrecision: DatePrecision;
   isLoading?: boolean;
@@ -26,8 +24,6 @@ interface ExpensesChartProps {
 const ExpensesChart: FC<ExpensesChartProps> = ({
   chartData,
   chartInfo,
-  chartValue,
-  selectedMonth,
   selectedDate,
   datePrecision,
   isLoading,
@@ -39,36 +35,46 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   onBarClick,
   onDrop,
 }) => {
+  const isMonth = [DatePrecision.Month, DatePrecision.Day].includes(
+    datePrecision
+  );
+  const hasPages = !!(chartData.nextDate && chartData.prevDate);
   const getChart = () => {
-    if (!chartData?.length) {
+    if (!chartData.intervals) {
       return null;
     }
-    const weekNums = chartData.reduce((nums, d) => {
-      const week = d.week as string;
-      if (!nums.includes(week)) {
-        nums.push(week);
-      }
-      return nums;
-    }, [] as string[]);
-    const weeks = weekNums.map((num) =>
-      chartData
-        .map((data) => ({
-          date: data.id,
-          day: data.day,
-          week: data.week,
-        }))
-        .filter((d) => d.week === num)
-    );
-    return selectedMonth ? (
-      <Month
-        weeks={weeks}
-        inputName="date"
-        selectedDate={selectedDate}
-        onDateChange={onDateChange}
-      />
-    ) : (
+    if (isMonth) {
+      const weekNums = chartData.intervals.reduce((nums, d) => {
+        const week = d.week as string;
+        if (!nums.includes(week)) {
+          nums.push(week);
+        }
+        return nums;
+      }, [] as string[]);
+      const weeks = weekNums.map((num) =>
+        chartData.intervals
+          ? chartData.intervals
+              .map((data) => ({
+                date: data.id,
+                day: data.day,
+                week: data.week,
+              }))
+              .filter((d) => d.week === num)
+          : []
+      );
+      return (
+        <Month
+          weeks={weeks}
+          inputName="date"
+          selectedDate={selectedDate}
+          onDateChange={onDateChange}
+        />
+      );
+    }
+    const chartValue = selectedDate?.split("-")[+datePrecision - 1];
+    return (
       <Chart
-        data={chartData}
+        data={chartData.intervals}
         inputName="date"
         onChange={onChange}
         onBarClick={onBarClick}
@@ -77,13 +83,14 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
       />
     );
   };
+
   return (
     <div className={styles.chart}>
       <nav className={styles.nav}>
         <div className={styles.timeframeTabs}>
           <label
             className={classnames(styles.button, {
-              [styles.active]: datePrecision < DatePrecision.Year,
+              [styles.active]: datePrecision === DatePrecision.None,
             })}
           >
             wszystko
@@ -111,7 +118,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
           </label>
           <label
             className={classnames(styles.button, {
-              [styles.active]: datePrecision > DatePrecision.Year,
+              [styles.active]: isMonth,
             })}
           >
             miesiąc
@@ -124,7 +131,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
             />
           </label>
         </div>
-        {datePrecision > DatePrecision.None && (
+        {hasPages && (
           <div className={styles.chevrons}>
             <button
               className={classNames(styles.button, styles.prev)}

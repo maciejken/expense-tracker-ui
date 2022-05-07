@@ -48,12 +48,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
 
   const privateClickHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
-    const isConfirmed = window.confirm(
-      "Czy chcesz zmienić widoczność wydatku?"
-    );
-    if (isConfirmed) {
-      onUpdate({ isPrivate: !isPrivate });
-    }
+    onUpdate({ isPrivate: !isPrivate });
   };
 
   const titleBlurHandler: FocusEventHandler<HTMLTextAreaElement> = async () => {
@@ -181,7 +176,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
                 onClick={dateUpdateHandler}
               >
                 {day}
-              </Button> 
+              </Button>
               <Button
                 title="Usuń"
                 size={ButtonSize.Small}
@@ -190,7 +185,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
                 onClick={deleteHandler}
               >
                 <i className="fa fa-trash" />
-              </Button>              
+              </Button>
             </div>
           </div>
         </div>

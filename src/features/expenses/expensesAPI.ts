@@ -7,7 +7,7 @@ import {
   DeleteExpensePayload,
 } from "features/expenses/expensesTypes";
 import { expensesUrl } from "app/config";
-import { DataPoint } from "common/components/Chart/Chart";
+import { ChartData } from "common/components/Chart/Chart";
 
 export const getExpenses: (
   payload: FetchExpensesPayload
@@ -20,7 +20,7 @@ export const getExpenses: (
 
 export const getExpensesChart: (
   payload: FetchExpensesPayload
-) => Promise<DataPoint[]> = async ({ token, date }) => {
+) => Promise<ChartData> = async ({ token, date }) => {
   const headers = new Headers();
   headers.set("Authorization", `Bearer ${token}`);
   const url = `${expensesUrl}/chart?date=${date}`;

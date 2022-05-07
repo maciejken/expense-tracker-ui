@@ -9,11 +9,14 @@ export interface DataPoint {
   info?: string;
   week: string;
   day: string;
+  timestamp: number;
 }
 
 export interface ChartData {
-  inputName: string;
-  values: DataPoint[];
+  date: string;
+  intervals: DataPoint[] | null;
+  nextDate?: string;
+  prevDate?: string;
 }
 
 interface ChartProps {

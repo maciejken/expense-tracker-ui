@@ -1,6 +1,5 @@
-import { DataPoint } from "common/components/Chart/Chart";
+import { ChartData } from "common/components/Chart/Chart";
 import { Status } from "common/types";
-import { DatePrecision } from "utils/date";
 
 export interface NewExpenseData {
   title: string;
@@ -23,18 +22,18 @@ export interface ExpenseUpdate {
 export enum ExpensesMode {
   Default = "default",
   Create = "create",
+  Update = "update",
+}
+
+interface ExpensesChartData extends ChartData {
+  info?: string;
+  status: Status;
 }
 
 export interface ExpensesState {
-  chart: {
-    data: DataPoint[] | null;
-    status: Status;
-  };
-  datePrecision: DatePrecision;
+  chart: ExpensesChartData;
+  date: string;
   expenses: ExpenseData[];
-  year?: string;
-  month?: string;
-  day?: string;
   status: Status;
   mode: ExpensesMode;
 }
