@@ -140,7 +140,9 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     const [hashtag] = updatedTitle.split(" ");
     return (
       <Dialog title="Usuwanie wydatku" onClose={closeDeleteDialog}>
-        Usunąć {hashtag} ({getLocalAmount(amount)})?
+        <div className={styles.dialogPrompt}>
+          Usunąć {hashtag} {getLocalAmount(amount)}?
+        </div>
         <div className={styles.dialogActions}>
           <Button onClick={handleDelete} variant={ButtonVariant.Secondary}>
             Tak
