@@ -1,12 +1,16 @@
-import { FC, MouseEventHandler } from "react";
+import { FC, MouseEventHandler, useEffect } from "react";
 import styles from "./Dialog.module.css";
 
 interface DialogProps {
   title: string;
   onClose: MouseEventHandler<HTMLButtonElement>;
+  onOpen?: () => void;
 }
 
-const Dialog: FC<DialogProps> = ({ children, title, onClose }) => {
+const Dialog: FC<DialogProps> = ({ children, title, onClose, onOpen }) => {
+  useEffect(() => {
+    "function" === typeof onOpen && onOpen();
+  });
   return (
     <div className={styles.overlay}>
       <div className={styles.dialog}>
@@ -16,9 +20,7 @@ const Dialog: FC<DialogProps> = ({ children, title, onClose }) => {
             <i className="fa fa-times" />
           </button>
         </header>
-        <div className={styles.dialogContent}>
-          {children}
-        </div>
+        <div className={styles.dialogContent}>{children}</div>
       </div>
     </div>
   );

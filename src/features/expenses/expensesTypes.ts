@@ -23,6 +23,7 @@ export enum ExpensesMode {
   Default = "default",
   Create = "create",
   Update = "update",
+  Delete = "delete",
 }
 
 interface ExpensesChartData extends ChartData {

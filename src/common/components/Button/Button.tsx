@@ -19,6 +19,7 @@ export enum ButtonSize {
 }
 
 interface ButtonProps {
+  autoFocus?: boolean;
   disabled?: boolean;
   size?: ButtonSize;
   title?: string;
@@ -28,6 +29,7 @@ interface ButtonProps {
 }
 
 const Button: FC<ButtonProps> = ({
+  autoFocus,
   children,
   disabled,
   size,
@@ -38,6 +40,7 @@ const Button: FC<ButtonProps> = ({
 }) => {
   return (
     <button
+      autoFocus={autoFocus}
       disabled={disabled}
       title={title}
       type={type}
