@@ -33,7 +33,8 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   onDelete,
 }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
-  const [edited, setEdited] = useState<boolean>(false);
+  const [datepickerOpen, setDatepickerOpen] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [updatedTitle, setTitle] = useState<string>(title);
   const [updatedAmount, setAmount] = useState<string>(getLocalFloat(amount));
   const day = new Date(date).getDate();
@@ -64,16 +65,20 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   };
 
   const dateUpdateHandler = () => {
-    setEdited(true);
+    setDatepickerOpen(true);
   };
 
-  const deleteHandler = () => {
-    const isConfirmed = window.confirm(
-      `Usunąć ${title} (${getLocalAmount(amount)})?`
-    );
-    if (isConfirmed) {
-      onDelete({ id, date, title, amount, isPrivate } as ExpenseData);
-    }
+  const openDeleteDialog = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDelete = () => {
+    onDelete({ id, date, title, amount, isPrivate } as ExpenseData);
+    setDeleteDialogOpen(false);
   };
 
   const toggleExpanded = () => {
@@ -119,14 +124,31 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     );
   };
 
-  const closeEditDialog = () => {
-    setEdited(false);
+  const closeDatepicker = () => {
+    setDatepickerOpen(false);
   };
 
   const getDatepicker = () => {
     return (
-      <Dialog title="Zmiana daty" onClose={closeEditDialog}>
+      <Dialog title="Zmiana daty" onClose={closeDatepicker}>
         {date}
+      </Dialog>
+    );
+  };
+
+  const getDeleteDialog = () => {
+    const [hashtag] = updatedTitle.split(" ");
+    return (
+      <Dialog title="Usuwanie wydatku" onClose={closeDeleteDialog}>
+        Usunąć {hashtag} ({getLocalAmount(amount)})?
+        <div className={styles.dialogActions}>
+          <Button onClick={handleDelete} variant={ButtonVariant.Secondary}>
+            Tak
+          </Button>
+          <Button onClick={closeDeleteDialog} autoFocus={true}>
+            Nie
+          </Button>
+        </div>
       </Dialog>
     );
   };
@@ -182,7 +204,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
                 size={ButtonSize.Small}
                 type={ButtonType.Button}
                 variant={ButtonVariant.Secondary}
-                onClick={deleteHandler}
+                onClick={openDeleteDialog}
               >
                 <i className="fa fa-trash" />
               </Button>
@@ -190,7 +212,8 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
           </div>
         </div>
       </div>
-      {edited && getDatepicker()}
+      {datepickerOpen && getDatepicker()}
+      {deleteDialogOpen && getDeleteDialog()}
     </li>
   );
 };
