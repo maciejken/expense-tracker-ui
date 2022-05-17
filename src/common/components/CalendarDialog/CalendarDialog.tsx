@@ -1,33 +1,31 @@
 import Month from "common/components/Calendar/Month";
 import { Day } from "common/components/Calendar/types";
 import Dialog from "common/components/Dialog/Dialog";
+import Loader from "../Loader/Loader";
 import { FC, MouseEventHandler } from "react";
-import styles from "./DateDialog.module.css";
+import styles from "./CalendarDialog.module.css";
 
-interface DateDialogProps {
+interface CalendarDialogProps {
   title: string;
   calendarData: Day[][];
   selectedDate: string;
   isLoading: boolean;
-  onDialogClose: MouseEventHandler<HTMLButtonElement>;
-  onDialogOpen: () => void;
-  onNext: () => void;
-  onPrev: () => void;
+  onClose: MouseEventHandler<HTMLButtonElement>;
+  onNext?: () => void;
+  onPrev?: () => void;
   onChange: (value: string) => void;
 }
 
-const DateDialog: FC<DateDialogProps> = ({
+const CalendarDialog: FC<CalendarDialogProps> = ({
   title,
   calendarData,
   selectedDate,
   isLoading,
-  onDialogClose,
-  onDialogOpen,
+  onClose,
   onChange,
   onNext,
   onPrev,
 }) => {
-  const getLoader = () => <span className="fa fa-spinner fa-pulse"></span>;
   const getCalendar = () => (
     <Month
       weeks={calendarData}
@@ -37,12 +35,12 @@ const DateDialog: FC<DateDialogProps> = ({
     />
   );
   return (
-    <Dialog title={title} onClose={onDialogClose} onOpen={onDialogOpen}>
+    <Dialog title={title} onClose={onClose}>
       <div className={styles.calendar}>
-        {isLoading ? getLoader() : getCalendar()}
+        {isLoading ? <Loader /> : getCalendar()}
       </div>
     </Dialog>
   );
 };
 
-export default DateDialog;
+export default CalendarDialog;

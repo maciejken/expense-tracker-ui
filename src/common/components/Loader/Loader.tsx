@@ -1,21 +1,7 @@
-import React, { FC } from "react";
-import styles from "./Loader.module.css";
-import classNames from "classnames";
+import { FC } from "react";
 
-interface LoaderProps {
-  overlay?: boolean;
-}
-
-const Loader: FC<LoaderProps> = ({ overlay }) => {
-  return (
-    <div
-      className={classNames(styles.loader, {
-        [styles.loader__overlay]: overlay,
-      })}
-    >
-      Wczytuję dane...
-    </div>
-  );
+const Loader: FC = () => {
+  return <span className="fa fa-spinner fa-pulse"></span>;
 };
 
 export default Loader;

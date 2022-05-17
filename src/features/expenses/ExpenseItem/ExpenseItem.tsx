@@ -17,6 +17,8 @@ import Button, {
   ButtonVariant,
 } from "common/components/Button/Button";
 import Dialog from "common/components/Dialog/Dialog";
+import CalendarDialog from "common/components/CalendarDialog/CalendarDialog";
+import { Day } from "common/components/Calendar/types";
 
 interface ExpenseItemProps extends ExpenseData {
   onDelete: (data: ExpenseData) => void;
@@ -33,11 +35,14 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   onDelete,
 }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
-  const [datepickerOpen, setDatepickerOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [updatedTitle, setTitle] = useState<string>(title);
   const [updatedAmount, setAmount] = useState<string>(getLocalFloat(amount));
-  const day = new Date(date).getDate();
+  const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
+  const [isCalendarLoading, setCalendarLoading] = useState<boolean>(false);
+  const [calendarData, setCalendarData] = useState<Day[][]>([]);
+  const day = "" + new Date(date).getDate();
+  const [selectedDate, setSelectedDate] = useState<string>(day);
 
   const titleChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
     setTitle(evt.target.value);
@@ -64,8 +69,17 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     }
   };
 
-  const dateUpdateHandler = () => {
-    setDatepickerOpen(true);
+  const handleCalendarOpen = () => {
+    setCalendarLoading(true);
+    setCalendarOpen(true);
+  };
+
+  const handleDateChanged = () => {
+    setCalendarOpen(false);
+  };
+
+  const handleCalendarClosed = () => {
+    setCalendarOpen(false);
   };
 
   const openDeleteDialog = () => {
@@ -124,15 +138,16 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     );
   };
 
-  const closeDatepicker = () => {
-    setDatepickerOpen(false);
-  };
-
   const getDatepicker = () => {
     return (
-      <Dialog title="Zmiana daty" onClose={closeDatepicker}>
-        {date}
-      </Dialog>
+      <CalendarDialog
+        title="Wybierz datę"
+        onClose={handleCalendarClosed}
+        isLoading={isCalendarLoading}
+        calendarData={calendarData}
+        selectedDate={selectedDate}
+        onChange={handleDateChanged}
+      />
     );
   };
 
@@ -197,7 +212,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
                 size={ButtonSize.Small}
                 type={ButtonType.Button}
                 variant={ButtonVariant.Primary}
-                onClick={dateUpdateHandler}
+                onClick={handleCalendarOpen}
               >
                 {day}
               </Button>
@@ -214,7 +229,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
           </div>
         </div>
       </div>
-      {datepickerOpen && getDatepicker()}
+      {calendarOpen && getDatepicker()}
       {deleteDialogOpen && getDeleteDialog()}
     </li>
   );
