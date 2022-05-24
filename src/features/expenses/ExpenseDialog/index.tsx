@@ -23,13 +23,11 @@ const ExpenseDialogWrapper: FC = () => {
     return null;
   }
   return (
-    <div className={styles.overlay}>
-      <ExpenseDialog
-        date={date}
-        onAddExpense={addExpenseHandler}
-        onCancel={cancelHandler}
-      />
-    </div>
+    <ExpenseDialog
+      date={date}
+      onAddExpense={addExpenseHandler}
+      onCancel={cancelHandler}
+    />
   );
 };
 

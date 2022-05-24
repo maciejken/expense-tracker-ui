@@ -17,8 +17,7 @@ import Button, {
   ButtonVariant,
 } from "common/components/Button/Button";
 import Dialog from "common/components/Dialog/Dialog";
-import CalendarDialog from "common/components/CalendarDialog/CalendarDialog";
-import { Day } from "common/components/Calendar/types";
+import CalendarDialog from "common/components/CalendarDialog";
 
 interface ExpenseItemProps extends ExpenseData {
   onDelete: (data: ExpenseData) => void;
@@ -39,10 +38,10 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   const [updatedTitle, setTitle] = useState<string>(title);
   const [updatedAmount, setAmount] = useState<string>(getLocalFloat(amount));
   const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
-  const [isCalendarLoading, setCalendarLoading] = useState<boolean>(false);
-  const [calendarData, setCalendarData] = useState<Day[][]>([]);
-  const day = "" + new Date(date).getDate();
-  const [selectedDate, setSelectedDate] = useState<string>(day);
+  const dayOfTheMonth = "" + new Date(date).getDate();
+  const [selectedDate, setSelectedDate] = useState<string>(dayOfTheMonth);
+  const [year, mm] = date.split("-");
+  const month = `${year}-${mm}`;
 
   const titleChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
     setTitle(evt.target.value);
@@ -70,11 +69,11 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   };
 
   const handleCalendarOpen = () => {
-    setCalendarLoading(true);
     setCalendarOpen(true);
   };
 
-  const handleDateChanged = () => {
+  const handleDateChanged = (value: string) => {
+    setSelectedDate(value);
     setCalendarOpen(false);
   };
 
@@ -134,19 +133,6 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
         onChange={amountChangeHandler}
         onBlur={amountBlurHandler}
         disabled={!expanded}
-      />
-    );
-  };
-
-  const getDatepicker = () => {
-    return (
-      <CalendarDialog
-        title="Wybierz datę"
-        onClose={handleCalendarClosed}
-        isLoading={isCalendarLoading}
-        calendarData={calendarData}
-        selectedDate={selectedDate}
-        onChange={handleDateChanged}
       />
     );
   };
@@ -214,7 +200,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
                 variant={ButtonVariant.Primary}
                 onClick={handleCalendarOpen}
               >
-                {day}
+                {dayOfTheMonth}
               </Button>
               <Button
                 title="Usuń"
@@ -229,7 +215,14 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
           </div>
         </div>
       </div>
-      {calendarOpen && getDatepicker()}
+      {calendarOpen && (
+        <CalendarDialog
+          month={month}
+          selectedDate={selectedDate}
+          onChange={handleDateChanged}
+          onClose={handleCalendarClosed}
+        />
+      )}
       {deleteDialogOpen && getDeleteDialog()}
     </li>
   );
