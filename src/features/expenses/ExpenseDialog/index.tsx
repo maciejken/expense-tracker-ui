@@ -3,7 +3,6 @@ import { FC } from "react";
 import { selectExpensesDate, selectExpensesMode } from "../expensesSelectors";
 import { addExpense } from "../expensesThunks";
 import { ExpensesMode, NewExpenseData } from "../expensesTypes";
-import styles from "./ExpenseDialog.module.css";
 import ExpenseDialog from "./ExpenseDialog";
 import { setExpensesMode } from "../expensesActions";
 

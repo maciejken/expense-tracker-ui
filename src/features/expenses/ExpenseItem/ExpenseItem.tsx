@@ -6,13 +6,12 @@ import {
   useState,
 } from "react";
 import classNames from "classnames";
-import { InputType } from "common/types";
+import { InputType, Size } from "common/types";
 import styles from "./ExpenseItem.module.css";
 import { ExpenseData, ExpenseUpdate } from "../expensesTypes";
 import { getLocalAmount, getLocalFloat } from "utils/number";
 import classnames from "classnames";
 import Button, {
-  ButtonSize,
   ButtonType,
   ButtonVariant,
 } from "common/components/Button/Button";
@@ -195,7 +194,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
             <div className={classnames(styles.row, styles.actions)}>
               <Button
                 title="Zmień datę"
-                size={ButtonSize.Small}
+                size={Size.Small}
                 type={ButtonType.Button}
                 variant={ButtonVariant.Primary}
                 onClick={handleCalendarOpen}
@@ -204,7 +203,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
               </Button>
               <Button
                 title="Usuń"
-                size={ButtonSize.Small}
+                size={Size.Small}
                 type={ButtonType.Button}
                 variant={ButtonVariant.Secondary}
                 onClick={openDeleteDialog}

@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, MouseEventHandler } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import styles from "./Chart.module.css";
 import ChartBar from "./ChartBar";
 
@@ -7,8 +7,8 @@ export interface DataPoint {
   amount: number;
   label?: string;
   info?: string;
-  week: string;
-  day: string;
+  week: number;
+  day: number;
   timestamp: number;
 }
 

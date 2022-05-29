@@ -1,17 +1,64 @@
-.loader {
-  text-align: center;
-  margin: 2rem 0;
+.hexContainer {
+  position: relative;
+  width: 5.7rem;
+  height: 5.6rem;
 }
 
-.loader__overlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  width: 100%;
-  height: 100%;
+.hexMedium {
+  transform: scale(0.5);
+}
+
+.hexSmall {
+  transform: scale(0.25);
+}
+
+@keyframes pulse {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: #026e00;
+  }
+}
+
+.hex {
+  background-color: #026e00;
+  width: calc(2rem * 0.866);
+  height: 2rem;
+  clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
   position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(255, 255, 255, 0.85);
+  animation-name: pulse;
+  animation-duration: 0.3s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.hex1 {
+  transform: translate(3rem, 0.1rem);
+  animation-delay: 0;
+}
+
+.hex2 {
+  transform: translate(4rem, 1.8rem);
+  animation-delay: 0.1s;
+}
+
+.hex3 {
+  transform: translate(3rem, 3.5rem);
+  animation-delay: 0.2s;
+}
+
+.hex4 {
+  transform: translate(1rem, 3.5rem);
+  animation-delay: 0.3s;
+}
+
+.hex5 {
+  transform: translate(0, 1.8rem);
+  animation-delay: 0.4s;
+}
+
+.hex6 {
+  transform: translate(1rem, 0.1rem);
+  animation-delay: 0.5s;
 }

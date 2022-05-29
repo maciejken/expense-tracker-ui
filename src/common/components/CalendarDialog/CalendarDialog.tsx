@@ -7,7 +7,7 @@ import styles from "./CalendarDialog.module.css";
 
 interface CalendarDialogProps {
   title: string;
-  calendarData: Day[][];
+  weeks: Day[][];
   selectedDate: string;
   isLoading: boolean;
   onClose: MouseEventHandler<HTMLButtonElement>;
@@ -18,7 +18,7 @@ interface CalendarDialogProps {
 
 const CalendarDialog: FC<CalendarDialogProps> = ({
   title,
-  calendarData,
+  weeks,
   selectedDate,
   isLoading,
   onClose,
@@ -28,7 +28,7 @@ const CalendarDialog: FC<CalendarDialogProps> = ({
 }) => {
   const getCalendar = () => (
     <Month
-      weeks={calendarData}
+      weeks={weeks}
       inputName="calendar"
       selectedDate={selectedDate}
       onDateChange={onChange}
