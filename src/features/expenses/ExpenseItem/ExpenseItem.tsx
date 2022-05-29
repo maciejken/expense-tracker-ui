@@ -6,17 +6,17 @@ import {
   useState,
 } from "react";
 import classNames from "classnames";
-import { InputType } from "common/types";
+import { InputType, Size } from "common/types";
 import styles from "./ExpenseItem.module.css";
 import { ExpenseData, ExpenseUpdate } from "../expensesTypes";
 import { getLocalAmount, getLocalFloat } from "utils/number";
 import classnames from "classnames";
 import Button, {
-  ButtonSize,
   ButtonType,
   ButtonVariant,
 } from "common/components/Button/Button";
 import Dialog from "common/components/Dialog/Dialog";
+import CalendarDialog from "common/components/CalendarDialog";
 
 interface ExpenseItemProps extends ExpenseData {
   onDelete: (data: ExpenseData) => void;
@@ -33,11 +33,14 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   onDelete,
 }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
-  const [datepickerOpen, setDatepickerOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [updatedTitle, setTitle] = useState<string>(title);
   const [updatedAmount, setAmount] = useState<string>(getLocalFloat(amount));
-  const day = new Date(date).getDate();
+  const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
+  const dayOfTheMonth = "" + new Date(date).getDate();
+  const [selectedDate, setSelectedDate] = useState<string>(dayOfTheMonth);
+  const [year, mm] = date.split("-");
+  const month = `${year}-${mm}`;
 
   const titleChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
     setTitle(evt.target.value);
@@ -64,8 +67,17 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     }
   };
 
-  const dateUpdateHandler = () => {
-    setDatepickerOpen(true);
+  const handleCalendarOpen = () => {
+    setCalendarOpen(true);
+  };
+
+  const handleDateChanged = (value: string) => {
+    setSelectedDate(value);
+    setCalendarOpen(false);
+  };
+
+  const handleCalendarClosed = () => {
+    setCalendarOpen(false);
   };
 
   const openDeleteDialog = () => {
@@ -121,18 +133,6 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
         onBlur={amountBlurHandler}
         disabled={!expanded}
       />
-    );
-  };
-
-  const closeDatepicker = () => {
-    setDatepickerOpen(false);
-  };
-
-  const getDatepicker = () => {
-    return (
-      <Dialog title="Zmiana daty" onClose={closeDatepicker}>
-        {date}
-      </Dialog>
     );
   };
 
@@ -194,16 +194,16 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
             <div className={classnames(styles.row, styles.actions)}>
               <Button
                 title="Zmień datę"
-                size={ButtonSize.Small}
+                size={Size.Small}
                 type={ButtonType.Button}
                 variant={ButtonVariant.Primary}
-                onClick={dateUpdateHandler}
+                onClick={handleCalendarOpen}
               >
-                {day}
+                {dayOfTheMonth}
               </Button>
               <Button
                 title="Usuń"
-                size={ButtonSize.Small}
+                size={Size.Small}
                 type={ButtonType.Button}
                 variant={ButtonVariant.Secondary}
                 onClick={openDeleteDialog}
@@ -214,7 +214,14 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
           </div>
         </div>
       </div>
-      {datepickerOpen && getDatepicker()}
+      {calendarOpen && (
+        <CalendarDialog
+          month={month}
+          selectedDate={selectedDate}
+          onChange={handleDateChanged}
+          onClose={handleCalendarClosed}
+        />
+      )}
       {deleteDialogOpen && getDeleteDialog()}
     </li>
   );

@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { Size } from "common/types";
 import { FC, MouseEventHandler } from "react";
 import styles from "./Button.module.css";
 
@@ -12,16 +13,10 @@ export enum ButtonType {
   Submit = "submit",
 }
 
-export enum ButtonSize {
-  Small = "small",
-  Medium = "medium",
-  Large = "large",
-}
-
 interface ButtonProps {
   autoFocus?: boolean;
   disabled?: boolean;
-  size?: ButtonSize;
+  size?: Size;
   title?: string;
   type?: ButtonType;
   variant?: ButtonVariant;
@@ -46,7 +41,7 @@ const Button: FC<ButtonProps> = ({
       type={type}
       className={classNames(styles.button, {
         [styles.secondary]: variant === ButtonVariant.Secondary,
-        [styles.small]: size === ButtonSize.Small,
+        [styles.small]: size === Size.Small,
       })}
       onClick={onClick}
     >

@@ -1,5 +1,5 @@
 export interface Day {
   date: string;
-  day: string;
-  week: string;
+  day: number;
+  week: number;
 }

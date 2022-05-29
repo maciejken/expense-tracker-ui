@@ -5,6 +5,8 @@ import classNames from "classnames";
 import { DatePrecision } from "utils/date";
 import classnames from "classnames";
 import Month from "common/components/Calendar/Month";
+import Loader from "common/components/Loader/Loader";
+import { Size } from "common/types";
 
 interface ExpensesChartProps {
   chartData: ChartData;
@@ -40,17 +42,24 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
   );
   const hasPages = !!(chartData.nextDate && chartData.prevDate);
   const getChart = () => {
+    if (isLoading) {
+      return (
+        <div className={styles.loader}>
+          <Loader size={Size.Medium} />
+        </div>
+      );
+    }
     if (!chartData.intervals) {
       return null;
     }
     if (isMonth) {
       const weekNums = chartData.intervals.reduce((nums, d) => {
-        const week = d.week as string;
+        const week = d.week;
         if (!nums.includes(week)) {
           nums.push(week);
         }
         return nums;
-      }, [] as string[]);
+      }, [] as number[]);
       const weeks = weekNums.map((num) =>
         chartData.intervals
           ? chartData.intervals
@@ -73,14 +82,16 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
     }
     const chartValue = selectedDate?.split("-")[+datePrecision - 1];
     return (
-      <Chart
-        data={chartData.intervals}
-        inputName="date"
-        onChange={onChange}
-        onBarClick={onBarClick}
-        onDrop={onDrop}
-        value={chartValue}
-      />
+      <div className={styles.barChart}>
+        <Chart
+          data={chartData.intervals}
+          inputName="date"
+          onChange={onChange}
+          onBarClick={onBarClick}
+          onDrop={onDrop}
+          value={chartValue}
+        />
+      </div>
     );
   };
 
@@ -148,13 +159,7 @@ const ExpensesChart: FC<ExpensesChartProps> = ({
           </div>
         )}
       </nav>
-      {isLoading ? (
-        <div className={styles.loader}>
-          <i className="fa fa-spinner fa-pulse" />
-        </div>
-      ) : (
-        getChart()
-      )}
+      {getChart()}
       <div className={styles.chartInfo}>{chartInfo}</div>
     </div>
   );

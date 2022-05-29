@@ -8,7 +8,7 @@ import {
 } from "react";
 import classNames from "classnames";
 import { InputType } from "common/types";
-import styles from "./ChartBar.module.css";
+import styles from "./Chart.module.css";
 
 interface ChartBarProps {
   height: string;
@@ -47,7 +47,7 @@ const ChartBar: FC<ChartBarProps> = ({
     e.preventDefault();
   };
   const dropHandler: DragEventHandler<HTMLLabelElement> = (e) => {
-    const id = e.dataTransfer.getData('itemId');
+    const id = e.dataTransfer.getData("itemId");
     if (onDrop) {
       onDrop(id, value);
     }
