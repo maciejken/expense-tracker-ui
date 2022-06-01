@@ -6,9 +6,10 @@ import { FC, MouseEventHandler } from "react";
 import styles from "./CalendarDialog.module.css";
 
 interface CalendarDialogProps {
-  title: string;
+  calendarTitle: string;
+  dialogTitle: string;
   weeks: Day[][];
-  selectedDate: string;
+  selectedDate?: string;
   isLoading: boolean;
   onClose: MouseEventHandler<HTMLButtonElement>;
   onNext?: () => void;
@@ -17,7 +18,8 @@ interface CalendarDialogProps {
 }
 
 const CalendarDialog: FC<CalendarDialogProps> = ({
-  title,
+  calendarTitle,
+  dialogTitle,
   weeks,
   selectedDate,
   isLoading,
@@ -26,16 +28,33 @@ const CalendarDialog: FC<CalendarDialogProps> = ({
   onNext,
   onPrev,
 }) => {
+  const handleClickPrev = () => {
+    "function" === typeof onPrev && onPrev();
+  };
+  const handleClickNext = () => {
+    "function" === typeof onNext && onNext();
+  };
   const getCalendar = () => (
-    <Month
-      weeks={weeks}
-      inputName="calendar"
-      selectedDate={selectedDate}
-      onDateChange={onChange}
-    />
+    <div>
+      <nav className={styles.calendarNav}>
+        <button className={styles.calendarNavBtn} onClick={handleClickPrev}>
+          &lt;
+        </button>
+        <span>{calendarTitle}</span>
+        <button className={styles.calendarNavBtn} onClick={handleClickNext}>
+          &gt;
+        </button>
+      </nav>
+      <Month
+        weeks={weeks}
+        inputName="calendar"
+        selectedDate={selectedDate}
+        onDateChange={onChange}
+      />
+    </div>
   );
   return (
-    <Dialog title={title} onClose={onClose}>
+    <Dialog title={dialogTitle} onClose={onClose}>
       <div className={styles.calendar}>
         {isLoading ? <Loader /> : getCalendar()}
       </div>

@@ -38,7 +38,6 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   const [updatedAmount, setAmount] = useState<string>(getLocalFloat(amount));
   const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
   const dayOfTheMonth = "" + new Date(date).getDate();
-  const [selectedDate, setSelectedDate] = useState<string>(dayOfTheMonth);
   const [year, mm] = date.split("-");
   const month = `${year}-${mm}`;
 
@@ -72,7 +71,8 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   };
 
   const handleDateChanged = (value: string) => {
-    setSelectedDate(value);
+    const dd = value.padStart(2, "0");
+    onUpdate({ date: `${month}-${dd}` });
     setCalendarOpen(false);
   };
 
@@ -217,7 +217,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
       {calendarOpen && (
         <CalendarDialog
           month={month}
-          selectedDate={selectedDate}
+          selectedDate={dayOfTheMonth}
           onChange={handleDateChanged}
           onClose={handleCalendarClosed}
         />
