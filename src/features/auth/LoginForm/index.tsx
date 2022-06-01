@@ -16,7 +16,11 @@ const LoginFormWrapper: FC = () => {
   return (
     <div className={styles.formContainer}>
       <LoginForm onAuth={authHandler} />
-      {isLoading && <Loader />}
+      {isLoading && (
+        <div className={styles.nodeLoader}>
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };

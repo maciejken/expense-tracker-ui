@@ -2,6 +2,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 18rem;
+  width: 19rem;
   min-height: 18rem;
+}
+
+.calendarNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+  font-size: 1.25rem;
+}
+
+.calendarNavBtn {
+  font-size: 1.25rem;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 2px solid transparent;
+  outline: none;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.calendarNavBtn:hover {
+  border: 2px solid #000;
 }
