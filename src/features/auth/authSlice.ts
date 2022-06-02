@@ -1,15 +1,19 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import { RootState } from "app/store";
 import { BasicAuth, fetchToken, TokenClaims } from "features/auth/authAPI";
 
-export interface ExpensesState {
+export interface AuthState {
   token: string;
   claims: TokenClaims | null;
   error: string;
   status: "idle" | "loading" | "failed";
 }
 
-const initialState: ExpensesState = {
+const initialState: AuthState = {
   token: "",
   claims: null,
   error: "",
@@ -66,5 +70,9 @@ export const authSlice = createSlice({
 export const { clearAuth } = authSlice.actions;
 
 export const selectAuth = (state: RootState) => state.auth;
+export const selectAuthStatus = createSelector(
+  selectAuth,
+  (auth) => auth.status
+);
 
 export default authSlice.reducer;

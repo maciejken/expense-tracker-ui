@@ -38,8 +38,17 @@ const CalendarWrapper: FC<CalendarWrapperProps> = ({
     year: "numeric",
     month: "long",
   }).format(activeDate);
-  const isCurrentMonth = activeDate?.toISOString().startsWith(month);
-  const selectedDayOfMonth = isCurrentMonth ? selectedDate : undefined;
+  const activeDateISOString = activeDate?.toISOString() || "";
+  const isSelectedMonth = activeDateISOString.startsWith(month);
+  const selectedDayOfMonth = isSelectedMonth ? selectedDate : undefined;
+
+  const handleDateChanged = (value: string) => {
+    if ("function" === typeof onChange) {
+      const activeMonth = activeDateISOString.slice(0, month.length);
+      const dd = value.padStart(2, "0");
+      onChange(`${activeMonth}-${dd}`);
+    }
+  };
 
   const getCalendarAsync = useCallback(async () => {
     const data = await getCalendar(month);
@@ -94,7 +103,7 @@ const CalendarWrapper: FC<CalendarWrapperProps> = ({
       isLoading={isCalendarLoading}
       weeks={weeks}
       selectedDate={selectedDayOfMonth}
-      onChange={onChange}
+      onChange={handleDateChanged}
       onNext={handleClickNext}
       onPrev={handleClickPrev}
     />

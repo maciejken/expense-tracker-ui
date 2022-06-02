@@ -70,9 +70,8 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     setCalendarOpen(true);
   };
 
-  const handleDateChanged = (value: string) => {
-    const dd = value.padStart(2, "0");
-    onUpdate({ date: `${month}-${dd}` });
+  const handleDateChanged = (date: string) => {
+    onUpdate({ date });
     setCalendarOpen(false);
   };
 
