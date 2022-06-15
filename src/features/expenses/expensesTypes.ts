@@ -12,12 +12,7 @@ export interface ExpenseData extends NewExpenseData {
   id: string;
 }
 
-export interface ExpenseUpdate {
-  title?: string;
-  amount?: string;
-  date?: string;
-  isPrivate?: boolean;
-}
+export type ExpenseUpdate = Partial<NewExpenseData>;
 
 export enum ExpensesMode {
   Default = "default",

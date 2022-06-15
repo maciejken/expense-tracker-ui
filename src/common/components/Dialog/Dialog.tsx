@@ -9,7 +9,9 @@ interface DialogProps {
 
 const Dialog: FC<DialogProps> = ({ children, title, onClose, onOpen }) => {
   useEffect(() => {
-    "function" === typeof onOpen && onOpen();
+    if ("function" === typeof onOpen) {
+      onOpen();
+    }
   });
   return (
     <div className={styles.overlay}>
